@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum {Type1, Type2, Type3, Type4} t_MyEnum;
+/*include headers inside Model directory*/
+#include "ChessBoard.h"
+
+
+
 
 void ModelSpeak(void);
 #endif

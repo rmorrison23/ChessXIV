@@ -3,5 +3,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void ViewSpeak(void);
+#include "ChessBoard.h"
+
+unsigned char AskUserChooseColor();
+unsigned char AskUserAIChoice();
+void DisplayChessBoard(ChessBoard *);
+
 #endif 

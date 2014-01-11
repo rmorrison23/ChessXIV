@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Control.h"
-#include "Model.h"
-#include "View.h"
+#include "Control/Control.h"
 
 int main(void){
-  ViewSpeak();
+  /*ViewSpeak();
   ControlSpeak();
-  ModelSpeak();
+  ModelSpeak();*/
+  
+  GameInitialize();
+  GameMainLoop();
+  GameQuit();
  return 0; 
 }
