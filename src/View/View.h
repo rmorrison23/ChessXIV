@@ -8,5 +8,5 @@
 unsigned char AskUserChooseColor();
 unsigned char AskUserAIChoice();
 void DisplayChessBoard(ChessBoard *);
-
+static void PrintChessCoordinate(ChessPiece * CurrPiece);
 #endif 

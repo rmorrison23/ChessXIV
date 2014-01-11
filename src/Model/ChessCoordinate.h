@@ -5,13 +5,16 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "ChessStructures.h"
+
+/*
 #include "ChessPiece.h"
 
 
 
 typedef struct {
-  /*unsigned char Rank, File;*/
-  ChessPiece OccupyingPiece;
-} ChessCoordinate;
+  unsigned char Rank, File;
+  ChessPiece * Piece;
+} ChessCoordinate;*/
 
 #endif
