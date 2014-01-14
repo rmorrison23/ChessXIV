@@ -42,3 +42,5 @@ ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
 
 ControlUnitTest: build/ControlUnitTest.o build/libControl.a
 	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o build/$@ $(CFLAGS)
+	
+#This line does nothing
