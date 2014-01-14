@@ -10,5 +10,6 @@ int main(void){
   GameInitialize();
   GameMainLoop();
   GameQuit();
+	printf ("Hanchel is here.\n");
  return 0; 
 }
