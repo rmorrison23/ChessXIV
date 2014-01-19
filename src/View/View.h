@@ -19,20 +19,19 @@ typedef struct {
 PlayerControlEnum AskWhitePlayerControl(void);
 PlayerControlEnum AskBlackPlayerControl(void);
 
+AIDifficultyLevel AskAIDifficultyLevel(void);
+
 /*for displaying*/
 void DisplayChessBoard(ChessBoard *);
-
+void HighlightCoordinates(ChessCoordinateList *);
 
 
 #ifdef GUI_ENABLE
 /*get event from user*/
 Event * View_GetEvent(void);
-
-
-
 #else
 /*get input coordinate from user*/
-ChessCoordinate * View_GetCoordinate(void);
+ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
 
 #endif
 

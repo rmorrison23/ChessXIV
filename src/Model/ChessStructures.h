@@ -16,14 +16,20 @@ typedef enum {White, Black} 	PlayerColorEnum;
 
 typedef enum {False, True}	Boolean;
 
+typedef struct {
+  ChessCoordinate * Board[CHESS_BOARD_MAX_ROW][CHESS_BOARD_MAX_COL];
+  ChessPlayer * WhitePlayer, * BlackPlayer;
+} ChessBoard;
+
+
 struct ChessCoordinateStruct {
   unsigned char Rank, File;
   ChessPiece * Piece;
 };
 
-
 struct ChessPlayerStruct{
 	PlayerColorEnum 	PlayerColor;
+	AIDifficultyLevel	AIDifficulty;
 	PlayerControlEnum	PlayerControl;
 
 	/*list all the pieces that could belong to a player*/

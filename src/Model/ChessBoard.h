@@ -14,10 +14,6 @@
 #include "ChessCoordinate.h"
 #include "ChessPlayer.h"
 */
-typedef struct {
-  ChessCoordinate * Board[CHESS_BOARD_MAX_ROW][CHESS_BOARD_MAX_COL];
-  ChessPlayer * WhitePlayer, * BlackPlayer;
-} ChessBoard;
 
 ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorChoice);
 
