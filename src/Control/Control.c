@@ -1,6 +1,6 @@
 #include "Control.h"
 
-
+static ChessBoard * MainChessBoard_pt;
 
 void ControlSpeak(void){
  printf("Control is speaking.\n"); 

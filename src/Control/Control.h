@@ -6,12 +6,11 @@
 #include "Model.h"
 #include "View.h"
 
-void ControlSpeak(void);
 
-void GameInitialize(void);
-void GameMainLoop(void);
-void GameQuit(void);
+void Control_Initialize(void);
+void Control_MainLoop(void);
+void Control_CleanUp(void);
 
-ChessBoard * MainChessBoard_pt;
+
 
 #endif
