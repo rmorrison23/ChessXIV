@@ -1,3 +1,6 @@
+#temporary files by text editor
+*~
+
 # Object files
 *.o
 *.ko
