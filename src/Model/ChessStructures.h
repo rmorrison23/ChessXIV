@@ -4,11 +4,14 @@
 typedef struct ChessCoordinateStruct ChessCoordinate;
 typedef struct ChessPieceStruct ChessPiece;
 typedef struct ChessPlayerStruct ChessPlayer;
+typedef struct ChessMoveStruct ChessMove;
 
 typedef enum {Pawn, Rook, Knight, Bishop, Queen, King, None}  ChessPieceTypeEnum;
 
 typedef enum {Human, AI} 	PlayerControlEnum;
 typedef enum {White, Black} 	PlayerColorEnum;
+
+typedef enum {False, True}	Boolean;
 
 struct ChessCoordinateStruct {
   unsigned char Rank, File;
@@ -35,6 +38,16 @@ struct ChessPieceStruct{
 	unsigned char		Index;
 	ChessPlayer *		Player;
 	ChessCoordinate *	Coordinate;
+	Boolean			AliveFlag;
 };
+
+struct ChessMoveStruct{
+	ChessMove * PrevMove;
+	ChessMove * NextMove;
+	ChessPlayer * Player;
+	ChessCoordinate * Start;
+	ChessCoordinate * End;
+};
+
 
 #endif
