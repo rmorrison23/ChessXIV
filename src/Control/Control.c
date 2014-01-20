@@ -12,6 +12,7 @@ void Control_Initialize(void){
 	View_Initialize();
 }
 
+
 void Control_MainLoop(void){
 	/*local variables*/
 	Boolean GameOnFlag = True, LegalMoveFlag = False;
@@ -20,17 +21,43 @@ void Control_MainLoop(void){
 	Coordinate1 = NULL; Coordinate2 = NULL;
 	ChessCoordinateList * LegalChessCoordList, * LegalChessCoordListNode;
 	ChessMove LocalChessMove;
+	Event LocalEvent;
 	
 	/*ask user settings*/
 	/*player control*/
-	MainChessBoard->WhitePlayer->PlayerControlType = AskWhitePlayerControl();
-	if (MainChessBoard->WhitePlayer->PlayerControlType == AI)
-		MainChessBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel;
+	MainChessBoard->WhitePlayer->PlayerControl = AskPlayerControl(MainChessBoard->WhitePlayer);
+	if (MainChessBoard->WhitePlayer->PlayerControl == AI)
+		MainChessBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
 	
-	MainChessBoard->BlackPlayer->PlayerControlType = AskBlackPlayerControl();
-	if (MainChessBoard->BlackPlayer->PlayerControlType == AI)
-		MainChessBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel;
+	MainChessBoard->BlackPlayer->PlayerControl = AskPlayerControl(MainChessBoard->BlackPlayer);
+	if (MainChessBoard->BlackPlayer->PlayerControl == AI)
+		MainChessBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
 	
+#if 1
+	
+	ChessCoordinateList TestList[3];
+	TestList[0].Coordinate = MainChessBoard->Board[0][2];
+	TestList[1].Coordinate = MainChessBoard->Board[1][2];
+	TestList[2].Coordinate = MainChessBoard->Board[2][2];
+	TestList[0].NextNode = &TestList[1];
+	TestList[1].NextNode = &TestList[2];
+	TestList[2].NextNode = NULL;
+	
+	/*set this part to if 0 if you want to run normally*/
+	printf("displaying the board\n");
+	DisplayChessBoard(MainChessBoard);
+	View_GetEvent(MainChessBoard, &LocalEvent);
+	switch(LocalEvent.EventType){
+		case SelectCoordinate:
+			printf("Rank = %d, File = %d\n", LocalEvent.Coordinate->Rank, LocalEvent.Coordinate->File);
+			break;
+	}
+	
+	HighlightCoordinates(MainChessBoard, TestList);
+#endif
+	
+	
+#if 0
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
@@ -109,10 +136,10 @@ void Control_MainLoop(void){
 	
 	/*conclude the game*/
 	View_ConcludeGame(MainChessBoard, CurrentPlayer);
+#endif
 }
 
 void Control_CleanUp(void){
 	Model_CleanUp(MainChessBoard, MainMoveList);
 	View_CleanUp();
-	
 }

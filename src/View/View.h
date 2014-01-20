@@ -15,25 +15,23 @@ typedef struct {
 	ChessPlayer *	Player;
 } Event;
 
-/*for settings*/
-PlayerControlEnum AskWhitePlayerControl(void);
-PlayerControlEnum AskBlackPlayerControl(void);
+/*initialize*/
+void View_Initialize(void);
 
+/*clean up*/
+void View_CleanUp(void);
+
+/*for settings*/
+PlayerControlEnum AskPlayerControl(ChessPlayer *);
 AIDifficultyLevel AskAIDifficultyLevel(void);
 
 /*for displaying*/
 void DisplayChessBoard(ChessBoard *);
-void HighlightCoordinates(ChessCoordinateList *);
+void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
 
-
-#ifdef GUI_ENABLE
 /*get event from user*/
-Event * View_GetEvent(void);
-#else
-/*get input coordinate from user*/
-ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
-
-#endif
+/*this function is supposed to overwrite the input pointer with new event data*/
+Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
 
 /*static void PrintChessCoordinate(ChessPiece * CurrPiece);*/
 #endif 

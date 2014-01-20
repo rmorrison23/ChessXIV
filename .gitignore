@@ -1,3 +1,6 @@
+#files under build directory
+build/*
+
 #temporary files by text editor
 *~
 

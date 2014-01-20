@@ -1,6 +1,13 @@
 CC	:= gcc
 CFLAGS	:= -ansi -Wall
 
+ifeq ($(GUI_ENABLE),y)
+	GUI_FLAG=-DGUI_ENABLE
+else
+        GUI_FLAG=
+endif
+
+
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
@@ -24,7 +31,7 @@ test:
 	@echo "MODEL_LIB_DEPEND = " $(MODEL_LIB_DEPEND)
 
 build/%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(GUI_FLAG)
 
 build/lib%.a: build/%.o
 	ar rc $@ $<
@@ -42,5 +49,8 @@ ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
 
 ControlUnitTest: build/ControlUnitTest.o build/libControl.a
 	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o build/$@ $(CFLAGS)
+	
+ChessXIV: build/ChessXIV.o build/libModel.a build/libControl.a build/libView.a build/libChessBoard.a
+	$(CC) build/ChessXIV.o -Lbuild  -lControl -lView -lModel -lChessBoard -o build/$@ $(CFLAGS)
 	
 #This line does nothing

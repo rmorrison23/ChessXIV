@@ -1,6 +1,10 @@
 #ifndef CHESS_STRUCTURES_H
 #define CHESS_STRUCTURES_H
 
+#define CHESS_BOARD_MAX_ROW 8
+#define CHESS_BOARD_MAX_COL 8
+
+
 typedef struct ChessCoordinateStruct ChessCoordinate;
 typedef struct ChessCoordinateListStruct ChessCoordinateList;
 typedef struct ChessPieceStruct ChessPiece;
@@ -8,6 +12,7 @@ typedef struct ChessPlayerStruct ChessPlayer;
 typedef struct ChessMoveStruct ChessMove;
 typedef struct ChessMoveListStruct ChessMoveList;
 
+typedef enum {Easy, Medium, Difficult} AIDifficultyLevel;
 
 typedef enum {Pawn, Rook, Knight, Bishop, Queen, King, None}  ChessPieceTypeEnum;
 
@@ -60,7 +65,7 @@ struct ChessMoveListStruct{
 	ChessMoveList * PrevMove;
 	ChessMoveList * NextMove;
 	ChessMove * Move;
-}
+};
 
 struct ChessCoordinateListStruct{
 	ChessCoordinateList * NextNode, * PrevNode;
