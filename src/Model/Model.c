@@ -26,6 +26,10 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	
 	/* update move list */
 	/* forward link */
+	while (moveList->NextMove != NULL)
+	{
+		moveList = moveList->NextMove;
+	}
 	moveList->NextMove = move;
 	
 	/*backward link */
