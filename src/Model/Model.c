@@ -14,6 +14,9 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 		move->End->Piece->AliveFlag = False;
 		/* set that dead piece coordinate to null */
 		move->End->Piece->Coordinate = NULL;
+		
+		/* it is dead */
+		move->CaptureFlag = True;
 	}
 	/* piece to move, moved to next coordinate */
 	move->Start->Piece->Coordinate = move->End;
