@@ -4,26 +4,41 @@ ChessBoard * Model_Initialize(void){
 	return InitializeChessBoard();
 }
 
-ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * moveTo)
+/* move piece to next location */
+ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * move)
 {
-	/* create a new moveList */
-	ChessMoveListStruct * newMove = new ChessMoveListStruct;
+	/* the place to move to has an enemy piece */
+	if (move->End->Piece != NULL)
+	{
+		/* kill it */
+		move->End->Piece->AliveFlag = False;
+		/* set that dead piece coordinate to null */
+		move->End->Piece->Coordinate = NULL;
+	}
+	/* piece to move, moved to next coordinate */
+	move->Start->Piece->Coordinate = move->End;
 	
-	/*linking previous and next */
-	newMove->PrevMove = moveList;
-	newMove->NextMove = NULL;
-	moveList->NextMove = newMov;
+	/* delete piece pointer at previous location */
+	move->Start->Piece = NULL;
 	
-	/*storing current move */
-	newMove->Move = moveTo;
+	/* update move list */
+	/* forward link */
+	moveList->NextMove = move;
 	
-	/*return the board */
+	/*backward link */
+	moveList->NextMove->PrevMove = moveList;
+	
+	/*set the move of the next move */
+	moveList->NextMove->Move = move;
+	
 	return board;
 }
 
+/* uses GetLegalCoordinates */
+/* see if move is legal */
 Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 {
-	return true;
+	return True;
 }
 
 void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveListStart){
