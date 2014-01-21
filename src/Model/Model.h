@@ -19,7 +19,11 @@ ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
+/*If this chess player is checkmakte, return True*/
 Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
+
+/*This chess player is in checked position and must get out, return True*/
+Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
 
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);
 
