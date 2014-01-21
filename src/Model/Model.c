@@ -4,6 +4,28 @@ ChessBoard * Model_Initialize(void){
 	return InitializeChessBoard();
 }
 
+ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * moveTo)
+{
+	/* create a new moveList */
+	ChessMoveListStruct * newMove = new ChessMoveListStruct;
+	
+	/*linking previous and next */
+	newMove->PrevMove = moveList;
+	newMove->NextMove = NULL;
+	moveList->NextMove = newMov;
+	
+	/*storing current move */
+	newMove->Move = moveTo;
+	
+	/*return the board */
+	return board;
+}
+
+Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
+{
+	return true;
+}
+
 void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveListStart){
 	ChessMoveList * MoveListNode1, * MoveListNode2;
 	MoveListNode1 = MoveListStart;
