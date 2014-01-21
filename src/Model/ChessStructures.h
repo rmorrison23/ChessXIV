@@ -59,6 +59,7 @@ struct ChessMoveStruct{
 	ChessPlayer * Player;
 	ChessCoordinate * Start;
 	ChessCoordinate * End;
+	Boolean CaptureFlag;
 };
 
 struct ChessMoveListStruct{
