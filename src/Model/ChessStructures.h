@@ -7,11 +7,12 @@
 
 typedef struct ChessCoordinateStruct ChessCoordinate;
 typedef struct ChessCoordinateListStruct ChessCoordinateList;
+typedef struct ChessCoordinateNodeStruct ChessCoordinateNode;
 typedef struct ChessPieceStruct ChessPiece;
 typedef struct ChessPlayerStruct ChessPlayer;
 typedef struct ChessMoveStruct ChessMove;
 typedef struct ChessMoveListStruct ChessMoveList;
-typedef struct ChessMoveNodeStruct 
+typedef struct ChessMoveNodeStruct ChessMoveNode;
 
 typedef enum {Easy, Medium, Difficult} AIDifficultyLevel;
 
@@ -33,18 +34,22 @@ struct ChessCoordinateStruct {
   ChessPiece * Piece;
 };
 
+struct ChessCoordinateListStruct{
+	ChessCoordinateNode * FirstNode, * LastNode;
+};
+
+struct ChessCoordinateNodeStruct{
+	ChessCoordinateNode * NextNode, * PrevNode;
+	ChessCoordinate * Coordinate;
+};
+
 struct ChessPlayerStruct{
 	PlayerColorEnum 	PlayerColor;
 	AIDifficultyLevel	AIDifficulty;
 	PlayerControlEnum	PlayerControl;
 
 	/*list all the ];pieces that could belong to a player*/
-	ChessPiece * Pawn[8];
-	ChessPiece * Rook[2];
-	ChessPiece * Knight[2];
-	ChessPiece * Bishop[2];
-	ChessPiece * Queen[1];
-	ChessPiece * King[1];
+	ChessPiece * Pieces[16];
 };
 
 
@@ -57,7 +62,6 @@ struct ChessPieceStruct{
 };
 
 struct ChessMoveStruct{	
-	ChessPlayer * Player;
 	ChessCoordinate * StartPosition;
 	ChessCoordinate * NextPosition;
 	Boolean CaptureFlag;
@@ -74,9 +78,6 @@ struct ChessMoveListStruct{
 	ChessMove * FirstMove, * LastMove;
 };
 
-struct ChessCoordinateListStruct{
-	ChessCoordinateList * NextNode, * PrevNode;
-	ChessCoordinate * Coordinate;
-};
+
 
 #endif
