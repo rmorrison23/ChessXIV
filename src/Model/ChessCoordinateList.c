@@ -67,3 +67,13 @@ ChessCoordinateList * ChessCoordinateList_AppendNode(ChessCoordinateList * List,
 	}
 	return List;
 }
+
+void ChessCoordinateList_Free(ChessCoordinateList * List){
+	ChessCoordinateNode * CurrNode = List->FirstNode, *NextNode;
+	while (CurrNode){
+		NextNode = CurrNode->NextNode;
+		free(CurrNode);
+		CurrNode = NextNode;
+	}
+	free(List);
+}

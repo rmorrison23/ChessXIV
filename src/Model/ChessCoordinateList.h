@@ -9,5 +9,7 @@
 ChessCoordinateList * ChessCoordinateList_AppendNoRedundancy(ChessCoordinateList *, ChessCoordinateList *);
 Boolean ChessCoordinateList_CheckRedundancy(ChessCoordinateList *, ChessCoordinate *);
 ChessCoordinateList * ChessCoordinateList_AppendNode(ChessCoordinateList *, ChessCoordinateNode *);
+ChessCoordinateList * ChessCoordinateList_AppendCoord(ChessCoordinateList *, ChessCoordinate *);
+void ChesscoordinateList_Free(ChessCoordinateList *);
 
 #endif
