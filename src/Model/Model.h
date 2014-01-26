@@ -6,6 +6,7 @@
 /*include headers inside Model directory*/
 #include "ChessStructures.h"
 #include "ChessBoard.h"
+#include "ChessPlayer.c"
 #include "ArtificialIntelligence.h"
 
 
@@ -13,7 +14,7 @@ ChessBoard * Model_Initialize(void);
 
 Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *);
 
-ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *);
+ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, ChessPlayer *);
 
 /* done, actually move the pieces to its destination */
 ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);

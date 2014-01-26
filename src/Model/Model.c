@@ -57,6 +57,43 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	return board;
 }
 
+ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
+{
+      int i = 0;
+      /* move to delete */
+      ChessMoveNode * tempNode = moveList->LastNode;
+      
+      /* need to move back twice */
+      for (i = 0; i < 2; i ++)
+      {
+	 /* moving back a position (1 undo) */
+	tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	
+	/* need to restore a piece from the graveyard */
+	if (tempNode->Move->CaptureFlag)
+	{
+	    /* bring back the dead */
+	    tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
+	    tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
+	}
+	/*nothing to restore from graveyard */
+	else
+	{
+	    tempNode->Move->NextPosition->Piece = NULL;
+	}
+	/*breaking the forward link of previous node*/
+	tempNode->PrevNode->NextNode = NULL;
+	/*moving the node back one */
+	tempNode = tempNode->PrevNode;
+	/*update the last node */
+	moveList->LastNode = tempNode;
+
+	free(tempNode->NextNode);
+      }
+      
+      return board;
+}
 ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn)
 {
 	int i = 0;
@@ -88,7 +125,8 @@ Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
 	ChessCoordinateList * newList = Model_GetAllLegalCoordinate(board, player->OtherPlayer, player);
 	
 	/* a temp node to traverse the list */
-	ChessCoordinateNode *tempNode = ChessCoordinateList->FirstNode;
+	ChessCoordinateNode *tempNode = newList->FirstNode;
+	ChessPiece * king = ChessPlayer_GetChessPiece(player, King, 0);
 
 	/* there is a legal move for other player */
 	if (newList != NULL)
@@ -96,7 +134,7 @@ Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
 		while (tempNode != NULL)
 		{
 		/* check the coordinate of the player king to the legal coordinate of other player */
-			if (getPiece(player, King, 0)->Coordinate == tempNode->Coordinate)
+			if (king->Coordinate == tempNode->Coordinate)
 			{
 				return True;
 			}
