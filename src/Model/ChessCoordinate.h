@@ -7,14 +7,6 @@
 
 #include "ChessStructures.h"
 
-/*
-#include "ChessPiece.h"
-
-
-
-typedef struct {
-  unsigned char Rank, File;
-  ChessPiece * Piece;
-} ChessCoordinate;*/
-
+/*horizontal movement between coordinates*/
+ChessCoordinate * ChessCoordinate_Offset(ChessCoordinate *, char, char);
 #endif

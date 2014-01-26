@@ -8,22 +8,24 @@ ChessBoard * Model_Initialize(void){
 ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * move)
 {
 	/* the place to move to has an enemy piece */
-	if (move->End->Piece != NULL)
+	if (move->NextPosition->Piece != NULL)
 	{
 		/* kill it */
-		move->End->Piece->AliveFlag = False;
+		move->NextPosition->Piece->AliveFlag = False;
 		/* set that dead piece coordinate to null */
-		move->End->Piece->Coordinate = NULL;
+		move->NextPosition->Piece->Coordinate = NULL;
 		
 		/* it is dead */
 		move->CaptureFlag = True;
 	}
 	/* piece to move, moved to next coordinate */
-	move->Start->Piece->Coordinate = move->End;
+	move->StartPosition->Piece->Coordinate = move->NextPosition;
 	
 	/* delete piece pointer at previous location */
-	move->Start->Piece = NULL;
-	
+	move->StartPosition->Piece = NULL;
+
+/*Need review to match new ChessMoveList*/
+#if 0
 	/* update move list */
 	/* go to the end of the link-list */
 	while (moveList->NextMove != NULL)
@@ -38,7 +40,7 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	
 	/*set the move of the next move */
 	moveList->NextMove->Move = move;
-	
+#endif
 	return board;
 }
 
@@ -49,16 +51,18 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 	return True;
 }
 
-void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveListStart){
-	ChessMoveList * MoveListNode1, * MoveListNode2;
-	MoveListNode1 = MoveListStart;
+void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
+	ChessMoveNode * MoveNode1, * MoveNode2;
+	MoveNode1 = MoveList->FirstMove;
 	
-	while (MoveListNode1){
-		MoveListNode2 = MoveListNode1->NextMove;
-		free(MoveListNode1);
-		MoveListNode1 = MoveListNode2;
+	while (MoveNode1){
+		MoveNode2 = MoveNode1->NextNode;
+		free(MoveNode1->Move);
+		free(MoveNode1);
+		MoveNode1 = MoveNode2;
 	}
-	
+		
+	free(MoveList);
 	
 	int i,j;
 	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){

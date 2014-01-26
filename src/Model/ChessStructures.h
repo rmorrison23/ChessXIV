@@ -7,10 +7,12 @@
 
 typedef struct ChessCoordinateStruct ChessCoordinate;
 typedef struct ChessCoordinateListStruct ChessCoordinateList;
+typedef struct ChessCoordinateNodeStruct ChessCoordinateNode;
 typedef struct ChessPieceStruct ChessPiece;
 typedef struct ChessPlayerStruct ChessPlayer;
 typedef struct ChessMoveStruct ChessMove;
 typedef struct ChessMoveListStruct ChessMoveList;
+typedef struct ChessMoveNodeStruct ChessMoveNode;
 
 typedef enum {Easy, Medium, Difficult} AIDifficultyLevel;
 
@@ -30,6 +32,18 @@ typedef struct {
 struct ChessCoordinateStruct {
   unsigned char Rank, File;
   ChessPiece * Piece;
+  
+  /*point back to the board, allows horizontal movement to other coordinate*/
+  ChessBoard * MainBoard;
+};
+
+struct ChessCoordinateListStruct{
+	ChessCoordinateNode * FirstNode, * LastNode;
+};
+
+struct ChessCoordinateNodeStruct{
+	ChessCoordinateNode * NextNode, * PrevNode;
+	ChessCoordinate * Coordinate;
 };
 
 struct ChessPlayerStruct{
@@ -37,13 +51,11 @@ struct ChessPlayerStruct{
 	AIDifficultyLevel	AIDifficulty;
 	PlayerControlEnum	PlayerControl;
 
-	/*list all the pieces that could belong to a player*/
-	ChessPiece * Pawn[8];
-	ChessPiece * Rook[2];
-	ChessPiece * Knight[2];
-	ChessPiece * Bishop[2];
-	ChessPiece * Queen[1];
-	ChessPiece * King[1];
+	/*pointer to other player*/
+	ChessPlayer *	OtherPlayer;
+	
+	/*list all the ];pieces that could belong to a player*/
+	ChessPiece *	Pieces[16];
 };
 
 
@@ -55,22 +67,25 @@ struct ChessPieceStruct{
 	Boolean			AliveFlag;
 };
 
-struct ChessMoveStruct{	
-	ChessPlayer * Player;
-	ChessCoordinate * Start;
-	ChessCoordinate * End;
+struct ChessMoveStruct{
+	ChessPiece *	MovePiece;
+	ChessCoordinate * StartPosition;
+	ChessCoordinate * NextPosition;
+	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
 };
 
-struct ChessMoveListStruct{
-	ChessMoveList * PrevMove;
-	ChessMoveList * NextMove;
+struct ChessMoveNodeStruct{
 	ChessMove * Move;
+	ChessMoveNode * PrevNode;
+	ChessMoveNode * NextNode;
+	ChessMoveList * List;
 };
 
-struct ChessCoordinateListStruct{
-	ChessCoordinateList * NextNode, * PrevNode;
-	ChessCoordinate * Coordinate;
+struct ChessMoveListStruct{
+	ChessMove * FirstMove, * LastMove;
 };
+
+
 
 #endif
