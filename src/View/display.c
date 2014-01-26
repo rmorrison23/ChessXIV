@@ -8,7 +8,7 @@
 /*          12/28/13 draw pieces on board                                     */
 /*          01/18/14 draw main menu                                           */
 /*          01/25/14 draw one player menu, draw two player,                   */
-/*                   draw advanced menu,  */
+/*                   draw advanced menu, draw gameplay screen (incomplete)    */
 /******************************************************************************/
 
 #include <stdio.h>
@@ -21,7 +21,10 @@
 
 /* BUG: title is not centered */
 /* function to display the main menu to the screen */
-void drawMainMenu(SDL_Renderer *renderer){
+void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, TITLE);
 
   /* create main menu background image */
   SDL_Texture *backSplash = NULL;
@@ -44,7 +47,7 @@ void drawMainMenu(SDL_Renderer *renderer){
 }
 
 /* function to display the one player menu to the screen */
-void drawOnePlayerMenu(SDL_Renderer *renderer){
+void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
 
   int leftMargin   = 50;
   int rightMargin  = 675;
@@ -54,6 +57,9 @@ void drawOnePlayerMenu(SDL_Renderer *renderer){
   SDL_Color titleColor = {0xA8, 0xC6, 0xDB}; /* this color is static */
   SDL_Color optionColor = {255, 255, 255};/* this color is static */
   SDL_Color buttonColor = {255, 255, 255}; /* this color is dynamic; default white */
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, "One Player Options");
 
   /* create one player background image */
   SDL_Texture *backSplash = NULL;
@@ -120,7 +126,7 @@ void drawOnePlayerMenu(SDL_Renderer *renderer){
 }
 
 /* function to display the two player menu to the screen */
-void drawTwoPlayerMenu(SDL_Renderer *renderer){
+void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
 
   int leftMargin   = 50;
   int rightMargin  = 675;
@@ -130,6 +136,9 @@ void drawTwoPlayerMenu(SDL_Renderer *renderer){
   SDL_Color titleColor = {0xA8, 0xC6, 0xDB}; /* this color is static */
   SDL_Color optionColor = {255, 255, 255};/* this color is static */
   SDL_Color buttonColor = {255, 255, 255}; /* this color is dynamic; default white */
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, "Two Player Options");
 
   /* create two player background image */
   SDL_Texture *backSplash = NULL;
@@ -176,7 +185,7 @@ void drawTwoPlayerMenu(SDL_Renderer *renderer){
 }
 
 /* function to display the advanced menu to the screen */
-void drawAdvancedMenu(SDL_Renderer *renderer){
+void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer){
 
   int margin         = 0;
   int titleWidth     = 0;
@@ -187,6 +196,9 @@ void drawAdvancedMenu(SDL_Renderer *renderer){
   SDL_Color buttonColor = {255, 255, 255}; /* this color is dynamic; default white */
 
   margin = SCREEN_WIDTH/2 + 25;
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, "Advanced Options");
 
   /* create two player background image */
   SDL_Texture *backSplash = NULL;
@@ -214,12 +226,70 @@ void drawAdvancedMenu(SDL_Renderer *renderer){
 }
 
 /* function to display the gameplay window to the screen */
-void drawGameplayScreen(SDL_Renderer *renderer){
+void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer){
+
+  int tileSize = BOARD_WIDTH / 8;
+  int leftMargin = 30;
+  int buttonWidth = 0, buttonHeight =0;
+  SDL_Color buttonColor = {255, 255, 255};   /* this color is dynamic */
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, TITLE);
+
+  /* reset background color */
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+  SDL_RenderClear(renderer);
+
+  /* display board with pieces at starting position */
+  drawChessboard(renderer);
+  drawPieces(renderer);
+
+  /* display game log button */
+  SDL_Texture *gameLog_Button = renderText("Game Log", CALIBRI_FONT, buttonColor, 30, renderer);
+  SDL_QueryTexture(gameLog_Button, NULL, NULL, &buttonWidth, NULL);
+  SDL_QueryTexture(gameLog_Button, NULL, NULL, NULL, &buttonHeight);
+  renderTexture2(gameLog_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 4*tileSize);
+
+  /* display move hints button */
+  SDL_Texture *moveHints_Button = renderText("Move Hints", CALIBRI_FONT, buttonColor, 30, renderer);
+  renderTexture2(moveHints_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 3*tileSize);
+
+  /* display undo move button */
+  SDL_Texture *undoMove_Button = renderText("Undo Move", CALIBRI_FONT, buttonColor, 30, renderer);
+  renderTexture2(undoMove_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 2*tileSize);
+
+  /* display pause button */
+  SDL_Texture *pause_Button = renderText("Pause", CALIBRI_FONT, buttonColor, 30, renderer);
+  renderTexture2(pause_Button, renderer, leftMargin, SCREEN_HEIGHT - 175);
+
+  /* display quit button */
+  SDL_Texture *quit_Button = renderText("Quit", CALIBRI_FONT, buttonColor, 30, renderer);
+  renderTexture2(quit_Button, renderer, leftMargin, SCREEN_HEIGHT - 175 + 2*buttonHeight);
+
+  /* display piece input header */
+  SDL_Texture *pieceHeader = renderText("Piece", CALIBRI_FONT, buttonColor, 30, renderer);
+  SDL_QueryTexture(pieceHeader, NULL, NULL, &buttonWidth, NULL);
+  renderTexture2(pieceHeader, renderer, leftMargin, SCREEN_HEIGHT/2);
+
+  /* display piece input window */
+
+  /* display move to input header */
+  SDL_Texture *moveToHeader = renderText("Move To", CALIBRI_FONT, buttonColor, 30, renderer);
+  renderTexture2(moveToHeader, renderer, leftMargin + buttonWidth + 25, SCREEN_HEIGHT/2);
+
+  /* display move to input window */
+
+  /* display left side player window */
+
+  /* display right side player window */
+
 }
 
 /* function to display a blank chessboard to the screen */
 void drawChessboard(SDL_Renderer *renderer){
-        
+
+  SDL_Color positionColor = {255, 255, 255}; /* this color is static */
+
   SDL_Rect whiteTile, blackTile;
   whiteTile.w = BOARD_WIDTH / 8;
   whiteTile.h = BOARD_HEIGHT / 8;
@@ -230,10 +300,10 @@ void drawChessboard(SDL_Renderer *renderer){
   for(int i = 0; i < 8; i++){
     
     for(int j = 0; j < 8; j++){
-      whiteTile.x = j * tileSize;
-      whiteTile.y = i * tileSize;
-      blackTile.x = j * tileSize;
-      blackTile.y = i * tileSize;
+      whiteTile.x = j * tileSize + SCREEN_WIDTH/2 - 4*tileSize;
+      whiteTile.y = i * tileSize + SCREEN_HEIGHT/2 - 4*tileSize;
+      blackTile.x = j * tileSize + SCREEN_WIDTH/2 - 4*tileSize;
+      blackTile.y = i * tileSize + SCREEN_HEIGHT/2 - 4*tileSize;
       
       if(i % 2 == 0){
 	if(j % 2 == 0){
@@ -257,71 +327,113 @@ void drawChessboard(SDL_Renderer *renderer){
       }
     }
   }
+
+  /* display chessboard horizontal coordinates */
+    SDL_Texture *num = renderText("1", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - tileSize - 20);     
+    num = renderText("2", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 2*tileSize - 20);     
+    num = renderText("3", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 3*tileSize - 20);
+    num = renderText("4", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 4*tileSize - 20);
+    num = renderText("5", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 5*tileSize - 20);
+    num = renderText("6", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 6*tileSize - 20);
+    num = renderText("7", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 7*tileSize - 20);
+    num = renderText("8", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(num, renderer, 280, SCREEN_HEIGHT - 8*tileSize - 20);
+
+    /* display chessboard vertical coordinates */
+    SDL_Texture *alpha = renderText("A", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 0.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("B", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 1.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("C", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 2.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("D", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 3.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("E", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 4.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("F", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 5.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("G", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 6.4*tileSize, SCREEN_HEIGHT - 35);     
+    alpha = renderText("H", CALIBRI_FONT, positionColor, 22, renderer);
+    renderTexture2(alpha, renderer, (SCREEN_WIDTH - BOARD_WIDTH)/2 + 7.4*tileSize, SCREEN_HEIGHT - 35);     
 }
 
 /* function to display the pieces in beginning position on the chessboard */
 void drawPieces(SDL_Renderer *renderer){
     
   int i=0;
+  int x_Offset = 0, y_Offset = 0;
+  int pieceSize = 0;
   SDL_Texture *piece = NULL;
-    
+
+  pieceSize = BOARD_WIDTH/8;
+  x_Offset = SCREEN_WIDTH/2 - 4*pieceSize;
+  y_Offset  = SCREEN_HEIGHT/2 - 4*pieceSize;
+
   // black pawns
-  piece = loadTexture("Assets/B_Pawn.png", renderer);
+  piece = loadTexture("Assets/pieces/B_Pawn.png", renderer);
   for(i=0; i<8; i++){
-    renderTexture(piece, renderer, BOARD_WIDTH/8*i, BOARD_HEIGHT/8 , BOARD_WIDTH/8, BOARD_HEIGHT/8);
+    renderTexture(piece, renderer, pieceSize*i + x_Offset, pieceSize + y_Offset, pieceSize, pieceSize);
   }
   
   // black rooks
-  piece = loadTexture("Assets/B_Rook.png", renderer);
-  renderTexture(piece, renderer, 0, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*7, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/B_Rook.png", renderer);
+  renderTexture(piece, renderer, x_Offset, y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*7 + x_Offset, y_Offset, pieceSize, pieceSize);
   
   // black knights
-  piece = loadTexture("Assets/B_Knight.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*6, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/B_Knight.png", renderer);
+  renderTexture(piece, renderer, pieceSize + x_Offset, y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*6 + x_Offset, y_Offset, pieceSize, pieceSize);
   
   // black bishops
-  piece = loadTexture("Assets/B_Bishop.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*2, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*5, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/B_Bishop.png", renderer);
+  renderTexture(piece, renderer, pieceSize*2 + x_Offset, y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*5 + x_Offset, y_Offset, pieceSize, pieceSize);
   
   // black king
-  piece = loadTexture("Assets/B_King.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*4, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/B_King.png", renderer);
+  renderTexture(piece, renderer, pieceSize*4 + x_Offset, y_Offset, pieceSize, pieceSize);
   
   // black queen
-  piece = loadTexture("Assets/B_Queen.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*3, 0, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/B_Queen.png", renderer);
+  renderTexture(piece, renderer, pieceSize*3 + x_Offset, y_Offset, pieceSize, pieceSize);
   
   // white pawns
-  piece = loadTexture("Assets/W_Pawn.png", renderer);
+  piece = loadTexture("Assets/pieces/W_Pawn.png", renderer);
   for(i=0; i<8; i++){
-    renderTexture(piece, renderer, BOARD_WIDTH/8*i, BOARD_HEIGHT/8*6 , BOARD_WIDTH/8, BOARD_HEIGHT/8);
+    renderTexture(piece, renderer, pieceSize*i + x_Offset, pieceSize*6 + y_Offset, pieceSize, pieceSize);
   }
     
   // white rooks
-  piece = loadTexture("Assets/W_Rook.png", renderer);
-  renderTexture(piece, renderer, 0, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*7, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/W_Rook.png", renderer);
+  renderTexture(piece, renderer, x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*7 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
   
   // white knights
-  piece = loadTexture("Assets/W_Knight.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*6, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/W_Knight.png", renderer);
+  renderTexture(piece, renderer, pieceSize + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*6 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
   
   // white bishops
-  piece = loadTexture("Assets/W_Bishop.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*2, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*5, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/W_Bishop.png", renderer);
+  renderTexture(piece, renderer, pieceSize*2 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
+  renderTexture(piece, renderer, pieceSize*5 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
   
   // white king
-  piece = loadTexture("Assets/W_King.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*4, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/W_King.png", renderer);
+  renderTexture(piece, renderer, pieceSize*4 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
   
   // white queen
-  piece = loadTexture("Assets/W_Queen.png", renderer);
-  renderTexture(piece, renderer, BOARD_WIDTH/8*3, BOARD_HEIGHT/8*7, BOARD_WIDTH/8, BOARD_HEIGHT/8);
+  piece = loadTexture("Assets/pieces/W_Queen.png", renderer);
+  renderTexture(piece, renderer, pieceSize*3 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
 }
 
 /* TEMPORARY: events handling function to allow testing of rendering/drawing functions */
