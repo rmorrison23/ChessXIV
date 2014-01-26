@@ -13,6 +13,8 @@ ChessBoard * InitializeChessBoard(void){
 	assert(ChessBoardToReturn->WhitePlayer && ChessBoardToReturn->BlackPlayer);
 	ChessBoardToReturn->WhitePlayer->PlayerColor = White;
 	ChessBoardToReturn->BlackPlayer->PlayerColor = Black;
+	ChessBoardToReturn->WhitePlayer->OtherPlayer = ChessBoardToReturn->BlackPlayer;
+	ChessBoardToReturn->BlackPlayer->OtherPlayer = ChessBoardToReturn->WhitePlayer;
 	
 	/*malloc all coordinate on the board*/
 	int i,j;
@@ -23,6 +25,7 @@ ChessBoard * InitializeChessBoard(void){
 			ChessBoardToReturn->Board[i][j]->Piece = NULL;
 			ChessBoardToReturn->Board[i][j]->Rank = i;
 			ChessBoardToReturn->Board[i][j]->File = j;
+			ChessBoardToReturn->Board[i][j]->MainBoard = ChessBoardToReturn;
 		}
 	}
 	

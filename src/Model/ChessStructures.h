@@ -32,6 +32,9 @@ typedef struct {
 struct ChessCoordinateStruct {
   unsigned char Rank, File;
   ChessPiece * Piece;
+  
+  /*point back to the board, allows horizontal movement to other coordinate*/
+  ChessBoard * MainBoard;
 };
 
 struct ChessCoordinateListStruct{
@@ -48,8 +51,11 @@ struct ChessPlayerStruct{
 	AIDifficultyLevel	AIDifficulty;
 	PlayerControlEnum	PlayerControl;
 
+	/*pointer to other player*/
+	ChessPlayer *	OtherPlayer;
+	
 	/*list all the ];pieces that could belong to a player*/
-	ChessPiece * Pieces[16];
+	ChessPiece *	Pieces[16];
 };
 
 
@@ -61,9 +67,11 @@ struct ChessPieceStruct{
 	Boolean			AliveFlag;
 };
 
-struct ChessMoveStruct{	
+struct ChessMoveStruct{
+	ChessPiece *	MovePiece;
 	ChessCoordinate * StartPosition;
 	ChessCoordinate * NextPosition;
+	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
 };
 
