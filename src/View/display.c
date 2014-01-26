@@ -42,7 +42,7 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
   SDL_Texture *twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, buttonColor, 72, renderer);
   renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90));
-  SDL_Texture *advanced_Button = renderText(ADVANCED, CALIBRI_FONT, buttonColor, 72, renderer);
+  SDL_Texture *advanced_Button = renderText("AI Versus AI", CALIBRI_FONT, buttonColor, 72, renderer);
   renderTexture2(advanced_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
 }
 
