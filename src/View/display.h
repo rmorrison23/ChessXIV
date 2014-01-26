@@ -15,19 +15,19 @@
 #include <stdio.h>
 
 /* function to display the main menu to the screen */
-void drawMainMenu(SDL_Renderer *renderer);
+void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer);
 
 /* function to display the one player menu to the screen */
-void drawOnePlayerMenu(SDL_Renderer *renderer);
+void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer);
 
 /* function to display the one player menu to the screen */
-void drawTwoPlayerMenu(SDL_Renderer *renderer);
+void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer);
 
 /* function to display the advanced menu to the screen */
-void drawAdvancedMenu(SDL_Renderer *renderer);
+void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer);
 
 /* function to display the gameplay window to the screen */
-void drawGameplayScreen(SDL_Renderer *renderer);
+void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer);
 
 /* function to display a blank chessboard to the screen */
 void drawChessboard(SDL_Renderer *renderer);
