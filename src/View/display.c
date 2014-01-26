@@ -7,7 +7,8 @@
 /*          12/22/13 initial file creation; draw window with checkerboard     */
 /*          12/28/13 draw pieces on board                                     */
 /*          01/18/14 draw main menu                                           */
-/*          01/25/14 draw one player menu, draw two player                    */
+/*          01/25/14 draw one player menu, draw two player,                   */
+/*                   draw advanced menu,  */
 /******************************************************************************/
 
 #include <stdio.h>
@@ -176,6 +177,40 @@ void drawTwoPlayerMenu(SDL_Renderer *renderer){
 
 /* function to display the advanced menu to the screen */
 void drawAdvancedMenu(SDL_Renderer *renderer){
+
+  int margin         = 0;
+  int titleWidth     = 0;
+  int buttonWidth    = 0;
+  int buttonHeight   = 0;
+
+  SDL_Color titleColor = {0xA8, 0xC6, 0xDB}; /* this color is static */
+  SDL_Color buttonColor = {255, 255, 255}; /* this color is dynamic; default white */
+
+  margin = SCREEN_WIDTH/2 + 25;
+
+  /* create two player background image */
+  SDL_Texture *backSplash = NULL;
+  backSplash = loadTexture("Assets/Menu_Backgrounds/Background_1600_900.jpg", renderer);
+  renderTexture(backSplash, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  /* create title */
+  SDL_Texture *title = renderText("Advanced Options", CALIBRI_FONT, titleColor, 100, renderer);
+  SDL_QueryTexture(title, NULL, NULL, &titleWidth, NULL);
+  renderTexture2(title, renderer, (SCREEN_WIDTH - titleWidth)/2, SCREEN_HEIGHT*0);
+
+  /* create board setup button */
+  SDL_Texture *boardSetup_Button = renderText("Interactive Board Setup", CALIBRI_FONT, buttonColor, 50, renderer);
+  SDL_QueryTexture(boardSetup_Button, NULL, NULL, &buttonWidth, NULL);
+  SDL_QueryTexture(boardSetup_Button, NULL, NULL, NULL, &buttonHeight);
+  renderTexture2(boardSetup_Button, renderer, margin, SCREEN_HEIGHT/4);
+
+  /* create demo button */
+  SDL_Texture *demo_Button = renderText("Demo", CALIBRI_FONT, buttonColor, 50, renderer);
+  renderTexture2(demo_Button, renderer, margin + 150, SCREEN_HEIGHT/4 + 2*buttonHeight);
+  
+  /* create main menu button */
+  SDL_Texture *mainMenu_Button = renderText("Main Menu", CALIBRI_FONT, buttonColor, 50, renderer);
+  renderTexture2(mainMenu_Button, renderer, margin + 100, SCREEN_HEIGHT/4 + 4*buttonHeight);
 }
 
 /* function to display the gameplay window to the screen */
