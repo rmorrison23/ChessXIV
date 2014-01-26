@@ -43,11 +43,13 @@ int main(int argc, char *argv[]){
     
     /* testing draw functions here; they are not yet linked with events handling/bools */
     /* so only one draw can be run at a time right now */
-    drawMainMenu(renderer);
+    /* drawMainMenu(renderer); */
+
+    drawOnePlayerMenu(renderer);
     
-    /* drawChessboard(); */
+    /* drawChessboard(renderer); */
     
-    /* drawPieces(); */
+    /* drawPieces(renderer); */
     
     SDL_RenderPresent(renderer);
     
