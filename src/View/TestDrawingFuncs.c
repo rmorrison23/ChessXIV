@@ -49,7 +49,9 @@ int main(int argc, char *argv[]){
 
     /* drawTwoPlayerMenu(renderer); */
    
-    drawAdvancedMenu(renderer);
+    /* drawAdvancedMenu(window, renderer); */
+
+    drawGameplayScreen(window, renderer);
  
     /* drawChessboard(renderer); */
     
