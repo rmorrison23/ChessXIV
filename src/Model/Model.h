@@ -15,17 +15,22 @@ Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *);
 
 ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *);
 
+/* done, actually move the pieces to its destination */
 ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 
+/* undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
-/*If this chess player is checkmakte, return True*/
+/* almost done, If this chess player is checkmakte, return True*/
 Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
 
-/*This chess player is in checked position and must get out, return True*/
+/* done, If this chess player is in checked position and must get out, return True*/
 Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
 
-/*Get all the legal coordinate of a player */
+/* almost done */
+Boolean Model_Stalemate(ChessBoard *, ChessPlayer *);
+
+/* done, Get all the legal coordinate of a player */
 ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard *, ChessPlayer *, ChessPlayer *);
 
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);

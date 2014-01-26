@@ -82,6 +82,49 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 	return newChessCoordinateList1;
 }
 
+Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
+{
+	/* grab list of legal move of other player */
+	ChessCoordinateList * newList = Model_GetAllLegalCoordinate(board, player->OtherPlayer, player);
+	
+	/* a temp node to traverse the list */
+	ChessCoordinateNode *tempNode = ChessCoordinateList->FirstNode;
+
+	/* there is a legal move for other player */
+	if (newList != NULL)
+	{
+		while (tempNode != NULL)
+		{
+		/* check the coordinate of the player king to the legal coordinate of other player */
+			if (getPiece(player, King, 0)->Coordinate == tempNode->Coordinate)
+			{
+				return True;
+			}
+			/* traverse the list */
+			tempNode = tempNode->NextNode;
+		}
+	}
+	return False;
+}
+
+Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
+{
+	if (Model_CheckCheckedPosition(board, player) && /* no legal move */)
+	{
+		return True;
+	}	
+	return False;
+}
+
+Boolean Model_Stalemate(ChessBoard * board, ChessPlayer * player)
+{
+	if (!Model_CheckCheckedPosition(board, player) && /* no legal move */)
+	{
+		return True;
+	}	
+	return False;
+}
+
 /* uses GetLegalCoordinates */
 /* see if move is legal */
 Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
