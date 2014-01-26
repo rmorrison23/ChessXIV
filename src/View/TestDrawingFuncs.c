@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
     
     /* testing draw functions here; they are not yet linked with events handling/bools */
     /* so only one draw can be run at a time right now */
-    /* drawMainMenu(renderer); */
+    /* drawMainMenu(window, renderer); */
 
     /* drawOnePlayerMenu(renderer); */
 
