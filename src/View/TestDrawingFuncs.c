@@ -45,7 +45,9 @@ int main(int argc, char *argv[]){
     /* so only one draw can be run at a time right now */
     /* drawMainMenu(renderer); */
 
-    drawOnePlayerMenu(renderer);
+    /* drawOnePlayerMenu(renderer); */
+
+    drawTwoPlayerMenu(renderer);
     
     /* drawChessboard(renderer); */
     
