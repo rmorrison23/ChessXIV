@@ -57,27 +57,24 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	return board;
 }
 
-ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player)
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn)
 {
 	int i = 0;
 	
 	/* create a permanent coordinate list to be return */
-	ChessCoordinateList *newChessCoordinateList1 = malloc(sizeof(ChessCoordinateList));
-	assert(newChessCoordinateList1);
-	
+	ChessCoordinateList *newChessCoordinateList1;
 	/* create a temp coordinate list to be append */
-	ChessCoordinateList *newChessCoordinateList2 = malloc(sizeof(ChessCoordinateList));
-	assert(newChessCoordinateList2);
+	ChessCoordinateList *newChessCoordinateList2;
 
 	/* storing the value of the permanent list */
-	newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0]);
+	newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0], PlayerInTurn);
 
 	/* for loop to store the remaining 15 piece into a temp list, then appending new coordinate into 
 	the permanent list */
 	for (i = 1; i < 16; i++)
 	{
 		/* storing coordinate into the temp list */
-		newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i]);
+		newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
 		
 		/* appending the two list so there is no duplicate coordinate */
 		ChessCoordinateList_AppendNoRedunduncy(newChessCoordinateList1, newChessCoordinateList2);

@@ -26,7 +26,7 @@ Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
 Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
 
 /*Get all the legal coordinate of a player */
-ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard *, ChessPlayer *);
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard *, ChessPlayer *, ChessPlayer *);
 
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);
 
