@@ -83,7 +83,7 @@ struct ChessMoveNodeStruct{
 };
 
 struct ChessMoveListStruct{
-	ChessMove * FirstMove, * LastMove;
+	ChessMoveNode * FirstNode, * LastNode;
 };
 
 

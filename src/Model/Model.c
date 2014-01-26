@@ -10,6 +10,8 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	/* the place to move to has an enemy piece */
 	if (move->NextPosition->Piece != NULL)
 	{
+		/* send to grave yard*/
+		move->CapturePiece = move->NextPosition->Piece;
 		/* kill it */
 		move->NextPosition->Piece->AliveFlag = False;
 		/* set that dead piece coordinate to null */
@@ -24,23 +26,34 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	/* delete piece pointer at previous location */
 	move->StartPosition->Piece = NULL;
 
-/*Need review to match new ChessMoveList*/
-#if 0
 	/* update move list */
-	/* go to the end of the link-list */
-	while (moveList->NextMove != NULL)
+	ChessMoveNode * newMoveNode = malloc(ChessMoveNode);
+	assert (newMoveNode);
+
+	/* point new List to old list */
+	newMoveNode->List = moveList;
+
+	/* point new move to move */
+	newMoveNode->Move = move;
+	
+	/* set next node to null */
+	newMoveNode->NextNode = NULL;
+
+	/* list is empty */
+	if (moveList ->FirstNode == NULL)
 	{
-		moveList = moveList->NextMove;
+		moveList->FirstNode = newMoveNode;
+		moveList->LastNode = newMoveNode;
+		newMoveNode->PrevNode = NULL;
 	}
-	/* forward link */
-	moveList->NextMove = move;
-	
-	/*backward link */
-	moveList->NextMove->PrevMove = moveList;
-	
-	/*set the move of the next move */
-	moveList->NextMove->Move = move;
-#endif
+
+	/* list is not empty */
+	else
+	{
+		moveList->LastNode->NextNode = newMoveNode;
+		newMoveNode->PrevNode = moveList->LastNode;
+		moveList->LastNode = newMoveNode;
+	}
 	return board;
 }
 
