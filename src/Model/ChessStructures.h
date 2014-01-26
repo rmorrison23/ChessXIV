@@ -44,6 +44,7 @@ struct ChessCoordinateListStruct{
 struct ChessCoordinateNodeStruct{
 	ChessCoordinateNode * NextNode, * PrevNode;
 	ChessCoordinate * Coordinate;
+	ChessCoordinateList * List;
 };
 
 struct ChessPlayerStruct{
