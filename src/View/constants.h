@@ -24,6 +24,9 @@ static const char *ONE_PLAYER  = "One Player";
 static const char *TWO_PLAYERS = "Two Players";
 static const char *ADVANCED    = "Advanced";
 
+static const char *ONE_PLAYER_OPTIONS = "ONE PLAYER OPTIONS";
+
+
 static const char *CALIBRI_FONT = "Assets/fonts/Calibri.ttf";
 
 #endif
