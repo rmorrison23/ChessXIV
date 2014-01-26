@@ -47,49 +47,208 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	ChessCoordinate *checkSpace;
 	int targetRank, targetFile;
 	
-	if(piece->Type == Pawn) {
-		if(piece->Player->PlayerColor == White) {
-			/* check rank+1 to see if empty */
+        if(piece->Type == Pawn) {
+                if(piece->Player->PlayerColor == White) {
+                        /* check rank+1 to see if empty */
+                        targetRank = 1 + piece->Coordinate->rank;
+                        targetFile = piece->Coordinate->file;
+                        if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* check rank+1, file-1 to see if capture */
+                        targetRank = piece->Coordinate->rank + 1;
+                        targetFile = piece->Coordinate->file - 1;
+                        if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece != NULL && chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* check rank+1, file+1 to see if capture */
+                        targetRank = piece->Coordinate->rank + 1;
+                        targetFile = piece->Coordinate->file + 1;
+                        if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece != NULL && chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* if hasn't moved yet, check rank+2 if empty */
+                        if(firstMove) {
+                                targetRank = piece->Coordinate->rank + 2;
+                                targetFile = piece->Coordinate->file;
+                                if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+                                        if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+                                                /* add to valid move */
+                                        }
+                                }
+                        }
+                        
+                }
+                if(piece->Player->PlayerColor == Black) {
+                        /* check rank-1 to see if empty */
+                        targetRank = -1 + piece->Coordinate->rank;
+                        targetFile = piece->Coordinate->file;
+                        if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* check rank-1, file-1 to see if capture */
+                        targetRank = piece->Coordinate->rank - 1;
+                        targetFile = piece->Coordinate->file - 1;
+                        if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece != NULL && chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* check rank-1, file+1 to see if capture */
+                        targetRank = piece->Coordinate->rank - 1;
+                        targetFile = piece->Coordinate->file + 1;
+                        if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+                                if(chessboard->Board[targetRank][targetFile]->Piece != NULL && chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+                                        /* add to valid move */
+                                }
+                        }
+                        
+                        /* if hasn't moved yet, check rank-2 if empty */
+                        if(firstMove) {
+                                targetRank = piece->Coordinate->rank - 2;
+                                targetFile = piece->Coordinate->file;
+                                if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+                                        if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+                                                /* add to valid move */
+                                        }
+                                }
+                        }
+                        
+                }
+        }
+		
+		if(piece->Type == Knight) {
 			targetRank = 1 + piece->Coordinate->rank;
-			targetFile = piece->Coordinate->file;
-			if(targetRank <= 7 && targetRank <= 7 {
+			targetFile = 2 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
 					/* add to valid move */
 				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
 			}
-			
-			/* check rank+1, file-1 to see if capture */
-			targetRank = piece->Coordinate->rank + 1;
-			targetFile = piece->Coordinate->file - 1;
-			if(targetRank <= 7 && targetRank <= 7 {
-				if(chessboard->Board[targetRank][targetFile]->Piece != NULL) {
+			targetRank = 2 + piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
 					/* add to valid move */
 				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
 			}
 			
-			/* check rank+1, file+1 to see if capture */
-			targetRank = piece->Coordinate->rank + 1;
-			targetFile = piece->Coordinate->file + 1;
-			if(targetRank <= 7 && targetRank <= 7 {
-				if(chessboard->Board[targetRank][targetFile]->Piece != NULL) {
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = 2 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
 					/* add to valid move */
 				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
 			}
-			
-			/* if hasn't moved yet, check rank+2 if empty */
-			if(firstMove) {
-				targetRank = piece->Coordinate->rank + 2;
-				targetFile = piece->Coordinate->file;
-				if(targetRank <= 7 && targetRank <= 7 {
-					if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-						/* add to valid move */
-					}
+			targetRank = -2 + piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+					/* add to valid move */
+				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
 				}
 			}
 			
+			targetRank = 1 + piece->Coordinate->rank;
+			targetFile = -2 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+					/* add to valid move */
+				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
+			}
+			targetRank = 2 + piece->Coordinate->rank;
+			targetFile = -1 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+					/* add to valid move */
+				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
+			}
+			
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = -2 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+					/* add to valid move */
+				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
+			}
+			targetRank = -2 + piece->Coordinate->rank;
+			targetFile = -1 + piece->Coordinate->file;
+			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+					/* add to valid move */
+				}
+				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
+					/* add to valid move */
+					/* capture piece */
+				}
+			}
 		}
-	}
-	
+		
+		if(piece->Type == King) {
+			targetRank = 1 + piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			
+			targetRank = 1 + piece->Coordinate->rank;
+			targetFile = piece->Coordinate->file;
+			
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			
+			targetRank = piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			
+			targetRank = piece->Coordinate->rank;
+			targetFile = -1 + piece->Coordinate->file;
+			
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = 1 + piece->Coordinate->file;
+			
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = piece->Coordinate->file;
+			
+			targetRank = -1 + piece->Coordinate->rank;
+			targetFile = -1 + piece->Coordinate->file;
+		}
 	
 	return output;
 }
