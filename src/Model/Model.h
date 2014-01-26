@@ -25,6 +25,9 @@ Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
 /*This chess player is in checked position and must get out, return True*/
 Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
 
+/*Get all the legal coordinate of a player */
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard *, ChessPlayer *);
+
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);
 
 void Model_CleanUp(ChessBoard *, ChessMoveList *);
