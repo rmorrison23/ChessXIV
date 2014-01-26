@@ -7,7 +7,7 @@
 /*          12/22/13 initial file creation; draw window with checkerboard     */
 /*          12/28/13 draw pieces on board                                     */
 /*          01/18/14 draw main menu                                           */
-/*          01/25/14 draw one player menu                                     */
+/*          01/25/14 draw one player menu, draw two player                    */
 /******************************************************************************/
 
 #include <stdio.h>
@@ -118,8 +118,60 @@ void drawOnePlayerMenu(SDL_Renderer *renderer){
   renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
 }
 
-/* function to display the one player menu to the screen */
+/* function to display the two player menu to the screen */
 void drawTwoPlayerMenu(SDL_Renderer *renderer){
+
+  int leftMargin   = 50;
+  int rightMargin  = 675;
+  int stringWidth  = 0;
+  int stringHeight = 0;
+
+  SDL_Color titleColor = {0xA8, 0xC6, 0xDB}; /* this color is static */
+  SDL_Color optionColor = {255, 255, 255};/* this color is static */
+  SDL_Color buttonColor = {255, 255, 255}; /* this color is dynamic; default white */
+
+  /* create two player background image */
+  SDL_Texture *backSplash = NULL;
+  backSplash = loadTexture("Assets/Menu_Backgrounds/Background_1600_900.jpg", renderer);
+  renderTexture(backSplash, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  /* create title */
+  SDL_Texture *title = renderText("Two Player Options", CALIBRI_FONT, titleColor, 100, renderer);
+  SDL_QueryTexture(title, NULL, NULL, &stringWidth, NULL);
+  renderTexture2(title, renderer, (SCREEN_WIDTH - stringWidth)/2, SCREEN_HEIGHT*0);
+
+  /* create timer option with buttons */
+  SDL_Texture *timeOption = renderText("Timer:", CALIBRI_FONT, optionColor, 50, renderer);
+  SDL_QueryTexture(timeOption, NULL, NULL, &stringWidth, NULL);
+  renderTexture2(timeOption, renderer, leftMargin, SCREEN_HEIGHT/5);
+
+  SDL_Texture *fiveMin_Button = renderText("5 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
+  SDL_QueryTexture(fiveMin_Button, NULL, NULL, NULL, &stringHeight);
+  renderTexture2(fiveMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5);
+  SDL_Texture *fifteenMin_Button = renderText("15 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
+  renderTexture2(fifteenMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight);
+  SDL_Texture *sixtyMin_Button = renderText("60 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
+  renderTexture2(sixtyMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 2*stringHeight);
+  SDL_Texture *off_Button = renderText("Off", CALIBRI_FONT, optionColor, 50, renderer);
+  renderTexture2(off_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 3*stringHeight);
+
+  /* create input options */
+  SDL_Texture *inputOption = renderText("Input:", CALIBRI_FONT, optionColor, 50, renderer);
+  SDL_QueryTexture(inputOption, NULL, NULL, &stringWidth, NULL);
+  renderTexture2(inputOption, renderer, rightMargin, SCREEN_HEIGHT/5);
+
+  SDL_Texture *kbd_Button = renderText("Keyboard", CALIBRI_FONT, optionColor, 50, renderer);
+  renderTexture2(kbd_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5);
+  SDL_Texture *mouse_Button = renderText("Mouse", CALIBRI_FONT, optionColor, 50, renderer);
+  renderTexture2(mouse_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight);
+
+  /* create main menu button */
+  SDL_Texture *mainMenu_Button = renderText("Main Menu", CALIBRI_FONT, buttonColor, 50, renderer);
+  renderTexture2(mainMenu_Button, renderer, leftMargin, SCREEN_HEIGHT/5 + 7*stringHeight);
+
+  /* create play button */
+  SDL_Texture *play_Button = renderText("Play", CALIBRI_FONT, buttonColor, 50, renderer);
+  renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
 }
 
 /* function to display the advanced menu to the screen */
