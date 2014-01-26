@@ -47,8 +47,10 @@ int main(int argc, char *argv[]){
 
     /* drawOnePlayerMenu(renderer); */
 
-    drawTwoPlayerMenu(renderer);
-    
+    /* drawTwoPlayerMenu(renderer); */
+   
+    drawAdvancedMenu(renderer);
+ 
     /* drawChessboard(renderer); */
     
     /* drawPieces(renderer); */
