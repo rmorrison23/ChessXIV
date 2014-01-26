@@ -16,3 +16,7 @@
 *.exe
 *.out
 *.app
+
+build/StructuredLibraryTest
+
+src/View/Chess
