@@ -44,9 +44,6 @@ void drawChessboard(SDL_Renderer *renderer);
 /* function to display the pieces in beginning position on the chessboard */
 void drawPieces(SDL_Renderer *renderer);
 
-/* TEMPORARY: events handling function to allow testing of rendering/drawing functions */
-int events();
-
 /* function to uninitialize SDL systems */
 void clean();
 
