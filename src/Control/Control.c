@@ -9,7 +9,7 @@ static ChessMoveList * MainMoveList;
 void Control_Initialize(void){
 	/*initialize the board*/
 	MainChessBoard = Model_Initialize();
-	MainMoveList = NULL;
+	MainMoveList = malloc(sizeof(ChessMoveList));
 	
 	/*initialize the view*/
 	View_Initialize();
@@ -35,6 +35,7 @@ void Control_MainLoop(void){
 	MainChessBoard->BlackPlayer->PlayerControl = AskPlayerControl(MainChessBoard->BlackPlayer);
 	if (MainChessBoard->BlackPlayer->PlayerControl == AI)
 		MainChessBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
+	DisplayChessBoard(MainChessBoard);
 	
 #if 0
 	
@@ -81,15 +82,28 @@ void Control_MainLoop(void){
 					Coordinate1 = NULL;
 				}
 			}
-			
+			DisplayChessBoard(MainChessBoard);
 			while (!Coordinate2){
 				/*highlight the legal moves*/
 				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
+				
+#if 0
+				printf("got here\n");
+				ChessCoordinateNode * MyNode = LegalChessCoordList->FirstNode;
+				printf("printing legal\n");
+				while (MyNode){
+						printf("%d %d\n", MyNode->Coordinate->Rank, MyNode->Coordinate->File);
+						MyNode = MyNode->NextNode;
+				}
+				
+#endif
+				
+				
 				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
 				/*let user select the next coordinate*/
 				Coordinate2 = View_GetOneCoordinate(MainChessBoard);
 				if (Coordinate2->Piece){
-					if (Coordinate2->Piece->Player->PlayerColor == CurrentPlayer->PlayerColor){
+					if (Coordinate2->Piece->Player == CurrentPlayer){
 						/*select own piece, reset the coordinate 1 and set null to coordinate2*/
 						Coordinate1 = Coordinate2;
 						Coordinate2 = NULL;
@@ -112,7 +126,7 @@ void Control_MainLoop(void){
 					}
 				}
 			}
-			
+			DisplayChessBoard(MainChessBoard);
 			/*construct chess move then perform it*/
 			LocalChessMove = malloc(sizeof(ChessMove));
 			assert(LocalChessMove);
@@ -126,15 +140,10 @@ void Control_MainLoop(void){
 		}
 #endif
 		/*check for checkmate*/
+		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
 			GameOnFlag = False;
-		} else {
-			/*switch player*/
-			if (CurrentPlayer->PlayerColor == White)
-				CurrentPlayer = MainChessBoard->BlackPlayer;
-			else
-				CurrentPlayer = MainChessBoard->WhitePlayer;
-		}
+		} 
 	}
 	
 	/*conclude the game*/
