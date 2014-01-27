@@ -106,14 +106,15 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 
 	/* storing the value of the permanent list */
 	newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0], PlayerInTurn);
-
+	printf("Working on piece index 0\n");
 	/* for loop to store the remaining 15 piece into a temp list, then appending new coordinate into 
 	the permanent list */
 	for (i = 1; i < 16; i++)
 	{
 		/* storing coordinate into the temp list */
+		printf("Working on piece index %d: type %d\n", i, player->Pieces[i]->Type);
 		newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
-		printf("Working on piece index %d\n", i);
+		
 		/* appending the two list so there is no duplicate coordinate */
 		ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
 	}
@@ -445,13 +446,45 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		break;
 	case King: {
 	      curr_coor = piece->Coordinate;
-	      for(dir_index = 0; dir_index < 8; dir_index++)
-		{
-		      target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
-		      if(target_coor) {
+	            
+		      
 			if(piece->Player == playerinturn)
 			  {
-			    inDanger = 0;
+				  printf("same player\n");
+				for(dir_index = 0; dir_index < 8; dir_index++)
+				{
+				/*printf("Beginning of loop 1: %d %p\n", dir_index, target_coor);*/
+				target_coor = piece->Coordinate;
+				/*printf("Beginning of loop 2 : %d %p\n", dir_index, target_coor);*/
+				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);			
+				/*printf("Beginning of loop 3: %d %p\n", dir_index, target_coor);*/
+				if (!target_coor) {printf("case 1\n"); continue;}
+				
+				if (target_coor->Piece){
+					if (target_coor->Piece->Player == piece->Player)
+						{printf("case 2\n"); continue;}	
+				}
+				
+				printf("Trying to get all legal of opponents\n");
+				 OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn);
+				 printf("Got to get all legal of opponents\n");
+				ChessCoordinateNode * checkSpace = OpponentLegalMoves->FirstNode;
+				inDanger = 0;
+			    while(checkSpace) {
+			      if(target_coor == checkSpace->Coordinate) {
+					inDanger = 1;
+					break;
+			      }
+			      
+			      else {
+					checkSpace = checkSpace->NextNode;
+			      }
+			    }
+			    if (inDanger == 0){
+				    output = ChessCoordinateList_AppendCoord(output,target_coor);  
+			    }
+			    
+			   /* inDanger = 0;
 			    OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player, playerinturn);
 			    ChessCoordinateNode * checkSpace = OpponentLegalMoves->FirstNode;
 			    while(checkSpace) {
@@ -471,22 +504,33 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 				if(chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player != piece->Player)
 				  { output = ChessCoordinateList_AppendCoord(output,curr_coor);
 				  }
-			      }
+			      }*/
 			  }
 
-			else
+			  } else
 			  {
-			    if(chessboard->Board[target_coor->Rank][target_coor->File]->Piece == NULL) 
-			      {
-				output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			      }
-			    if(chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player != piece->Player)
-			      { output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			      }
+				  printf("diff player\n");
+			   for(dir_index = 0; dir_index < 8; dir_index++)
+				{
+				target_coor = piece->Coordinate;
+				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
+				StopFlag = False;
+					
+				if (!target_coor){
+					continue;
+				}else if (target_coor->Piece == NULL){
+					output = ChessCoordinateList_AppendCoord(output,target_coor);  
+				} else if (target_coor->Piece->Player == piece->Player){
+					
+				} else {
+					output = ChessCoordinateList_AppendCoord(output,target_coor);  
+					
+				}					
+						
+				
+				}
 			  }
-		      }
-		}
-	     }
+	}
 	  break;
 	}
 	return output;

@@ -1,5 +1,5 @@
 CC	:= gcc
-CFLAGS	:= -ansi -Wall
+CFLAGS	:= -ansi -Wall -g
 
 ifeq ($(GUI_ENABLE),y)
 	GUI_FLAG=-DGUI_ENABLE

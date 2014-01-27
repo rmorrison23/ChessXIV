@@ -8,14 +8,14 @@ ChessCoordinateList * ChessCoordinateList_AppendNoRedundancy(ChessCoordinateList
 			FirstList = ChessCoordinateList_AppendNode(FirstList, CurrNode);
 			CurrNode->List = FirstList;
 		} else {			
-			free(CurrNode->Coordinate);			
-			free(CurrNode);
+			/*free(CurrNode->Coordinate);			
+			free(CurrNode);*/
 		}
 		
 		CurrNode = FutureNode;
 	}
 	
-	free(SecondList);
+	/*free(SecondList);*/
 	return FirstList;
 	
 }
