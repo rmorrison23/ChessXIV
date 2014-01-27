@@ -8,5 +8,5 @@
 #include "ChessStructures.h"
 
 /*horizontal movement between coordinates*/
-ChessCoordinate * ChessCoordinate_Offset(ChessCoordinate *, char, char);
+ChessCoordinate * ChessCoordinate_Offset(ChessCoordinate *, int, int);
 #endif

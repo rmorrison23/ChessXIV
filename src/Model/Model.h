@@ -8,6 +8,7 @@
 #include "ChessBoard.h"
 #include "ChessPlayer.h"
 #include "ChessCoordinateList.h"
+#include "ChessCoordinate.h"
 #include "ArtificialIntelligence.h"
 
 
@@ -16,6 +17,8 @@ ChessBoard * Model_Initialize(void);
 Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *);
 
 ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, ChessPlayer *);
+
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn);
 
 /* done, actually move the pieces to its destination */
 ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
