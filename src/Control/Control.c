@@ -24,7 +24,7 @@ void Control_MainLoop(void){
 	Coordinate1 = NULL; Coordinate2 = NULL;
 	ChessCoordinateList * LegalChessCoordList; ChessCoordinateNode * LegalChessCoordListNode;
 	ChessMove * LocalChessMove;
-	Event LocalEvent;
+/*Event LocalEvent;*/
 	
 	/*ask user settings*/
 	/*player control*/

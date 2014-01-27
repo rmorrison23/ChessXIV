@@ -213,7 +213,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                         }
                         
                         /* if hasn't moved yet, check rank+2 if empty */
-                        if(piece->CurrPiece->PawnMoveFirstFlag) {
+                        if(piece->PawnMoveFirstFlag) {
                                 targetRank = piece->Coordinate->Rank + 2;
                                 targetFile = piece->Coordinate->File;
                                 if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
@@ -253,7 +253,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                         }
                         
                         /* if hasn't moved yet, check rank-2 if empty */
-                        if(firstMove) {
+                        if(piece->PawnMoveFirstFlag) {
                                 targetRank = piece->Coordinate->Rank - 2;
                                 targetFile = piece->Coordinate->File;
                                 if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
