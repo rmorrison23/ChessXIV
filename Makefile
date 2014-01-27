@@ -31,13 +31,15 @@ INCLUDES  := $(addprefix -I,$(SRC_DIR))
 
 VPATH = $(SRC_DIR) src
 
-.PHONY: all clean
+.PHONY: all clean test
 
-all: StructuredLibraryTest
+all: ChessXIV
+
+test: ModelUnitTest
 
 clean:
 	rm build/*
-	rm ChessXIV
+	rm bin/*
 
 build/%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(GUI_FLAG)
