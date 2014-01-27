@@ -173,7 +173,7 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 
 void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
 	ChessMoveNode * MoveNode1, * MoveNode2;
-	MoveNode1 = MoveList->FirstMove;
+	MoveNode1 = MoveList->FirstNode;
 	
 	while (MoveNode1){
 		MoveNode2 = MoveNode1->NextNode;
