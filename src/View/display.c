@@ -280,9 +280,147 @@ void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer){
   /* display move to input window */
 
   /* display left side player window */
+  drawLeftPlayerWindow(renderer, tileSize, 1);
 
   /* display right side player window */
+  drawRightPlayerWindow(renderer, tileSize, 1);
+}
 
+void drawLeftPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode){
+
+  int margin = 30;
+  int headerWidth = 0, headerHeight = 0;
+  SDL_Rect headerWinL, pieceWinL;
+  SDL_Color headerColor = {0, 0, 0};
+  SDL_Texture *piece = NULL;
+
+  /* using int playerMode for: 1=one player, 2=two players, 3=AIvAI */
+
+  headerWinL.x = margin; 
+  headerWinL.y = SCREEN_HEIGHT/2 - 4*tileSize;
+  headerWinL.w = 3*tileSize;
+  headerWinL.h = tileSize;
+
+  SDL_SetRenderDrawColor(renderer, 0xA8, 0xC6, 0xDB, 0xDB);
+  SDL_RenderFillRect(renderer, &headerWinL);
+
+  pieceWinL.x = margin;
+  pieceWinL.y = SCREEN_HEIGHT/2 - 3*tileSize; 
+  pieceWinL.w = 3*tileSize;
+  pieceWinL.h = 2*tileSize;
+
+  SDL_SetRenderDrawColor(renderer, 0x7B, 0xAD, 0xDB, 0xDB);
+  SDL_RenderFillRect(renderer, &pieceWinL);
+
+  /* draw grid */
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_RenderDrawLine(renderer, margin, SCREEN_HEIGHT/2 - 3*tileSize, margin + 3*tileSize, SCREEN_HEIGHT/2 - 3*tileSize);
+  SDL_RenderDrawLine(renderer, margin, SCREEN_HEIGHT/2 - 2*tileSize, margin + 3*tileSize, SCREEN_HEIGHT/2 - 2*tileSize);  
+  SDL_RenderDrawLine(renderer, margin + tileSize, SCREEN_HEIGHT/2 - 3*tileSize, margin + tileSize, SCREEN_HEIGHT/2 - tileSize);
+  SDL_RenderDrawLine(renderer, margin + 2*tileSize, SCREEN_HEIGHT/2 - 3*tileSize, margin + 2*tileSize, SCREEN_HEIGHT/2 - tileSize);
+
+  /* display player 2 header */
+  SDL_Texture *playerTwoHeader = renderText("P l a y e r  2", CALIBRI_FONT, headerColor, 30, renderer);
+  SDL_QueryTexture(playerTwoHeader, NULL, NULL, &headerWidth, NULL);
+  SDL_QueryTexture(playerTwoHeader, NULL, NULL, NULL, &headerHeight);
+  renderTexture2(playerTwoHeader, renderer, margin + 40, SCREEN_HEIGHT/2 - 4*tileSize);
+
+  /* display timer */
+  SDL_Texture *playerTwoTimer = renderText("5:00", CALIBRI_FONT, headerColor, 30, renderer);
+  renderTexture2(playerTwoTimer, renderer, margin + 80, SCREEN_HEIGHT/2 - 3.5*tileSize);  
+
+  /* display captured pieces */
+  piece = loadTexture("Assets/pieces/W_Pawn.png", renderer);
+  renderTexture(piece, renderer, margin, SCREEN_HEIGHT/2 - 3*tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/W_Rook.png", renderer);
+  renderTexture(piece, renderer, margin + tileSize, SCREEN_HEIGHT/2 - 3*tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/W_Knight.png", renderer);
+  renderTexture(piece, renderer, margin + 2*tileSize, SCREEN_HEIGHT/2 - 3*tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/W_Bishop.png", renderer);
+  renderTexture(piece, renderer, margin, SCREEN_HEIGHT/2 - 2*tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/W_Queen.png", renderer);
+  renderTexture(piece, renderer, margin + tileSize, SCREEN_HEIGHT/2 - 2*tileSize, tileSize, tileSize);
+
+  /* display capture counts */
+  SDL_Texture *pawnCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(pawnCaptureCount, renderer, margin + 5, SCREEN_HEIGHT/2 - 3*tileSize);
+  SDL_Texture *rookCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(rookCaptureCount, renderer, margin + 5 + tileSize, SCREEN_HEIGHT/2 - 3*tileSize);
+  SDL_Texture *knightCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(knightCaptureCount, renderer, margin + 5 + 2*tileSize, SCREEN_HEIGHT/2 - 3*tileSize);
+  SDL_Texture *bishopCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(bishopCaptureCount, renderer, margin + 5, SCREEN_HEIGHT/2 - 2*tileSize);
+  SDL_Texture *queenCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(rookCaptureCount, renderer, margin + 5 + tileSize, SCREEN_HEIGHT/2 - 2*tileSize);    
+}
+
+void drawRightPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode){
+
+  int xMargin = SCREEN_WIDTH - 3*tileSize - 30;
+  int yMargin = SCREEN_HEIGHT/2 + tileSize;
+  int headerWidth = 0, headerHeight = 0;
+  SDL_Rect headerWinR, pieceWinR;
+  SDL_Color headerColor = {0, 0, 0};
+  SDL_Texture *piece = NULL;
+
+  /* using int playerMode for: 1=one player, 2=two players, 3=AIvAI */
+
+  headerWinR.x = xMargin; 
+  headerWinR.y = yMargin;
+  headerWinR.w = 3*tileSize;
+  headerWinR.h = tileSize;
+
+  SDL_SetRenderDrawColor(renderer, 0xA8, 0xC6, 0xDB, 0xDB);
+  SDL_RenderFillRect(renderer, &headerWinR);
+
+  pieceWinR.x = xMargin;
+  pieceWinR.y = yMargin + tileSize;
+  pieceWinR.w = 3*tileSize;
+  pieceWinR.h = 2*tileSize;
+
+  SDL_SetRenderDrawColor(renderer, 0x7B, 0xAD, 0xDB, 0xDB);
+  SDL_RenderFillRect(renderer, &pieceWinR);
+
+  /* draw grid */
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_RenderDrawLine(renderer, xMargin, yMargin + tileSize, xMargin + 3*tileSize, yMargin + tileSize);
+  SDL_RenderDrawLine(renderer, xMargin, yMargin + 2*tileSize, xMargin + 3*tileSize, yMargin + 2*tileSize);
+  SDL_RenderDrawLine(renderer, xMargin + tileSize, yMargin + tileSize, xMargin + tileSize, yMargin +3*tileSize);
+  SDL_RenderDrawLine(renderer, xMargin + 2*tileSize, yMargin + tileSize, xMargin + 2*tileSize, yMargin + 3*tileSize);
+
+  /* display player 1 header */
+  SDL_Texture *playerOneHeader = renderText("P l a y e r  1", CALIBRI_FONT, headerColor, 30, renderer);
+  SDL_QueryTexture(playerOneHeader, NULL, NULL, &headerWidth, NULL);
+  SDL_QueryTexture(playerOneHeader, NULL, NULL, NULL, &headerHeight);
+  renderTexture2(playerOneHeader, renderer, xMargin + 40, yMargin);
+
+  /* display timer */
+  SDL_Texture *playerOneTimer = renderText("5:00", CALIBRI_FONT, headerColor, 30, renderer);
+  renderTexture2(playerOneTimer, renderer, xMargin + 80, yMargin + 0.5*tileSize);
+
+  /* display captured pieces */
+  piece = loadTexture("Assets/pieces/B_Pawn.png", renderer);
+  renderTexture(piece, renderer, xMargin, yMargin + tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/B_Rook.png", renderer);
+  renderTexture(piece, renderer, xMargin + tileSize, yMargin + tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/B_Knight.png", renderer);
+  renderTexture(piece, renderer, xMargin + 2*tileSize, yMargin + tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/B_Bishop.png", renderer);
+  renderTexture(piece, renderer, xMargin, yMargin + 2*tileSize, tileSize, tileSize);
+  piece = loadTexture("Assets/pieces/B_Queen.png", renderer);
+  renderTexture(piece, renderer, xMargin + tileSize, yMargin +  2*tileSize, tileSize, tileSize);
+
+  /* display capture counts */
+  SDL_Texture *pawnCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(pawnCaptureCount, renderer, xMargin + 5, yMargin + tileSize);
+  SDL_Texture *rookCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(rookCaptureCount, renderer, xMargin + 5 + tileSize, yMargin + tileSize);
+  SDL_Texture *knightCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(knightCaptureCount, renderer, xMargin + 5 + 2*tileSize, yMargin + tileSize);
+  SDL_Texture *bishopCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(bishopCaptureCount, renderer, xMargin + 5, yMargin + 2*tileSize);
+  SDL_Texture *queenCaptureCount = renderText("0", CALIBRI_FONT, headerColor, 20, renderer);
+  renderTexture2(queenCaptureCount, renderer, xMargin + 5 + tileSize, yMargin + 2*tileSize); 
 }
 
 /* function to display a blank chessboard to the screen */
