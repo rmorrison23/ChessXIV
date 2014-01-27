@@ -28,14 +28,7 @@ void Control_MainLoop(void){
 	
 	/*ask user settings*/
 	/*player control*/
-	MainChessBoard->WhitePlayer->PlayerControl = AskPlayerControl(MainChessBoard->WhitePlayer);
-	if (MainChessBoard->WhitePlayer->PlayerControl == AI)
-		MainChessBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
-	
-	MainChessBoard->BlackPlayer->PlayerControl = AskPlayerControl(MainChessBoard->BlackPlayer);
-	if (MainChessBoard->BlackPlayer->PlayerControl == AI)
-		MainChessBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
-	DisplayChessBoard(MainChessBoard);
+	MainChessBoard = SetOptions(MainChessBoard);
 	
 #if 0
 	

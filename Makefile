@@ -52,5 +52,6 @@ ControlUnitTest: build/ControlUnitTest.o build/libControl.a
 	
 ChessXIV: build/ChessXIV.o build/libControl.a build/libView.a $(MODEL_LIB_DEPEND)
 	$(CC) build/ChessXIV.o -Lbuild  -lControl -lView $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
+	ln -s build/ChessXIV ChessXIV
 	
 #This line does nothing

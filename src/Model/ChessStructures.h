@@ -16,7 +16,7 @@ typedef struct ChessMoveNodeStruct ChessMoveNode;
 
 typedef enum {Easy, Medium, Difficult} AIDifficultyLevel;
 
-typedef enum {Pawn, Rook, Knight, Bishop, Queen, King, None}  ChessPieceTypeEnum;
+typedef enum {Pawn, Rook, Knight, Bishop, Queen, King}  ChessPieceTypeEnum;
 
 typedef enum {Human, AI} 	PlayerControlEnum;
 typedef enum {White, Black} 	PlayerColorEnum;

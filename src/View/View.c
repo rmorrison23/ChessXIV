@@ -2,6 +2,7 @@
 
 #ifndef GUI_ENABLE
 
+
 static void PrintChessCoordinate(ChessPiece * CurrPiece){
 	unsigned char PieceLetter;
 	if (!CurrPiece){		/*No piece is here*/
@@ -93,6 +94,21 @@ AIDifficultyLevel AskAIDifficultyLevel(void){
 			assert(0);
 	}	
 }
+
+ChessBoard * SetOptions(ChessBoard * MainBoard){
+	AskPlayerControl(MainBoard->WhitePlayer);
+	if (MainBoard->WhitePlayer->PlayerControl == AI){
+		MainBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
+	}
+	
+	AskPlayerControl(MainBoard->BlackPlayer);
+	if (MainBoard->BlackPlayer->PlayerControl == AI){
+		MainBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
+	} 
+	
+	return MainBoard;
+}
+
 
 /*for displaying*/
 ChessCoordinate * View_GetOneCoordinate(ChessBoard * MainBoard){

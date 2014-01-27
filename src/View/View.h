@@ -22,8 +22,7 @@ void View_Initialize(void);
 void View_CleanUp(void);
 
 /*for settings*/
-PlayerControlEnum AskPlayerControl(ChessPlayer *);
-AIDifficultyLevel AskAIDifficultyLevel(void);
+ChessBoard * SetOptions(ChessBoard *);
 
 /*for displaying*/
 void DisplayChessBoard(ChessBoard *);
