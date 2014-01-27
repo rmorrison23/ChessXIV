@@ -66,6 +66,7 @@ struct ChessPieceStruct{
 	ChessPlayer *		Player;
 	ChessCoordinate *	Coordinate;
 	Boolean			AliveFlag;
+	Boolean			PawnMoveFirstFlag;
 };
 
 struct ChessMoveStruct{

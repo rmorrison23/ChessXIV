@@ -37,6 +37,8 @@ static void PrintChessCoordinate(ChessPiece * CurrPiece){
   
 }
 
+
+
 /*for settings*/
 PlayerControlEnum AskPlayerControl(ChessPlayer * Player){
 	unsigned char ValidFlag = 0;
@@ -93,7 +95,11 @@ AIDifficultyLevel AskAIDifficultyLevel(void){
 }
 
 /*for displaying*/
-
+ChessCoordinate * View_GetOneCoordinate(ChessBoard * MainBoard){
+	Event MyEvent;
+	View_GetEvent(MainBoard, &MyEvent);
+	return MyEvent.Coordinate;
+}
 
 /*get event from user*/
 Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
@@ -147,16 +153,16 @@ void DisplayChessBoard(ChessBoard * CurrChessBoard){
 	printf("\n");
 }
 
-void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * CoordListFirstNode){
+void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * CoordList){
 	int i, j;
-	ChessCoordinateList * CoordListNode;
+	ChessCoordinateNode * CoordListNode = CoordList->FirstNode;
 	Boolean HighlightFlag;
 	for (i = CHESS_BOARD_MAX_ROW - 1; i >= 0 ; i--){
 		printf("%d  |  ", i + 1);
 		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){    
 			PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
 			/*check if this coordinate is highlighted*/
-			CoordListNode = CoordListFirstNode;
+			CoordListNode = CoordList->FirstNode;
 			HighlightFlag = False;
 			while (CoordListNode && !HighlightFlag){
 				if (CoordListNode->Coordinate->Rank == i && CoordListNode->Coordinate->File == j){
@@ -185,6 +191,10 @@ void View_CleanUp(void){
 	printf("Goodbye. See you next time\n");
 }
 
+void View_ConcludeGame(ChessBoard * MainBoard, ChessPlayer * WinPlayer){
+	printf("Game concluded\n");
+	
+}
 #else
 /*RYAN PUT YOUR CODE HERE. TO COMPILE USE make GUI_ENABLE=y*/
 /*for settings*/

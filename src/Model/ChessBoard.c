@@ -42,6 +42,7 @@ ChessBoard * InitializeChessBoard(void){
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[1][i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[1][i]->Piece = CurrPiece;
 	}
@@ -119,6 +120,7 @@ ChessBoard * InitializeChessBoard(void){
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[6][i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[6][i]->Piece = CurrPiece;
 	}

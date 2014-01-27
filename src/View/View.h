@@ -32,6 +32,9 @@ void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
 /*get event from user*/
 /*this function is supposed to overwrite the input pointer with new event data*/
 Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
+ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+
+void View_ConcludeGame(ChessBoard *, ChessPlayer *);
 
 /*static void PrintChessCoordinate(ChessPiece * CurrPiece);*/
 #endif 

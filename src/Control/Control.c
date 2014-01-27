@@ -1,5 +1,8 @@
 #include "Control.h"
 
+
+/*In main loop, make sure that player don't undo in first move*/
+
 static ChessBoard * MainChessBoard;
 static ChessMoveList * MainMoveList;
 
@@ -19,8 +22,8 @@ void Control_MainLoop(void){
 	ChessPlayer * CurrentPlayer;
 	ChessCoordinate * Coordinate1, * Coordinate2;
 	Coordinate1 = NULL; Coordinate2 = NULL;
-	ChessCoordinateList * LegalChessCoordList, * LegalChessCoordListNode;
-	ChessMove LocalChessMove;
+	ChessCoordinateList * LegalChessCoordList; ChessCoordinateNode * LegalChessCoordListNode;
+	ChessMove * LocalChessMove;
 	Event LocalEvent;
 	
 	/*ask user settings*/
@@ -33,7 +36,7 @@ void Control_MainLoop(void){
 	if (MainChessBoard->BlackPlayer->PlayerControl == AI)
 		MainChessBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
 	
-#if 1
+#if 0
 	
 	ChessCoordinateList TestList[3];
 	TestList[0].Coordinate = MainChessBoard->Board[0][2];
@@ -57,11 +60,11 @@ void Control_MainLoop(void){
 #endif
 	
 	
-#if 0
+#if 1
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
-		if (CurrentPlayer->PlayerControlType == Human){
+		if (CurrentPlayer->PlayerControl == Human){
 #if GUI_ENABLE
 		
 			
@@ -69,7 +72,7 @@ void Control_MainLoop(void){
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
 			/*let current user select 1 coordinate*/
 			while (Coordinate1 == NULL){			
-				Coordinate1 = View_GetOneCoordinate();
+				Coordinate1 = View_GetOneCoordinate(MainChessBoard);
 				if (Coordinate1->Piece == NULL){
 					/*select an empty coordinate*/
 					Coordinate1 = NULL;
@@ -81,10 +84,10 @@ void Control_MainLoop(void){
 			
 			while (!Coordinate2){
 				/*highlight the legal moves*/
-				LegalChessCoordList = Model_GetLegalCoordinate(MainChessBoard, Coordinate1->Piece);
-				HighlightCoordinates(LegalChessCoordList);
+				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
+				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
 				/*let user select the next coordinate*/
-				Coordinate2 = View_GetOneCoordinate();
+				Coordinate2 = View_GetOneCoordinate(MainChessBoard);
 				if (Coordinate2->Piece){
 					if (Coordinate2->Piece->Player->PlayerColor == CurrentPlayer->PlayerColor){
 						/*select own piece, reset the coordinate 1 and set null to coordinate2*/
@@ -93,7 +96,7 @@ void Control_MainLoop(void){
 					}
 				} else {
 					/*check if this coordinate is in the legal coordinate list we got*/
-					LegalChessCoordListNode = LegalChessCoordList;
+					LegalChessCoordListNode = LegalChessCoordList->FirstNode;
 					LegalMoveFlag = False;
 					while (LegalChessCoordListNode && !LegalMoveFlag){
 						if (LegalChessCoordListNode->Coordinate == Coordinate2){
@@ -113,13 +116,13 @@ void Control_MainLoop(void){
 			/*construct chess move then perform it*/
 			LocalChessMove = malloc(sizeof(ChessMove));
 			assert(LocalChessMove);
-			LocalChessMove->Piece = Coordinate1->Piece;
-			LocalChessMove->Start = Coordinate1;
-			LocalChessMove->End = Coordinate2;
+			LocalChessMove->MovePiece = Coordinate1->Piece;
+			LocalChessMove->StartPosition = Coordinate1;
+			LocalChessMove->NextPosition = Coordinate2;
 			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);
 			
 		} else {
-			Model_GetBestMove
+			/*Model_GetBestMove*/
 		}
 #endif
 		/*check for checkmate*/
