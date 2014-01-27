@@ -66,12 +66,15 @@ void Control_MainLoop(void){
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
 		if (CurrentPlayer->PlayerControl == Human){
+			Coordinate1 = NULL;
+			Coordinate2 = NULL;
 #if GUI_ENABLE
 		
 			
 #else
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
 			/*let current user select 1 coordinate*/
+			DisplayChessBoard(MainChessBoard);
 			while (Coordinate1 == NULL){			
 				Coordinate1 = View_GetOneCoordinate(MainChessBoard);
 				if (Coordinate1->Piece == NULL){
@@ -82,7 +85,7 @@ void Control_MainLoop(void){
 					Coordinate1 = NULL;
 				}
 			}
-			DisplayChessBoard(MainChessBoard);
+			
 			while (!Coordinate2){
 				/*highlight the legal moves*/
 				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
@@ -141,9 +144,9 @@ void Control_MainLoop(void){
 #endif
 		/*check for checkmate*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
-		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
+		/*if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
 			GameOnFlag = False;
-		} 
+		} */
 	}
 	
 	/*conclude the game*/

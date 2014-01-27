@@ -4,7 +4,7 @@ ChessCoordinateList * ChessCoordinateList_AppendNoRedundancy(ChessCoordinateList
 	ChessCoordinateNode * CurrNode = SecondList->FirstNode, * FutureNode;
 	while (CurrNode){
 		FutureNode = CurrNode->NextNode;
-		if (ChessCoordinateList_CheckRedundancy(FirstList, CurrNode->Coordinate)){
+		if (!ChessCoordinateList_CheckRedundancy(FirstList, CurrNode->Coordinate)){
 			FirstList = ChessCoordinateList_AppendNode(FirstList, CurrNode);
 			CurrNode->List = FirstList;
 		} else {			

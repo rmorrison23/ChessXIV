@@ -22,6 +22,7 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	}
 	/* piece to move, moved to next coordinate */
 	move->StartPosition->Piece->Coordinate = move->NextPosition;
+	move->NextPosition->Piece = move->MovePiece;	
 	
 	/* delete piece pointer at previous location */
 	move->StartPosition->Piece = NULL;
@@ -181,7 +182,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	int File_Offset_Rook[4] = {0,0,1,-1};
 	int inDanger = 0;
 	
-
+	Boolean StopFlag;
 	switch(piece->Type)
 	  { 
 	  case Pawn:
@@ -196,8 +197,6 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                                 }
                         }
                         
-                        printf("1\n");
-                        
                         /* check rank+1, file-1 to see if capture */
                         targetRank = piece->Coordinate->Rank + 1;
                         targetFile = piece->Coordinate->File - 1;
@@ -207,7 +206,6 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                                 }
                         }
                         
-                        printf("2\n");
                         
                         /* check rank+1, file+1 to see if capture */
                         targetRank = piece->Coordinate->Rank + 1;
@@ -217,8 +215,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                                         output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
                                 }
                         }
-                        
-                        printf("3\n");
+                       
                         
                         /* if hasn't moved yet, check rank+2 if empty */
                         if(piece->PawnMoveFirstFlag) {
@@ -230,7 +227,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
                                         }
                                 }
                         }
-                        printf("4\n");
+         
 	      	}
 
                 if(piece->Player->PlayerColor == Black) {
@@ -280,10 +277,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = 2 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -291,10 +288,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = 1 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -303,10 +300,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = 2 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -314,10 +311,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = 1 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -326,10 +323,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = -2 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -337,10 +334,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = -1 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -349,10 +346,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = -2 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -360,10 +357,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			targetFile = -1 + piece->Coordinate->File;
 			if(targetRank >= 0 && targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
 				if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 				}
 				else if(chessboard->Board[targetRank][targetFile]->Piece->Player != piece->Player) {
-					output = ChessCoordinateList_AppendCoord(output,curr_coor);
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					/* capture piece */
 				}
 			}
@@ -375,37 +372,22 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	      curr_coor = piece->Coordinate;
 	      for(dir_index = 0; dir_index < 8; dir_index++)
 		{
-		  while (curr_coor)
-		    {
-		      if(piece->Player->PlayerColor == White)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    curr_coor = NULL;}
-			  else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
-		      if(piece->Player->PlayerColor == Black)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-
-			    curr_coor = NULL;}
-			  else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
+		  target_coor = piece->Coordinate;
+			target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
+			StopFlag = False;
+		  while (target_coor && !StopFlag)
+		    {	  
+			  
+			  if (target_coor->Piece == NULL){
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+			  } else if (target_coor->Piece->Player == piece->Player){
+				StopFlag = True;
+			  } else {
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+				StopFlag = True;
+			  }
+			  target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);  
+			  	    
 		    }
 		}
 	    }
@@ -415,36 +397,22 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	      curr_coor = piece->Coordinate;
 	      for(dir_index = 0; dir_index < 4; dir_index++)
 		{
-		  while (curr_coor)
-		    {
-		      if(piece->Player->PlayerColor == White)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset_Bish[dir_index], File_Offset_Bish[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    curr_coor = NULL;
-			}else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
-		      if(piece->Player->PlayerColor == Black)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset_Bish[dir_index], File_Offset_Bish[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    curr_coor = NULL;}
-			  else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
+		  target_coor = piece->Coordinate;
+			target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset_Bish[dir_index], File_Offset_Bish[dir_index]);
+			StopFlag = False;
+		  while (target_coor && !StopFlag)
+		    {	  
+			  
+			  if (target_coor->Piece == NULL){
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+			  } else if (target_coor->Piece->Player == piece->Player){
+				StopFlag = True;
+			  } else {
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+				StopFlag = True;
+			  }
+			  target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset_Bish[dir_index], File_Offset_Bish[dir_index]);  
+			  	    
 		    }
 		}
 	      }
@@ -452,38 +420,25 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	  case Rook:
 	      {
 	      curr_coor = piece->Coordinate;
+		
 	      for(dir_index = 0; dir_index < 4; dir_index++)
 		{
-		  while (curr_coor)
-		    {
-		      if(piece->Player->PlayerColor == White)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset_Rook[dir_index], File_Offset_Rook[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    curr_coor = NULL;}
-			  else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
-		      if(piece->Player->PlayerColor == Black)
-			{
-			  target_coor = ChessCoordinate_Offset(curr_coor, Rank_Offset_Rook[dir_index], File_Offset_Rook[dir_index]);
-			  curr_coor = target_coor;
-			  if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == Black)
-			    curr_coor = NULL;
-			  else if (chessboard->Board[target_coor->Rank][target_coor->File]->Piece->Player->PlayerColor == White){
-			    output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    curr_coor = NULL;}
-			  else
-			    {
-			      output = ChessCoordinateList_AppendCoord(output,curr_coor);
-			    }
-			}
+			target_coor = piece->Coordinate;
+			target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset_Rook[dir_index], File_Offset_Rook[dir_index]);
+			StopFlag = False;
+		  while (target_coor && !StopFlag)
+		    {	  
+			  
+			  if (target_coor->Piece == NULL){
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+			  } else if (target_coor->Piece->Player == piece->Player){
+				StopFlag = True;
+			  } else {
+				output = ChessCoordinateList_AppendCoord(output,target_coor);  
+				StopFlag = True;
+			  }
+			  target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset_Rook[dir_index], File_Offset_Rook[dir_index]);  
+			  	    
 		    }
 		}
 	      }
