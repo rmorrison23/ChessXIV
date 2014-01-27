@@ -114,7 +114,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 		newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
 		
 		/* appending the two list so there is no duplicate coordinate */
-		ChessCoordinateList_AppendNoRedunduncy(newChessCoordinateList1, newChessCoordinateList2);
+		ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
 	}
 	return newChessCoordinateList1;
 }
@@ -147,7 +147,8 @@ Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
 
 Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
 {
-	if (Model_CheckCheckedPosition(board, player) && /* no legal move */)
+	
+	if (Model_CheckCheckedPosition(board, player) && Model_GetAllLegalCoordinate(board, player, player->OtherPlayer) == NULL)	
 	{
 		return True;
 	}	
@@ -156,7 +157,7 @@ Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
 
 Boolean Model_Stalemate(ChessBoard * board, ChessPlayer * player)
 {
-	if (!Model_CheckCheckedPosition(board, player) && /* no legal move */)
+	if (!Model_CheckCheckedPosition(board, player) && Model_GetAllLegalCoordinate(board, player, player->OtherPlayer) == NULL)
 	{
 		return True;
 	}	

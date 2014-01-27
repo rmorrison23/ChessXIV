@@ -6,7 +6,8 @@
 /*include headers inside Model directory*/
 #include "ChessStructures.h"
 #include "ChessBoard.h"
-#include "ChessPlayer.c"
+#include "ChessPlayer.h"
+#include "ChessCoordinateList.h"
 #include "ArtificialIntelligence.h"
 
 
@@ -19,7 +20,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, Ches
 /* done, actually move the pieces to its destination */
 ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 
-/* undo a move */
+/*done,  undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
 /* almost done, If this chess player is checkmakte, return True*/
