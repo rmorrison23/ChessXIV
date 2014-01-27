@@ -7,8 +7,6 @@ else
         GUI_FLAG=
 endif
 
-mkdir bin
-
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 

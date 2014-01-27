@@ -7,8 +7,6 @@ else
         GUI_FLAG=
 endif
 
-mkdir bin
-
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
@@ -54,13 +52,13 @@ StructuredLibraryTest: build/StructuredLibraryTest.o $(MODEL_LIB_DEPEND) build/l
 	build/$@
 
 ModelUnitTest: build/ModelUnitTest.o $(MODEL_LIB_DEPEND)
-	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
+	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 	
 ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
-	$(CC) build/ViewUnitTest.o -Lbuild -lModel -lView -o build/$@ $(CFLAGS)
+	$(CC) build/ViewUnitTest.o -Lbuild -lModel -lView -o bin/$@ $(CFLAGS)
 
 ControlUnitTest: build/ControlUnitTest.o build/libControl.a
-	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o build/$@ $(CFLAGS)
+	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o bin/$@ $(CFLAGS)
 	
 ChessXIV: build/ChessXIV.o $(VIEW_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(MODEL_LIB_DEPEND)
 	$(CC) build/ChessXIV.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
