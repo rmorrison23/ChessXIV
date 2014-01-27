@@ -29,6 +29,15 @@ void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer);
 /* function to display the gameplay window to the screen */
 void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer);
 
+/* function to display the left player window */
+void drawLeftPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
+
+/* function to display the right player window */
+void drawRightPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
+
+/* function to display the left player window */
+void drawRightPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
+
 /* function to display a blank chessboard to the screen */
 void drawChessboard(SDL_Renderer *renderer);
 
