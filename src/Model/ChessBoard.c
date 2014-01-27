@@ -1,7 +1,7 @@
 #include "ChessBoard.h"
 
 
-ChessBoard * InitializeChessBoard(void){
+ChessBoard * ChessBoard_Initialize(void){
 	
 	/*malloc the board*/
 	ChessBoard * ChessBoardToReturn = (ChessBoard *) malloc(sizeof(ChessBoard));
@@ -186,4 +186,23 @@ ChessBoard * InitializeChessBoard(void){
 	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[7][4]->Piece = CurrPiece;
   return ChessBoardToReturn;
+}
+
+void ChessBoard_Free(ChessBoard * CurrBoard){
+	int i,j;
+	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
+			/*free the pieces*/
+			if (CurrBoard->Board[i][j]->Piece) free(CurrBoard->Board[i][j]->Piece);
+			/*free coordinate*/
+			free(CurrBoard->Board[i][j]);
+		}
+	}
+	
+	/*free the player*/
+	free(CurrBoard->WhitePlayer);
+	free(CurrBoard->BlackPlayer);
+	
+	/*free the board*/
+	free(CurrBoard);
 }

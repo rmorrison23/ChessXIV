@@ -1,21 +1,16 @@
 
 #include "ChessCoordinateList.h"
 ChessCoordinateList * ChessCoordinateList_AppendNoRedundancy(ChessCoordinateList * FirstList, ChessCoordinateList * SecondList){
-	ChessCoordinateNode * CurrNode = SecondList->FirstNode, * FutureNode;
+	ChessCoordinateNode * CurrNode = SecondList->FirstNode;
 	while (CurrNode){
-		FutureNode = CurrNode->NextNode;
-		if (!ChessCoordinateList_CheckRedundancy(FirstList, CurrNode->Coordinate)){
-			FirstList = ChessCoordinateList_AppendNode(FirstList, CurrNode);
-			CurrNode->List = FirstList;
-		} else {			
-			/*free(CurrNode->Coordinate);			
-			free(CurrNode);*/
-		}
+		if (!(ChessCoordinateList_CheckRedundancy(FirstList, CurrNode->Coordinate))){
+			FirstList = ChessCoordinateList_AppendCoord(FirstList, CurrNode->Coordinate);
+		} 
 		
-		CurrNode = FutureNode;
+		CurrNode = CurrNode->NextNode;
 	}
 	
-	/*free(SecondList);*/
+	ChessCoordinateList_Free(SecondList);
 	return FirstList;
 	
 }
@@ -51,22 +46,6 @@ ChessCoordinateList * ChessCoordinateList_AppendCoord(ChessCoordinateList * List
 	return List;
 }
 
-ChessCoordinateList * ChessCoordinateList_AppendNode(ChessCoordinateList * List, ChessCoordinateNode * NewNode){
-	
-	if (List->LastNode){
-		NewNode->NextNode = NULL;
-		NewNode->PrevNode = List->LastNode;
-		List->LastNode->NextNode = NewNode;
-		List->LastNode = NewNode;
-	} else {
-		/*empty list*/
-		List->FirstNode = NewNode;
-		List->LastNode = NewNode;
-		NewNode->PrevNode = NULL;
-		NewNode->NextNode = NULL;
-	}
-	return List;
-}
 
 void ChessCoordinateList_Free(ChessCoordinateList * List){
 	ChessCoordinateNode * CurrNode = List->FirstNode, *NextNode;
@@ -76,4 +55,11 @@ void ChessCoordinateList_Free(ChessCoordinateList * List){
 		CurrNode = NextNode;
 	}
 	free(List);
+}
+
+ChessCoordinateList * ChessCoordinateList_Initialize(void){
+	ChessCoordinateList * NewList = malloc(sizeof(ChessCoordinateList));
+	NewList->FirstNode = NULL;
+	NewList->LastNode = NULL;
+	return NewList;
 }

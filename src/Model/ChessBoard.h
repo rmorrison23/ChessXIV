@@ -10,6 +10,7 @@
 #include "ChessStructures.h"
 
 
-ChessBoard * InitializeChessBoard(void);
+ChessBoard * ChessBoard_Initialize(void);
+void ChessBoard_Free(ChessBoard *);
 
 #endif

@@ -1,7 +1,7 @@
 #include "Model.h"
 
 ChessBoard * Model_Initialize(void){
-	return InitializeChessBoard();
+	return ChessBoard_Initialize();
 }
 
 /* move piece to next location */
@@ -166,7 +166,7 @@ Boolean Model_Stalemate(ChessBoard * board, ChessPlayer * player)
 }
 
 ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPiece *piece, ChessPlayer *playerinturn) {
-	ChessCoordinateList *output = malloc(sizeof(ChessCoordinateList));
+	ChessCoordinateList *output = ChessCoordinateList_Initialize();
 	ChessCoordinateList *OpponentLegalMoves;
 	ChessCoordinate * target_coor = NULL;
 	ChessCoordinate * curr_coor = NULL;
@@ -522,21 +522,6 @@ void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
 		
 	free(MoveList);
 	
-	int i,j;
-	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){
-		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
-			/*free the pieces*/
-			if (CurrBoard->Board[i][j]->Piece) free(CurrBoard->Board[i][j]->Piece);
-			/*free coordinate*/
-			free(CurrBoard->Board[i][j]);
-		}
-	}
-	
-	/*free the player*/
-	free(CurrBoard->WhitePlayer);
-	free(CurrBoard->BlackPlayer);
-	
-	/*free the board*/
-	free(CurrBoard);
+	ChessBoard_Free(CurrBoard);
 	
 }
