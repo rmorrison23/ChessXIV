@@ -122,6 +122,8 @@ void Control_MainLoop(void){
 					}
 				}
 			}
+			
+			
 			DisplayChessBoard(MainChessBoard);
 			/*construct chess move then perform it*/
 			LocalChessMove = malloc(sizeof(ChessMove));
@@ -135,8 +137,13 @@ void Control_MainLoop(void){
 			/*Model_GetBestMove*/
 		}
 #endif
-		/*check for checkmate*/
+		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
+		
+		/*delete the current legal coord list*/
+		ChessCoordinateList_Free(LegalChessCoordList);
+		
+		/*check for checkmate*/
 		/*if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
 			GameOnFlag = False;
 		} */
