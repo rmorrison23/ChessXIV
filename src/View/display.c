@@ -9,6 +9,7 @@
 /*          01/18/14 draw main menu                                           */
 /*          01/25/14 draw one player menu, draw two player,                   */
 /*                   draw advanced menu, draw gameplay screen (incomplete)    */
+/*          01/26/14 draw player status windows, */
 /******************************************************************************/
 
 #include <stdio.h>
@@ -19,7 +20,7 @@
 #include "constants.h"
 #include "display.h"
 
-/* BUG: title is not centered */
+
 /* function to display the main menu to the screen */
 void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
 
@@ -574,21 +575,6 @@ void drawPieces(SDL_Renderer *renderer){
   renderTexture(piece, renderer, pieceSize*3 + x_Offset, pieceSize*7 + y_Offset, pieceSize, pieceSize);
 }
 
-/* TEMPORARY: events handling function to allow testing of rendering/drawing functions */
-int events(){
-  SDL_Event event;
-  int status = 0;
-  if(SDL_PollEvent(&event)){
-    switch(event.type){
-    case SDL_QUIT:
-      status = 1;
-      break;
-    default:
-      break;
-    }
-  }
-  return status;
-}
 
 /* function to uninitialize SDL systems */
 void clean(){
