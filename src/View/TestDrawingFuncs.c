@@ -16,6 +16,7 @@
 #include "render.h"
 #include "display.h"
 #include "constants.h"
+#include "sdlUtilities.h"
 
 
 int main(int argc, char *argv[]){
@@ -34,9 +35,7 @@ int main(int argc, char *argv[]){
     if(TTF_Init() != 0){
         //error check here
     }
-    
-    int quit = 0;
-    
+        
     // clear screen
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
@@ -59,11 +58,39 @@ int main(int argc, char *argv[]){
     
     SDL_RenderPresent(renderer);
     
-    /* game loop */
-    while(!quit){
-        quit = events();	
-    }
-    
+    /* /\* event loop *\/ */
+    /* int done = 0;      /\* 0 = false, 1 = true *\/ */
+    /* SDL_Event event; */
+
+    /* while(!done){ */
+    /*   /\* quit = events(); *\/ */
+    /*   while(SDL_PollEvent(&event)){ */
+
+    /* 	switch(event.type){ */
+    /* 	case SDL_QUIT: */
+    /* 	  done = 1; */
+    /* 	  break; */
+    /* 	case SDL_KEYUP: */
+
+    /* 	  switch(event.key.keysym.sym){ */
+    /* 	  case SDLK_ESCAPE: */
+    /* 	    done = 1; */
+    /* 	    break; */
+    /* 	  case SDLK_RETURN: */
+    /* 	    /\* do something here *\/ */
+    /* 	    break; */
+    /* 	  default: */
+    /* 	    break; */
+    /* 	  }    */
+    /* 	  break; */
+    /* 	default: */
+    /* 	  break; */
+    /* 	} */
+    /*   } */
+    /* } */
+	
+    eventMain();
+   
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     
