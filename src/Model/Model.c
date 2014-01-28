@@ -6,7 +6,12 @@ ChessBoard * Model_Initialize(void){
 
 /* move piece to next location */
 ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * move)
-{
+{	
+	/*if the move piece is a pawn, set first move flag to false*/
+	if (move->MovePiece->Type == Pawn){
+		move->MovePiece->PawnMoveFirstFlag = False;
+	}
+	
 	/* the place to move to has an enemy piece */
 	if (move->NextPosition->Piece != NULL)
 	{
@@ -226,7 +231,6 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					}
 				}
-				piece->PawnMoveFirstFlag = False;
 			}
 
 		}
@@ -268,7 +272,6 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
 					}
 				}
-				piece->PawnMoveFirstFlag = False;
 			}
 			
 		}
