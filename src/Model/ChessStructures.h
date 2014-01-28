@@ -23,6 +23,8 @@ typedef enum {White, Black} 	PlayerColorEnum;
 
 typedef enum {False, True}	Boolean;
 
+typedef enum {Normal, EnPassant, Castling, Transformation}	ChessMoveTypeEnum;
+
 typedef struct {
   ChessCoordinate * Board[CHESS_BOARD_MAX_ROW][CHESS_BOARD_MAX_COL];
   ChessPlayer * WhitePlayer, * BlackPlayer;
@@ -75,6 +77,7 @@ struct ChessMoveStruct{
 	ChessCoordinate * NextPosition;
 	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
+	ChessMoveTypeEnum	MoveType;
 };
 
 struct ChessMoveNodeStruct{
