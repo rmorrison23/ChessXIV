@@ -53,6 +53,9 @@ StructuredLibraryTest: build/StructuredLibraryTest.o $(MODEL_LIB_DEPEND) build/l
 	$(CC) build/StructuredLibraryTest.o -Lbuild -lControl -lView $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
 	build/$@
 
+Transform:  build/TestSpecialMove_Transforming.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
+	$(CC) build/TestSpecialMove_Transforming.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+
 EnPassant:  build/TestSpecialMove_EnPassant.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
 	$(CC) build/TestSpecialMove_EnPassant.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 

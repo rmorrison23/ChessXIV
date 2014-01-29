@@ -122,7 +122,11 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalChessMove->MovePiece = Coordinate1->Piece;
 			LocalChessMove->StartPosition = Coordinate1;
 			LocalChessMove->NextPosition = Coordinate2;
-			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);
+			if (ChessMove_IsTransformation(LocalChessMove)){
+				LocalChessMove->Transform_IntoType = View_AskMoveTransform();
+			}
+			
+			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);	
 			
 		} else {
 			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer);

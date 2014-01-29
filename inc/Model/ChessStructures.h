@@ -78,6 +78,9 @@ struct ChessMoveStruct{
 	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
 	ChessMoveTypeEnum	MoveType;
+	
+	/*for transformation*/
+	ChessPieceTypeEnum Transform_IntoType;
 };
 
 struct ChessMoveNodeStruct{

@@ -35,5 +35,6 @@ ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
 
 void View_ConcludeGame(ChessBoard *, ChessPlayer *);
 
-/*static void PrintChessCoordinate(ChessPiece * CurrPiece);*/
+/*for transformation: ask user which type to transform to*/
+ChessPieceTypeEnum View_AskMoveTransform(void);
 #endif 

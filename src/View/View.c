@@ -3,6 +3,32 @@
 #ifndef GUI_ENABLE
 
 
+ChessPieceTypeEnum View_AskMoveTransform(void){
+	Boolean ValidFlag = False;
+	int UserChoice;
+	while (!ValidFlag){
+		printf("Please select the type of piece to transform to:\n1. Rook\n2.Knight\n3. Bishop\n4. Queen\nYour choice: ");
+		scanf("%d", &UserChoice);
+		if (UserChoice < 1 || UserChoice > 4){
+			printf("Invalid Choice\n"); 
+		} else {
+			switch (UserChoice){
+				case 1:
+			 		return Rook;
+				case 2:
+					return Knight;
+				case 3:
+					return Bishop;
+				case 4:
+					return Queen;
+				default:
+					return Queen;
+			}
+		}
+	}
+	return Queen;
+}
+
 static void PrintChessCoordinate(ChessPiece * CurrPiece){
 	unsigned char PieceLetter;
 	if (!CurrPiece){		/*No piece is here*/
@@ -125,37 +151,17 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	unsigned char ReturnRank, ReturnFile;
 	
 	/*ask user what to do: 3 options are select a coordinate, undo and exit*/
-	int MacroChoice = 0;
-	/*while (MacroChoice < 1 || MacroChoice > 3){*/
-		printf("Enter Coordinate or 2 to undo or 3 to exit: ");
-		scanf("%s", UserInput);
-		/*if (MacroChoice < 1 || MacroChoice > 3) printf("Invalid choice");
-	}*/
-	
-	/*switch (MacroChoice){
-		case 1:
-			EventHandle->Type = SelectCoordinate;
-			break;
-		case 2:
-			EventHandle->Type = UndoMove;
-			return EventHandle;
-		case 3:
-			EventHandle->Type = Exit;
-			return EventHandle;
-		default:
-			printf("View.c: MacroChoice get invalid value\n");
-			break;
-	}*/	
+	printf("Enter Coordinate or 2 to undo or 3 to exit: ");
+	scanf("%s", UserInput);
 	
 	Boolean ValidOptionFlag = False;
 	while (!ValidOptionFlag){
-	 	/*ValidCoordFlag = True;*/
 			
 		/*get first non space character*/
 		while ((*OneLetter) == ' ') OneLetter++;
 		
 		if (*OneLetter >= 'a' && *OneLetter <= 'h'){
-			ReturnFile = *OneLetter - ' a';
+			ReturnFile = *OneLetter - 'a';
 		} else if (*OneLetter >= 'A' && *OneLetter <= 'H'){
 			ReturnFile = *OneLetter - 'A';
 		} else if (*OneLetter == '2'){

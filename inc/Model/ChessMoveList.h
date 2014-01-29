@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "ChessStructures.h"
 
+#include "ChessStructures.h"
+#include "ChessMove.h"
 
 int ChessMoveList_Count(ChessMoveList * List);
 ChessMoveList * ChessMoveList_AppendMove(ChessMoveList *, ChessMove *);

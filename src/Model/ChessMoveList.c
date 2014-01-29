@@ -39,7 +39,7 @@ void ChessMoveList_Free(ChessMoveList * List){
 	ChessMoveNode * CurrNode = List->FirstNode, *NextNode;
 	while (CurrNode){
 		NextNode = CurrNode->NextNode;
-		free(CurrNode->Move);
+		ChessMove_Free(CurrNode->Move);
 		free(CurrNode);
 		CurrNode = NextNode;
 	}

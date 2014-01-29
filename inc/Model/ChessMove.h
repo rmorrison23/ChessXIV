@@ -8,5 +8,6 @@
 #include "ChessStructures.h"
 
 ChessMove * ChessMove_Initialize(void);
-
+Boolean ChessMove_IsTransformation(ChessMove *);
+ChessMove * ChessMove_Free(ChessMove *);
 #endif
