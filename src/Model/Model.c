@@ -114,21 +114,22 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 	ChessCoordinateList *newChessCoordinateList2;
 
 	/* storing the value of the permanent list */
-	
 	while (i < 16 && firstListPiece == 0)
 	{
+		/* making sure the piece is alive before storing */
 		if (player->Pieces[i]->AliveFlag == True)
 		{
-			newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0], PlayerInTurn);
+			newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
 			firstListPiece = 1;
 		}
 		i++;
 	}
 	
-	/* for loop to store the remaining 15 piece into a temp list, then appending new coordinate into 
+	/* for loop to store the remaining pieces into a temp list, then appending new coordinate into 
 	the permanent list */
 	while (i < 16)
 	{
+		/* making sure the piece is alive before storing */
 		if (player->Pieces[i]->AliveFlag == True)
 		{
 			/* storing coordinate into the temp list */
