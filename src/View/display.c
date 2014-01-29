@@ -45,6 +45,8 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90));
   SDL_Texture *advanced_Button = renderText("AI Versus AI", CALIBRI_FONT, buttonColor, 72, renderer);
   renderTexture2(advanced_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
+
+  SDL_RenderPresent(renderer);
 }
 
 /* function to display the one player menu to the screen */
@@ -124,6 +126,8 @@ void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
   /* create play button */
   SDL_Texture *play_Button = renderText("Play", CALIBRI_FONT, buttonColor, 50, renderer);
   renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
+
+  SDL_RenderPresent(renderer);
 }
 
 /* function to display the two player menu to the screen */
@@ -183,6 +187,8 @@ void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
   /* create play button */
   SDL_Texture *play_Button = renderText("Play", CALIBRI_FONT, buttonColor, 50, renderer);
   renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
+
+  SDL_RenderPresent(renderer);
 }
 
 /* function to display the advanced menu to the screen */
@@ -224,6 +230,8 @@ void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer){
   /* create main menu button */
   SDL_Texture *mainMenu_Button = renderText("Main Menu", CALIBRI_FONT, buttonColor, 50, renderer);
   renderTexture2(mainMenu_Button, renderer, margin + 100, SCREEN_HEIGHT/4 + 4*buttonHeight);
+
+  SDL_RenderPresent(renderer);
 }
 
 /* function to display the gameplay window to the screen */
@@ -252,12 +260,12 @@ void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(gameLog_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 4*tileSize);
 
   /* display move hints button */
-  SDL_Texture *moveHints_Button = renderText("Move Hints", CALIBRI_FONT, buttonColor, 30, renderer);
-  renderTexture2(moveHints_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 3*tileSize);
+  /* SDL_Texture *moveHints_Button = renderText("Move Hints", CALIBRI_FONT, buttonColor, 30, renderer); */
+  /* renderTexture2(moveHints_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 3*tileSize); */
 
   /* display undo move button */
-  SDL_Texture *undoMove_Button = renderText("Undo Move", CALIBRI_FONT, buttonColor, 30, renderer);
-  renderTexture2(undoMove_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 2*tileSize);
+  /* SDL_Texture *undoMove_Button = renderText("Undo Move", CALIBRI_FONT, buttonColor, 30, renderer); */
+  /* renderTexture2(undoMove_Button, renderer, SCREEN_WIDTH - buttonWidth*2, SCREEN_HEIGHT/2 - 2*tileSize); */
 
   /* display pause button */
   SDL_Texture *pause_Button = renderText("Pause", CALIBRI_FONT, buttonColor, 30, renderer);
@@ -268,15 +276,15 @@ void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(quit_Button, renderer, leftMargin, SCREEN_HEIGHT - 175 + 2*buttonHeight);
 
   /* display piece input header */
-  SDL_Texture *pieceHeader = renderText("Piece", CALIBRI_FONT, buttonColor, 30, renderer);
-  SDL_QueryTexture(pieceHeader, NULL, NULL, &buttonWidth, NULL);
-  renderTexture2(pieceHeader, renderer, leftMargin, SCREEN_HEIGHT/2);
+  /* SDL_Texture *pieceHeader = renderText("Piece", CALIBRI_FONT, buttonColor, 30, renderer); */
+  /* SDL_QueryTexture(pieceHeader, NULL, NULL, &buttonWidth, NULL); */
+  /* renderTexture2(pieceHeader, renderer, leftMargin, SCREEN_HEIGHT/2); */
 
   /* display piece input window */
 
   /* display move to input header */
-  SDL_Texture *moveToHeader = renderText("Move To", CALIBRI_FONT, buttonColor, 30, renderer);
-  renderTexture2(moveToHeader, renderer, leftMargin + buttonWidth + 25, SCREEN_HEIGHT/2);
+  /* SDL_Texture *moveToHeader = renderText("Move To", CALIBRI_FONT, buttonColor, 30, renderer); */
+  /* renderTexture2(moveToHeader, renderer, leftMargin + buttonWidth + 25, SCREEN_HEIGHT/2); */
 
   /* display move to input window */
 
@@ -285,6 +293,8 @@ void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer){
 
   /* display right side player window */
   drawRightPlayerWindow(renderer, tileSize, 1);
+
+  SDL_RenderPresent(renderer);
 }
 
 void drawLeftPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode){
