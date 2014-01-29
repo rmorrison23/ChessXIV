@@ -25,7 +25,7 @@ VIEW_LIB_DEPEND := $(addprefix build/lib,$(VIEW_LIB))
 VIEW_LIB_DEPEND := $(addsuffix .a,$(VIEW_LIB_DEPEND))
 VIEW_LIB_COMPILE := $(addprefix -l,$(VIEW_LIB))
 
-INCLUDES  := $(addprefix -I,$(SRC_DIR))
+INCLUDES  := $(addprefix -Iinc/,$(MODULES))
 
 VPATH = $(SRC_DIR) src
 

@@ -25,17 +25,23 @@ VIEW_LIB_DEPEND := $(addprefix build/lib,$(VIEW_LIB))
 VIEW_LIB_DEPEND := $(addsuffix .a,$(VIEW_LIB_DEPEND))
 VIEW_LIB_COMPILE := $(addprefix -l,$(VIEW_LIB))
 
+<<<<<<< HEAD
 INCLUDES  := $(addprefix -I,$(SRC_DIR))
+=======
+INCLUDES  := $(addprefix -Iinc/,$(MODULES))
+>>>>>>> IncFolder
 
 VPATH = $(SRC_DIR) src
 
-.PHONY: all clean
+.PHONY: all clean test
 
-all: StructuredLibraryTest
+all: ChessXIV
+
+test: ModelUnitTest
 
 clean:
 	rm build/*
-	rm ChessXIV
+	rm bin/*
 
 build/%.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(GUI_FLAG)
