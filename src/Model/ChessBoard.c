@@ -228,7 +228,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Pawn;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		CurrPiece->PawnMoveFirstFlag = True;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
@@ -240,7 +240,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Rook;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -251,7 +251,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Knight;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -262,7 +262,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Bishop;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -272,7 +272,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 	CurrPiece->Type = Queen;
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;	
-	CurrPiece->AliveFlag = True;
+	CurrPiece->AliveFlag = False;
 	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	
 	
@@ -282,7 +282,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 	CurrPiece->Type = King;
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;	
-	CurrPiece->AliveFlag = True;
+	CurrPiece->AliveFlag = False;
 	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;	
 	
 	
@@ -295,7 +295,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Pawn;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		CurrPiece->PawnMoveFirstFlag = True;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
@@ -307,7 +307,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Rook;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -318,7 +318,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Knight;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -329,7 +329,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 		CurrPiece->Type = Bishop;
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
-		CurrPiece->AliveFlag = True;
+		CurrPiece->AliveFlag = False;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
 	}
 	
@@ -339,7 +339,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 	CurrPiece->Type = Queen;
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;	
-	CurrPiece->AliveFlag = True;
+	CurrPiece->AliveFlag = False;
 	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	
 	
@@ -349,7 +349,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 	CurrPiece->Type = King;
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;	
-	CurrPiece->AliveFlag = True;
+	CurrPiece->AliveFlag = False;
 	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	
   return ChessBoardToReturn;

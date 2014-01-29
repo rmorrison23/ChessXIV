@@ -9,6 +9,7 @@
 #include "ChessPlayer.h"
 #include "ChessCoordinateList.h"
 #include "ChessMoveList.h"
+#include "ChessMove.h"
 #include "ChessCoordinate.h"
 #include "ArtificialIntelligence.h"
 
@@ -35,9 +36,6 @@ Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
 
 /* almost done */
 Boolean Model_Stalemate(ChessBoard *, ChessPlayer *);
-
-/* done, Get all the legal coordinate of a player */
-ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard *, ChessPlayer *, ChessPlayer *);
 
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);
 

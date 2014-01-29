@@ -10,7 +10,7 @@ endif
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
-MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessMoveList ChessBoard 
+MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessMoveList ChessBoard ChessMove
 MODEL_LIB_DEPEND := $(addprefix build/lib,$(MODEL_LIB))
 MODEL_LIB_DEPEND := $(addsuffix .a,$(MODEL_LIB_DEPEND))
 MODEL_LIB_COMPILE := $(addprefix -l,$(MODEL_LIB))
@@ -53,6 +53,9 @@ StructuredLibraryTest: build/StructuredLibraryTest.o $(MODEL_LIB_DEPEND) build/l
 	$(CC) build/StructuredLibraryTest.o -Lbuild -lControl -lView $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
 	build/$@
 
+Castling:  build/TestSpecialMove_Castling.o $(MODEL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
+	$(CC) build/TestSpecialMove_Castling.o -Lbuild $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+	
 ModelUnitTest: build/ModelUnitTest.o $(MODEL_LIB_DEPEND)
 	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 	

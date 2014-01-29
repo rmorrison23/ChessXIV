@@ -67,35 +67,39 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
 {
       int i = 0;
       /* move to delete */
-      ChessMoveNode * tempNode = moveList->LastNode;
+      ChessMoveNode * tempNode;
       
       /* need to move back twice */
       for (i = 0; i < 2; i ++)
-      {
-	 /* moving back a position (1 undo) */
-	tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
-	tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+      {	tempNode = moveList->LastNode;
+		/* moving back a position (1 undo) */
+		tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+		tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+		
+		/* need to restore a piece from the graveyard */
+		if (tempNode->Move->CaptureFlag)
+		{
+		/* bring back the dead */
+		tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
+		tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
+		}
+		/*nothing to restore from graveyard */
+		else
+		{
+		tempNode->Move->NextPosition->Piece = NULL;
+		}
 	
-	/* need to restore a piece from the graveyard */
-	if (tempNode->Move->CaptureFlag)
-	{
-	    /* bring back the dead */
-	    tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
-	    tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
-	}
-	/*nothing to restore from graveyard */
-	else
-	{
-	    tempNode->Move->NextPosition->Piece = NULL;
-	}
-	/*breaking the forward link of previous node*/
-	tempNode->PrevNode->NextNode = NULL;
-	/*moving the node back one */
-	tempNode = tempNode->PrevNode;
-	/*update the last node */
-	moveList->LastNode = tempNode;
+		moveList = ChessMoveList_PopLastMove(moveList);
+#if 0
+		/*breaking the forward link of previous node*/
+		tempNode->PrevNode->NextNode = NULL;
+		/*moving the node back one */
+		tempNode = tempNode->PrevNode;
+		/*update the last node */
+		moveList->LastNode = tempNode;
 
-	free(tempNode->NextNode);
+		free(tempNode->NextNode);
+#endif
       }
       
       return board;
@@ -115,7 +119,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 
 	/* storing the value of the permanent list */
 	while (i < 16 && firstListPiece == 0)
-	{
+	{	
 		/* making sure the piece is alive before storing */
 		if (player->Pieces[i]->AliveFlag == True)
 		{
@@ -128,7 +132,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 	/* for loop to store the remaining pieces into a temp list, then appending new coordinate into 
 	the permanent list */
 	while (i < 16)
-	{
+	{	
 		/* making sure the piece is alive before storing */
 		if (player->Pieces[i]->AliveFlag == True)
 		{
@@ -136,7 +140,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 			newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
 			
 			/* appending the two list so there is no duplicate coordinate */
-			ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
+			newChessCoordinateList1 = ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
 		}
 		i++;
 	}
@@ -207,6 +211,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	int inDanger = 0;
 	
 	Boolean StopFlag;
+	
 	switch(piece->Type)
 	  { 
 	  case Pawn:
@@ -470,18 +475,20 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	            
 		      
 		if(piece->Player == playerinturn){
+			OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn);				
 			for(dir_index = 0; dir_index < 8; dir_index++)
 			{
 			
 				target_coor = piece->Coordinate;				
 				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);							
 				
-				if (target_coor->Piece){
+				if (!target_coor) continue;
+				else if (target_coor->Piece){
 					if (target_coor->Piece->Player == piece->Player)
 						continue;
 				}
 			
-				OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn);				
+				
 				ChessCoordinateNode * checkSpace = OpponentLegalMoves->FirstNode;
 				inDanger = 0;
 				while(checkSpace) {
@@ -492,13 +499,14 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 					checkSpace = checkSpace->NextNode;
 					}
 				}
-				if (inDanger == 0){
+				
+				if (inDanger == 0 || !checkSpace){		/*if the opponent can't make any move as well*/
 					output = ChessCoordinateList_AppendCoord(output,target_coor);  
 				}
 						
 			}
-
-		} else {				  
+			ChessCoordinateList_Free(OpponentLegalMoves);
+		} else {			
 			for(dir_index = 0; dir_index < 8; dir_index++){
 				target_coor = piece->Coordinate;
 				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
@@ -518,7 +526,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 				
 			}
 		}
-	
+		
 	  break;
 	}
 	return output;
