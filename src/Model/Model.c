@@ -104,22 +104,40 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 {
 	int i = 0;
 	
+	/* a flag for first coordinate list; making sure the first piece that is going to be store */
+	/* in the list is not dead */
+	int firstListPiece = 0;
+	
 	/* create a permanent coordinate list to be return */
 	ChessCoordinateList *newChessCoordinateList1;
 	/* create a temp coordinate list to be append */
 	ChessCoordinateList *newChessCoordinateList2;
 
 	/* storing the value of the permanent list */
-	newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0], PlayerInTurn);
+	
+	while (i < 16 && firstListPiece == 0)
+	{
+		if (player->Pieces[i]->AliveFlag == True)
+		{
+			newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[0], PlayerInTurn);
+			firstListPiece = 1;
+		}
+		i++;
+	}
+	
 	/* for loop to store the remaining 15 piece into a temp list, then appending new coordinate into 
 	the permanent list */
-	for (i = 1; i < 16; i++)
+	while (i < 16)
 	{
-		/* storing coordinate into the temp list */
-		newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
-		
-		/* appending the two list so there is no duplicate coordinate */
-		ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
+		if (player->Pieces[i]->AliveFlag == True)
+		{
+			/* storing coordinate into the temp list */
+			newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
+			
+			/* appending the two list so there is no duplicate coordinate */
+			ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
+		}
+		i++;
 	}
 	return newChessCoordinateList1;
 }
