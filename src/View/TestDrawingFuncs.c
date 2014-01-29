@@ -42,54 +42,25 @@ int main(int argc, char *argv[]){
     
     /* testing draw functions here; they are not yet linked with events handling/bools */
     /* so only one draw can be run at a time right now */
-    /* drawMainMenu(window, renderer); */
+    drawMainMenu(window, renderer);
 
-    /* drawOnePlayerMenu(renderer); */
+    /* drawOnePlayerMenu(window, renderer); */
 
-    /* drawTwoPlayerMenu(renderer); */
+    /* drawTwoPlayerMenu(window, renderer); */
    
     /* drawAdvancedMenu(window, renderer); */
 
-    drawGameplayScreen(window, renderer);
+    /* drawGameplayScreen(window, renderer); */
  
     /* drawChessboard(renderer); */
     
     /* drawPieces(renderer); */
     
-    SDL_RenderPresent(renderer);
-    
-    /* /\* event loop *\/ */
-    /* int done = 0;      /\* 0 = false, 1 = true *\/ */
-    /* SDL_Event event; */
+    mainMenuEvents(window, renderer);
 
-    /* while(!done){ */
-    /*   /\* quit = events(); *\/ */
-    /*   while(SDL_PollEvent(&event)){ */
-
-    /* 	switch(event.type){ */
-    /* 	case SDL_QUIT: */
-    /* 	  done = 1; */
-    /* 	  break; */
-    /* 	case SDL_KEYUP: */
-
-    /* 	  switch(event.key.keysym.sym){ */
-    /* 	  case SDLK_ESCAPE: */
-    /* 	    done = 1; */
-    /* 	    break; */
-    /* 	  case SDLK_RETURN: */
-    /* 	    /\* do something here *\/ */
-    /* 	    break; */
-    /* 	  default: */
-    /* 	    break; */
-    /* 	  }    */
-    /* 	  break; */
-    /* 	default: */
-    /* 	  break; */
-    /* 	} */
-    /*   } */
-    /* } */
-	
     eventMain();
+
+    SDL_RenderPresent(renderer);
    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
