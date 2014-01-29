@@ -11,4 +11,5 @@
 ChessMoveList * ChessMoveList_AppendMove(ChessMoveList *, ChessMove *);
 void ChessMoveList_Free(ChessMoveList *);
 ChessMoveList * ChessMoveList_Initialize(void);
+ChessMoveList * ChessMoveList_PopLastMove(ChessMoveList *);
 #endif

@@ -10,7 +10,7 @@ endif
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
-MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessBoard 
+MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessMoveList ChessBoard 
 MODEL_LIB_DEPEND := $(addprefix build/lib,$(MODEL_LIB))
 MODEL_LIB_DEPEND := $(addsuffix .a,$(MODEL_LIB_DEPEND))
 MODEL_LIB_COMPILE := $(addprefix -l,$(MODEL_LIB))

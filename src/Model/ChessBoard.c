@@ -213,6 +213,7 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 			ChessBoardToReturn->Board[i][j]->Rank = i;
 			ChessBoardToReturn->Board[i][j]->File = j;
 			ChessBoardToReturn->Board[i][j]->MainBoard = ChessBoardToReturn;
+			
 		}
 	}
 	
@@ -356,13 +357,17 @@ ChessBoard * ChessBoard_InitializeEmpty(void){
 
 void ChessBoard_Free(ChessBoard * CurrBoard){
 	int i,j;
+	/*free coordinate*/
 	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){
-		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
-			/*free the pieces*/
-			if (CurrBoard->Board[i][j]->Piece) free(CurrBoard->Board[i][j]->Piece);
-			/*free coordinate*/
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){			
 			free(CurrBoard->Board[i][j]);
 		}
+	}
+	
+	/*free the pieces*/
+	for (i = 0; i < 16; i++) {
+		free(CurrBoard->WhitePlayer->Pieces[i]);
+		free(CurrBoard->BlackPlayer->Pieces[i]);
 	}
 	
 	/*free the player*/

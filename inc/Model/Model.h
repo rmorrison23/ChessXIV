@@ -8,6 +8,7 @@
 #include "ChessBoard.h"
 #include "ChessPlayer.h"
 #include "ChessCoordinateList.h"
+#include "ChessMoveList.h"
 #include "ChessCoordinate.h"
 #include "ArtificialIntelligence.h"
 
