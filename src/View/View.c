@@ -124,31 +124,62 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	
 	unsigned char ReturnRank, ReturnFile;
 	
-	/*so far we only allow event to get a coordinate*/
-	EventHandle->EventType = SelectCoordinate;
-	printf("Please select a coordinate: ");
-	scanf("%s", UserInput);
+	/*ask user what to do: 3 options are select a coordinate, undo and exit*/
+	int MacroChoice = 0;
+	/*while (MacroChoice < 1 || MacroChoice > 3){*/
+		printf("Enter Coordinate or 2 to undo or 3 to exit: ");
+		scanf("%s", UserInput);
+		/*if (MacroChoice < 1 || MacroChoice > 3) printf("Invalid choice");
+	}*/
 	
-	/*get first non space character*/
-	while ((*OneLetter) == ' ') OneLetter++;
+	/*switch (MacroChoice){
+		case 1:
+			EventHandle->Type = SelectCoordinate;
+			break;
+		case 2:
+			EventHandle->Type = UndoMove;
+			return EventHandle;
+		case 3:
+			EventHandle->Type = Exit;
+			return EventHandle;
+		default:
+			printf("View.c: MacroChoice get invalid value\n");
+			break;
+	}*/	
 	
-	if (*OneLetter >= 'a' && *OneLetter <= 'h'){
-		ReturnFile = *OneLetter - 'a';
-	} else if (*OneLetter >= 'A' && *OneLetter <= 'H'){
-		ReturnFile = *OneLetter - 'A';
-	} else {
-		printf("Invalid input coordinate\n");
-		assert(0);
+	Boolean ValidOptionFlag = False;
+	while (!ValidOptionFlag){
+	 	/*ValidCoordFlag = True;*/
+			
+		/*get first non space character*/
+		while ((*OneLetter) == ' ') OneLetter++;
+		
+		if (*OneLetter >= 'a' && *OneLetter <= 'h'){
+			ReturnFile = *OneLetter - ' a';
+		} else if (*OneLetter >= 'A' && *OneLetter <= 'H'){
+			ReturnFile = *OneLetter - 'A';
+		} else if (*OneLetter == '2'){
+			EventHandle->Type = UndoMove;
+			return EventHandle;
+		} else if (*OneLetter == '3'){
+			EventHandle->Type = Exit;
+			return EventHandle;
+		} else {
+			printf("Invalid choice\n");
+			continue;	
+		}
+	
+		OneLetter++;
+		if (*OneLetter >= '1' && *OneLetter <= '8'){
+			ReturnRank = *OneLetter - '1';
+			ValidOptionFlag = True;
+		} else {
+		 	printf("Invalid Coordinate");
+			continue;
+		}		
+		
 	}
-	
-	OneLetter++;
-	if (*OneLetter >= '1' && *OneLetter <= '8'){
-		ReturnRank = *OneLetter - '1';
-	} else {
-		printf("Invalid input coordinate\n");
-		assert(0);
-	}
-	
+	EventHandle->Type = SelectCoordinate;
 	EventHandle->Coordinate = CurrBoard->Board[ReturnRank][ReturnFile];
 	return EventHandle;
 	

@@ -2,7 +2,8 @@
 
 
 /*In main loop, make sure that player don't undo in first move*/
-static Boolean CheckSelectValidCoordinate(ChessCoordinate *, ChessPlayer *);
+static Boolean CheckSelectOwnPiece(ChessCoordinate *, ChessPlayer *);
+static Boolean CheckCoordinatesSamePlayer(ChessCoordinate *, ChessCoordinate *);
 
 ControlHandle * Control_Initialize(void){
 	/*Initialize handle*/
@@ -28,18 +29,20 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	ChessMoveList * MainMoveList = Handle->MainMoveList;
 	
 	/*local variables*/
-	Boolean GameOnFlag = True, LegalMoveFlag = False;
+	Boolean GameOnFlag = True;
 	ChessPlayer * CurrentPlayer;
 	ChessCoordinate * Coordinate1, * Coordinate2;
 	Coordinate1 = NULL; Coordinate2 = NULL;
-	ChessCoordinateList * LegalChessCoordList; ChessCoordinateNode * LegalChessCoordListNode;
+	ChessCoordinateList * LegalChessCoordList; 
 	ChessMove * LocalChessMove;
 	Event * LocalEvent = malloc(sizeof(Event));
-	Boolean ExitStateFlag = False;
+	Boolean ExitStateFlag = False, UndoMoveFlag = False;
 
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
+	 	 UndoMoveFlag = False;
+	 
 		if (CurrentPlayer->PlayerControl == Human){
 			Coordinate1 = NULL;
 			Coordinate2 = NULL;
@@ -55,7 +58,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 				switch (LocalEvent->Type){
 					case SelectCoordinate:
 						Coordinate1 = LocalEvent->Coordinate;
-						if (CheckSelectValidCoordinate(Coordinate1, CurrentPlayer))	ExitStateFlag = True; 
+						if (CheckSelectOwnPiece(Coordinate1, CurrentPlayer))	ExitStateFlag = True; 
 						break;
 					case UndoMove:
 						UndoMoveFlag = True;
@@ -73,60 +76,49 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			}
 			
 			if (UndoMoveFlag){
-				
+				Model_UndoLastMove(MainChessBoard, MainMoveList);
 				continue;
-			}
+			} else if (!GameOnFlag) continue;
 			
-			GameOnFlag = False;
-			
-			while (Coordinate1 == NULL){			
-				Coordinate1 = View_GetOneCoordinate(MainChessBoard);
-				if (Coordinate1->Piece == NULL){
-					/*select an empty coordinate*/
-					Coordinate1 = NULL;
-				} else if (Coordinate1->Piece->Player->PlayerColor != CurrentPlayer->PlayerColor){
-					/*select an piece of opponent*/
-					Coordinate1 = NULL;
-				}
-			}
-			
-			while (!Coordinate2){
-				/*highlight the legal moves*/
-				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);				
-				
+			/*state 2: One coordinate selected*/
+			ExitStateFlag = False;
+			while (!ExitStateFlag){
+			 	/*highlight the legal coordinates of selected piece*/
+				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
 				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
-				/*let user select the next coordinate*/
-				Coordinate2 = View_GetOneCoordinate(MainChessBoard);
-				if (Coordinate2->Piece){
-					if (Coordinate2->Piece->Player == CurrentPlayer){
-						/*select own piece, reset the coordinate 1 and set null to coordinate2*/
-						Coordinate1 = Coordinate2;
-						Coordinate2 = NULL;
-					}
-				} else {
-					/*check if this coordinate is in the legal coordinate list we got*/
-					LegalChessCoordListNode = LegalChessCoordList->FirstNode;
-					LegalMoveFlag = False;
-					while (LegalChessCoordListNode && !LegalMoveFlag){
-						if (LegalChessCoordListNode->Coordinate == Coordinate2){
-							LegalMoveFlag = True;
-						} else {
-							LegalChessCoordListNode = LegalChessCoordListNode->NextNode;
-						}
-					}
-					
-					if (!LegalMoveFlag){
-						/*reselect coordinate2*/
-						Coordinate2 = NULL;
-					}
+				
+				LocalEvent = View_GetEvent(MainChessBoard, LocalEvent);
+				switch (LocalEvent->Type){
+					case SelectCoordinate:
+						Coordinate2 = LocalEvent->Coordinate;
+						if (CheckCoordinatesSamePlayer(Coordinate1, Coordinate2)) Coordinate1 = Coordinate2;
+						else if (ChessCoordinateList_CheckRedundancy(LegalChessCoordList, Coordinate2)) ExitStateFlag = True; 
+						break;
+					case UndoMove:
+						UndoMoveFlag = True;
+						ExitStateFlag = True;
+						break;
+					case Exit:
+						GameOnFlag = False;
+						ExitStateFlag = True;
+						break;
+					default:  
+						assert(False);
+						break;
+						
 				}
+				
+				/*free the current legal coordinate list*/
+				ChessCoordinateList_Free(LegalChessCoordList);
 			}
 			
+			if (UndoMoveFlag){
+				Model_UndoLastMove(MainChessBoard, MainMoveList);
+				continue;
+			} else if (!GameOnFlag) continue;
 			
-			DisplayChessBoard(MainChessBoard);
 			/*construct chess move then perform it*/
-			LocalChessMove = malloc(sizeof(ChessMove));
-			assert(LocalChessMove);
+			LocalChessMove = ChessMove_Initialize();
 			LocalChessMove->MovePiece = Coordinate1->Piece;
 			LocalChessMove->StartPosition = Coordinate1;
 			LocalChessMove->NextPosition = Coordinate2;
@@ -139,7 +131,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
 		/*delete the current legal coord list*/
-		ChessCoordinateList_Free(LegalChessCoordList);
+		
 		
 		/*check for checkmate*/
 		/*if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
@@ -161,8 +153,14 @@ ControlHandle * Control_CleanUp(ControlHandle * Handle){
 	return NULL;
 }
 
-static Boolean CheckSelectValidCoordinate(ChessCoordinate * Coord, ChessPlayer * PlayerToChoose){
+static Boolean CheckSelectOwnPiece(ChessCoordinate * Coord, ChessPlayer * PlayerToChoose){
 	if (!Coord->Piece) return False;
 	if (Coord->Piece->Player != PlayerToChoose) return False;
 	else return True;
+}
+
+static Boolean CheckCoordinatesSamePlayer(ChessCoordinate * Coord1, ChessCoordinate * Coord2){
+	if (!Coord1->Piece || !Coord2->Piece) return False;
+	if (Coord1->Piece->Player != Coord2->Piece->Player) return False;
+	return True;
 }

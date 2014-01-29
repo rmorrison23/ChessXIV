@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+
 #include "ChessStructures.h"
 
 ChessMove * ChessMove_Initialize(void);

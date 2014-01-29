@@ -2,6 +2,8 @@
 #define CONTROL_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+
 
 #include "Model.h"
 #include "View.h"

@@ -7,7 +7,7 @@
 #include "ChessStructures.h"
 
 
-
+int ChessMoveList_Count(ChessMoveList * List);
 ChessMoveList * ChessMoveList_AppendMove(ChessMoveList *, ChessMove *);
 void ChessMoveList_Free(ChessMoveList *);
 ChessMoveList * ChessMoveList_Initialize(void);

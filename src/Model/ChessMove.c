@@ -2,6 +2,7 @@
 
 ChessMove * ChessMove_Initialize(void){
 	ChessMove * NewMove = malloc(sizeof(ChessMove));
+	assert(NewMove);
 	NewMove->MovePiece = NULL;
 	NewMove->StartPosition = NULL;
 	NewMove-> NextPosition = NULL;

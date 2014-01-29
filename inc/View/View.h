@@ -10,7 +10,7 @@ typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation} EventTypeEn
 
 /*may add more things to hang on to the event here*/
 typedef struct {
-	EventTypeEnum EventType;
+	EventTypeEnum Type;
 	ChessCoordinate * Coordinate;
 	ChessPlayer *	Player;
 } Event;

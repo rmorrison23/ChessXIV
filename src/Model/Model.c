@@ -559,6 +559,6 @@ void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
 	
 }
 
-ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *){
+ChessMove * Model_GetBestMove(ChessBoard * MainBoard, ChessPlayer * PlayerInTurn){
 	return NULL;
 }
