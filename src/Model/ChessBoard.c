@@ -188,6 +188,172 @@ ChessBoard * ChessBoard_Initialize(void){
   return ChessBoardToReturn;
 }
 
+ChessBoard * ChessBoard_InitializeEmpty(void){
+	
+	/*malloc the board*/
+	ChessBoard * ChessBoardToReturn = (ChessBoard *) malloc(sizeof(ChessBoard));
+	assert(ChessBoardToReturn);
+  
+	/*malloc two players*/
+	ChessBoardToReturn->WhitePlayer = (ChessPlayer *) malloc(sizeof(ChessPlayer));
+	ChessBoardToReturn->BlackPlayer = (ChessPlayer *) malloc(sizeof(ChessPlayer));
+	assert(ChessBoardToReturn->WhitePlayer && ChessBoardToReturn->BlackPlayer);
+	ChessBoardToReturn->WhitePlayer->PlayerColor = White;
+	ChessBoardToReturn->BlackPlayer->PlayerColor = Black;
+	ChessBoardToReturn->WhitePlayer->OtherPlayer = ChessBoardToReturn->BlackPlayer;
+	ChessBoardToReturn->BlackPlayer->OtherPlayer = ChessBoardToReturn->WhitePlayer;
+	
+	/*malloc all coordinate on the board*/
+	int i,j;
+	for (i = 0; i < CHESS_BOARD_MAX_ROW; i++){
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
+			ChessBoardToReturn->Board[i][j]	= (ChessCoordinate *) malloc(sizeof(ChessCoordinate));
+			assert(ChessBoardToReturn->Board[i][j]);
+			ChessBoardToReturn->Board[i][j]->Piece = NULL;
+			ChessBoardToReturn->Board[i][j]->Rank = i;
+			ChessBoardToReturn->Board[i][j]->File = j;
+			ChessBoardToReturn->Board[i][j]->MainBoard = ChessBoardToReturn;
+		}
+	}
+	
+	/*malloc each piece and assign all double links*/
+	/*White first*/
+	/*Pawns x 8*/
+	ChessPiece * CurrPiece;
+	int CurrPieceIdx = 0;
+	for (i = 0; i < 8; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Pawn;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
+		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Rook x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Rook;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Knight x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Knight;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Bishop x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Bishop;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Queen x 1*/
+	CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+	assert(CurrPiece);
+	CurrPiece->Type = Queen;
+	CurrPiece->Index = 0;
+	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;	
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
+	
+	
+	/*King x 1*/
+	CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+	assert(CurrPiece);
+	CurrPiece->Type = King;
+	CurrPiece->Index = 0;
+	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;	
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;	
+	
+	
+	/*Then black*/
+	/*Pawns x 8*/
+	CurrPieceIdx = 0;
+	for (i = 0; i < 8; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Pawn;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
+		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Rook x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Rook;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Knight x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Knight;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Bishop x 2*/
+	for (i = 0; i < 2; i++){
+		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+		assert(CurrPiece);
+		CurrPiece->Type = Bishop;
+		CurrPiece->Index = i;
+		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;		
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;		
+	}
+	
+	/*Queen x 1*/
+	CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+	assert(CurrPiece);
+	CurrPiece->Type = Queen;
+	CurrPiece->Index = 0;
+	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;	
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
+	
+	
+	/*King x 1*/
+	CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
+	assert(CurrPiece);
+	CurrPiece->Type = King;
+	CurrPiece->Index = 0;
+	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;	
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
+	
+  return ChessBoardToReturn;
+}
+
 void ChessBoard_Free(ChessBoard * CurrBoard){
 	int i,j;
 	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){
