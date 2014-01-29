@@ -6,7 +6,7 @@
 #include "Model.h"
 
 /*may add more type of event here*/
-typedef enum {SelectCoordinate, UndoMove} EventTypeEnum;
+typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation} EventTypeEnum;
 
 /*may add more things to hang on to the event here*/
 typedef struct {

@@ -65,6 +65,9 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 
 ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
 {
+
+	/*COUNT NUMBER OF MOVE DONE B4 doing this: IN CASE GAME JUST  STARTED*/
+	if (ChessMoveList_Count(moveList) < 3) return board;
       int i = 0;
       /* move to delete */
       ChessMoveNode * tempNode;
@@ -554,4 +557,8 @@ void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
 	
 	ChessBoard_Free(CurrBoard);
 	
+}
+
+ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *){
+	return NULL;
 }

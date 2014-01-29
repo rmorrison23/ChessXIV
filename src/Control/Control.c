@@ -2,6 +2,7 @@
 
 
 /*In main loop, make sure that player don't undo in first move*/
+static Boolean CheckSelectValidCoordinate(ChessCoordinate *, ChessPlayer *);
 
 ControlHandle * Control_Initialize(void){
 	/*Initialize handle*/
@@ -33,50 +34,51 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	Coordinate1 = NULL; Coordinate2 = NULL;
 	ChessCoordinateList * LegalChessCoordList; ChessCoordinateNode * LegalChessCoordListNode;
 	ChessMove * LocalChessMove;
-/*Event LocalEvent;*/
-	
-	/*ask user settings*/
-	/*player control*/
-	
-	
-#if 0
-	
-	ChessCoordinateList TestList[3];
-	TestList[0].Coordinate = MainChessBoard->Board[0][2];
-	TestList[1].Coordinate = MainChessBoard->Board[1][2];
-	TestList[2].Coordinate = MainChessBoard->Board[2][2];
-	TestList[0].NextNode = &TestList[1];
-	TestList[1].NextNode = &TestList[2];
-	TestList[2].NextNode = NULL;
-	
-	/*set this part to if 0 if you want to run normally*/
-	printf("displaying the board\n");
-	DisplayChessBoard(MainChessBoard);
-	View_GetEvent(MainChessBoard, &LocalEvent);
-	switch(LocalEvent.EventType){
-		case SelectCoordinate:
-			printf("Rank = %d, File = %d\n", LocalEvent.Coordinate->Rank, LocalEvent.Coordinate->File);
-			break;
-	}
-	
-	HighlightCoordinates(MainChessBoard, TestList);
-#endif
-	
-	
-#if 1
+	Event * LocalEvent = malloc(sizeof(Event));
+	Boolean ExitStateFlag = False;
+
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
 		if (CurrentPlayer->PlayerControl == Human){
 			Coordinate1 = NULL;
 			Coordinate2 = NULL;
-#if GUI_ENABLE
-		
-			
-#else
+
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
 			/*let current user select 1 coordinate*/
 			DisplayChessBoard(MainChessBoard);
+			
+			/*state 1: No coordinates selected*/
+			ExitStateFlag = False;
+			while (!ExitStateFlag){
+				LocalEvent = View_GetEvent(MainChessBoard, LocalEvent);
+				switch (LocalEvent->Type){
+					case SelectCoordinate:
+						Coordinate1 = LocalEvent->Coordinate;
+						if (CheckSelectValidCoordinate(Coordinate1, CurrentPlayer))	ExitStateFlag = True; 
+						break;
+					case UndoMove:
+						UndoMoveFlag = True;
+						ExitStateFlag = True;
+						break;
+					case Exit:
+						GameOnFlag = False;
+						ExitStateFlag = True;
+						break;
+					default:  
+						assert(False);
+						break;
+						
+				}
+			}
+			
+			if (UndoMoveFlag){
+				
+				continue;
+			}
+			
+			GameOnFlag = False;
+			
 			while (Coordinate1 == NULL){			
 				Coordinate1 = View_GetOneCoordinate(MainChessBoard);
 				if (Coordinate1->Piece == NULL){
@@ -90,19 +92,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			
 			while (!Coordinate2){
 				/*highlight the legal moves*/
-				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
-				
-#if 0
-				printf("got here\n");
-				ChessCoordinateNode * MyNode = LegalChessCoordList->FirstNode;
-				printf("printing legal\n");
-				while (MyNode){
-						printf("%d %d\n", MyNode->Coordinate->Rank, MyNode->Coordinate->File);
-						MyNode = MyNode->NextNode;
-				}
-				
-#endif
-				
+				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);				
 				
 				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
 				/*let user select the next coordinate*/
@@ -143,9 +133,8 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);
 			
 		} else {
-			/*Model_GetBestMove*/
+			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer);
 		}
-#endif
 		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
@@ -160,8 +149,8 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	
 	/*conclude the game*/
 	View_ConcludeGame(MainChessBoard, CurrentPlayer);
-#endif
-
+	free(LocalEvent);
+	
 	return Handle;
 }
 
@@ -170,4 +159,10 @@ ControlHandle * Control_CleanUp(ControlHandle * Handle){
 	View_CleanUp();
 	free(Handle);
 	return NULL;
+}
+
+static Boolean CheckSelectValidCoordinate(ChessCoordinate * Coord, ChessPlayer * PlayerToChoose){
+	if (!Coord->Piece) return False;
+	if (Coord->Piece->Player != PlayerToChoose) return False;
+	else return True;
 }

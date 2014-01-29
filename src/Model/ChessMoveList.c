@@ -1,5 +1,18 @@
 #include "ChessMoveList.h"
 
+int ChessMoveList_Count(ChessMoveList * List){
+
+ 	ChessMoveNode * firstNode = List->FirstNode;
+	if (!firstNode) return 0;
+	
+	int ReturnValue = 0;
+	while (firstNode){
+		ReturnValue++;
+		firstNode = firstNode->NextNode;
+	}
+	return ReturnValue;
+}
+
 
 ChessMoveList * ChessMoveList_AppendMove(ChessMoveList * List, ChessMove * Move){
 	ChessMoveNode * NewNode = malloc(sizeof(ChessMoveNode));
