@@ -10,7 +10,7 @@ endif
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
-MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessBoard 
+MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessMoveList ChessBoard ChessMove
 MODEL_LIB_DEPEND := $(addprefix build/lib,$(MODEL_LIB))
 MODEL_LIB_DEPEND := $(addsuffix .a,$(MODEL_LIB_DEPEND))
 MODEL_LIB_COMPILE := $(addprefix -l,$(MODEL_LIB))
@@ -25,11 +25,7 @@ VIEW_LIB_DEPEND := $(addprefix build/lib,$(VIEW_LIB))
 VIEW_LIB_DEPEND := $(addsuffix .a,$(VIEW_LIB_DEPEND))
 VIEW_LIB_COMPILE := $(addprefix -l,$(VIEW_LIB))
 
-<<<<<<< HEAD
-INCLUDES  := $(addprefix -I,$(SRC_DIR))
-=======
 INCLUDES  := $(addprefix -Iinc/,$(MODULES))
->>>>>>> IncFolder
 
 VPATH = $(SRC_DIR) src
 
@@ -57,6 +53,12 @@ StructuredLibraryTest: build/StructuredLibraryTest.o $(MODEL_LIB_DEPEND) build/l
 	$(CC) build/StructuredLibraryTest.o -Lbuild -lControl -lView $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
 	build/$@
 
+EnPassant:  build/TestSpecialMove_EnPassant.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
+	$(CC) build/TestSpecialMove_EnPassant.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+
+Castling:  build/TestSpecialMove_Castling.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
+	$(CC) build/TestSpecialMove_Castling.o -Lbuild $(VIEW_LIB_COMPILE) $(CONTROL_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+	
 ModelUnitTest: build/ModelUnitTest.o $(MODEL_LIB_DEPEND)
 	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 	

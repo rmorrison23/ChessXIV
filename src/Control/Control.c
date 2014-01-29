@@ -3,20 +3,29 @@
 
 /*In main loop, make sure that player don't undo in first move*/
 
-static ChessBoard * MainChessBoard;
-static ChessMoveList * MainMoveList;
-
-void Control_Initialize(void){
+ControlHandle * Control_Initialize(void){
+	/*Initialize handle*/
+	ControlHandle * ReturnHandle = malloc(sizeof(ControlHandle));
+ 
 	/*initialize the board*/
-	MainChessBoard = Model_Initialize();
-	MainMoveList = malloc(sizeof(ChessMoveList));
+	ReturnHandle->MainChessBoard = Model_Initialize();
+	
+	ReturnHandle->MainChessBoard = SetOptions(ReturnHandle->MainChessBoard);
+	
+	/*intialize move list*/
+	ReturnHandle->MainMoveList = ChessMoveList_Initialize();
 	
 	/*initialize the view*/
 	View_Initialize();
+	
+	return ReturnHandle;
 }
 
 
-void Control_MainLoop(void){
+ControlHandle * Control_MainLoop(ControlHandle * Handle){
+	ChessBoard * MainChessBoard = Handle->MainChessBoard;
+	ChessMoveList * MainMoveList = Handle->MainMoveList;
+	
 	/*local variables*/
 	Boolean GameOnFlag = True, LegalMoveFlag = False;
 	ChessPlayer * CurrentPlayer;
@@ -28,7 +37,7 @@ void Control_MainLoop(void){
 	
 	/*ask user settings*/
 	/*player control*/
-	MainChessBoard = SetOptions(MainChessBoard);
+	
 	
 #if 0
 	
@@ -152,9 +161,13 @@ void Control_MainLoop(void){
 	/*conclude the game*/
 	View_ConcludeGame(MainChessBoard, CurrentPlayer);
 #endif
+
+	return Handle;
 }
 
-void Control_CleanUp(void){
-	Model_CleanUp(MainChessBoard, MainMoveList);
+ControlHandle * Control_CleanUp(ControlHandle * Handle){
+	Model_CleanUp(Handle->MainChessBoard, Handle->MainMoveList);
 	View_CleanUp();
+	free(Handle);
+	return NULL;
 }

@@ -6,12 +6,14 @@
 #include "Model.h"
 #include "View.h"
 
+typedef struct {
+	ChessBoard * MainChessBoard;
+	ChessMoveList * MainMoveList;
+} ControlHandle;
 
-void Control_Initialize(void);
-void Control_MainLoop(void);
-void Control_CleanUp(void);
 
-
-
+ControlHandle * Control_Initialize();
+ControlHandle * Control_MainLoop(ControlHandle *);
+ControlHandle * Control_CleanUp(ControlHandle *);
 
 #endif
