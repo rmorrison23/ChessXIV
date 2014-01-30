@@ -47,7 +47,59 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(advanced_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
 
   SDL_RenderPresent(renderer);
+
+  int done = 0;
+  int buttonWidth = 0, buttonHeight = 0;
+  int x_pos = 0, y_pos = 0;
+
+  int playerOne = 0, playerTwo = 0, AIversusAI = 0;
+
+  SDL_Event event;
+  SDL_QueryTexture(onePlayer_Button, NULL, NULL, &buttonWidth, NULL);
+  SDL_QueryTexture(onePlayer_Button, NULL, NULL, NULL, &buttonHeight);
+
+
+
+  while(!done){
+
+    while(SDL_PollEvent(&event)){
+
+      switch(event.type){
+
+      case SDL_QUIT:
+	done = 1;
+	break;
+      case SDL_KEYUP:
+	if(event.key.keysym.sym == SDLK_ESCAPE)
+	  done = 1;
+	break;
+ 
+      case SDL_MOUSEBUTTONDOWN:
+      	if(event.button.button == SDL_BUTTON_LEFT){
+      	  x_pos = event.button.x;
+	  y_pos = event.button.y;
+
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
+	    drawOnePlayerMenu(window, renderer);
+	    break;
+	  }
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
+	    drawTwoPlayerMenu(window, renderer);
+	    break;
+	  }
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
+	    drawGameplayScreen(window, renderer);
+	    break;
+	  }
+      	}      	
+      }      
+    }    
+  }
 }
+
 
 /* function to display the one player menu to the screen */
 void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
