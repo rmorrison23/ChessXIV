@@ -42,8 +42,20 @@ int main(int argc, char *argv[]){
     
     /* testing draw functions here; they are not yet linked with events handling/bools */
     /* so only one draw can be run at a time right now */
-    drawMainMenu(window, renderer);
 
+    int *screenMode = 0;	/* 0 = main, 1 = one player, 2 = two players, 3 = game screen */
+
+    screenMode = drawMainMenu(window, renderer, screenMode);
+
+    if(screenMode == 1){
+     screenMode = drawOnePlayerMenu(window, renderer, screenMode);
+    }
+    if(screenMode == 2){
+      screenMode = drawTwoPlayerMenu(window, renderer, screenMode);
+    }
+    if(screenMode == 3){
+      drawGameplayScreen(window, renderer);
+    }
     /* drawOnePlayerMenu(window, renderer); */
 
     /* drawTwoPlayerMenu(window, renderer); */
