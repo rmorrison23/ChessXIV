@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
     
     /* drawPieces(renderer); */
     
-    mainMenuEvents(window, renderer);
+    /* mainMenuEvents(window, renderer); */
 
     eventMain();
 
