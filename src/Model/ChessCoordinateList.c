@@ -63,3 +63,28 @@ ChessCoordinateList * ChessCoordinateList_Initialize(void){
 	NewList->LastNode = NULL;
 	return NewList;
 }
+
+ChessCoordinateList * ChessCoordinateList_RemoveAtNode( ChessCoordinateList * CoordList, ChessCoordinateNode * CoordNode){
+	/*if list has only 1 node*/
+	if (CoordList->FirstNode == CoordList->LastNode){
+		free(CoordList->FirstNode);
+		CoordList->FirstNode = NULL;
+		CoordList->LastNode = NULL;
+	/*if that node is first node*/
+	} else if (!CoordNode->PrevNode){	
+		CoordList->FirstNode = CoordNode->NextNode;
+		CoordNode->NextNode->PrevNode = NULL;
+		free(CoordNode);
+	/*if that node is last node*/
+	} else if(!CoordNode->NextNode) {
+		CoordList->LastNode = CoordNode->PrevNode;
+		CoordNode->PrevNode->NextNode = NULL;
+		free(CoordNode);
+	/*node must be in the middle of at least 3 node list*/
+	} else {
+		CoordNode->NextNode->PrevNode = CoordNode->PrevNode;
+		CoordNode->PrevNode->NextNode = CoordNode->NextNode;
+		free(CoordNode);
+	}
+	return CoordList;
+}

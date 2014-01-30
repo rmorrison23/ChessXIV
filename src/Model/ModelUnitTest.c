@@ -1,7 +1,7 @@
 #include "Model.h"
 
-/*#define TEST_COORDINATE_LIST  */
-#define TEST_MOVE_LIST
+#define TEST_COORDINATE_LIST  
+/*#define TEST_MOVE_LIST*/
 
 int main(void){
 	ChessBoard * MainBoard = ChessBoard_InitializeEmpty();
@@ -21,6 +21,9 @@ int main(void){
 	}
 	
 	MainList = ChessCoordinateList_AppendNoRedundancy(MainList, SupportList);
+	
+	for (i = 0; i < 5; i++) ChessCoordinateList_RemoveAtNode(MainList, MainList->FirstNode->NextNode);
+	while (MainList->LastNode) ChessCoordinateList_RemoveAtNode(MainList, MainList->FirstNode);
 	
 	ChessCoordinateList_Free(MainList);
 	

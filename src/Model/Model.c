@@ -527,6 +527,21 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		
 	  break;
 	}
+	
+	/* right here, before return the coord list, we will only select coordinate that won't get our king killed
+	 * but that happens only when we're in defensive mode. When it's not our turn (we're in offensive mode, 
+	 * don't need to care about this   */
+	if (piece->Player == playerinturn && output->FirstNode){
+		ChessCoordinateNode * node1 = output->FirstNode, * node2;
+		while (node1){
+			node2 = node1->NextNode;
+			if (False/*replace this with your boolean return*/){
+				output = ChessCoordinateList_RemoveAtNode(output, node1);
+			}
+			node1 = node2;
+		}
+	}
+	
 	return output;
 }
 

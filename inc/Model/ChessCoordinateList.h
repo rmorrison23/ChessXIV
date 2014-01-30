@@ -11,4 +11,5 @@ Boolean ChessCoordinateList_CheckRedundancy(ChessCoordinateList *, ChessCoordina
 ChessCoordinateList * ChessCoordinateList_AppendCoord(ChessCoordinateList *, ChessCoordinate *);
 void ChessCoordinateList_Free(ChessCoordinateList *);
 ChessCoordinateList * ChessCoordinateList_Initialize(void);
+ChessCoordinateList * ChessCoordinateList_RemoveAtNode( ChessCoordinateList *, ChessCoordinateNode *);
 #endif
