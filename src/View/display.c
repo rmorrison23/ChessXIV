@@ -22,7 +22,7 @@
 
 
 /* function to display the main menu to the screen */
-void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
+int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
   /* rename window title */
   SDL_SetWindowTitle(window, TITLE);
@@ -49,6 +49,7 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
   SDL_RenderPresent(renderer);
 
   int done = 0;
+
   int buttonWidth = 0, buttonHeight = 0;
   int x_pos = 0, y_pos = 0;
 
@@ -77,28 +78,32 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
 
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
-	    drawOnePlayerMenu(window, renderer);
+	    screenMode = 1;
+	    done = 1;
 	    break;
 	  }
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
-	    drawTwoPlayerMenu(window, renderer);
+	    screenMode = 2;
+	    done = 1;
 	    break;
 	  }
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	    drawGameplayScreen(window, renderer);
+	    screenMode = 3;
+	    done = 1;
 	    break;
 	  }
       	}      	
       }      
     }    
   }
+  return screenMode;
 }
 
 
 /* function to display the one player menu to the screen */
-void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
+int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
   int leftMargin   = 50;
   int rightMargin  = 675;
@@ -176,10 +181,47 @@ void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
 
   SDL_RenderPresent(renderer);
-}
 
+  int done = 0;
+  int x_pos = 0, y_pos = 0;
+
+  SDL_Event event;
+
+  while(!done){
+
+    while(SDL_PollEvent(&event)){
+
+      switch(event.type){
+
+      case SDL_QUIT:
+	done = 1;
+	break;
+      case SDL_KEYUP:
+	if(event.key.keysym.sym == SDLK_ESCAPE)
+	  done = 1;
+	break;
+ 
+      case SDL_MOUSEBUTTONDOWN:
+      	if(event.button.button == SDL_BUTTON_LEFT){
+      	  x_pos = event.button.x;
+	  y_pos = event.button.y;
+	  
+
+	  /* go to gameplay screen */
+	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - leftMargin
+	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
+	    screenMode = 3;
+	    done = 1;
+	    break;
+	  }
+	}
+      }    
+    }
+  }
+  return screenMode;
+}
 /* function to display the two player menu to the screen */
-void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
+int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
   int leftMargin   = 50;
   int rightMargin  = 675;
@@ -237,6 +279,46 @@ void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer){
   renderTexture2(play_Button, renderer, SCREEN_WIDTH - leftMargin - stringWidth, SCREEN_HEIGHT/5 + 7*stringHeight);
 
   SDL_RenderPresent(renderer);
+
+  int done = 0;
+  int x_pos = 0, y_pos = 0;
+
+  SDL_Event event;
+
+  while(!done){
+
+    while(SDL_PollEvent(&event)){
+
+      switch(event.type){
+
+      case SDL_QUIT:
+	done = 1;
+	break;
+      case SDL_KEYUP:
+	if(event.key.keysym.sym == SDLK_ESCAPE)
+	  done = 1;
+	break;
+ 
+      case SDL_MOUSEBUTTONDOWN:
+      	if(event.button.button == SDL_BUTTON_LEFT){
+      	  x_pos = event.button.x;
+	  y_pos = event.button.y;
+
+	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - leftMargin
+	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){
+
+	    screenMode = 3;
+
+	    done = 1;
+	    break;
+	  }
+	 
+	 
+      	}      	
+      }      
+    }    
+  }
+  return screenMode;
 }
 
 /* function to display the advanced menu to the screen */
