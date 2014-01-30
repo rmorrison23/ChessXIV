@@ -52,13 +52,9 @@ void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer){
   int buttonWidth = 0, buttonHeight = 0;
   int x_pos = 0, y_pos = 0;
 
-  int playerOne = 0, playerTwo = 0, AIversusAI = 0;
-
   SDL_Event event;
   SDL_QueryTexture(onePlayer_Button, NULL, NULL, &buttonWidth, NULL);
   SDL_QueryTexture(onePlayer_Button, NULL, NULL, NULL, &buttonHeight);
-
-
 
   while(!done){
 
