@@ -155,44 +155,39 @@ Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
 	/* grab list of legal move of other player */
 	ChessCoordinateList * newList = Model_GetAllLegalCoordinate(board, player->OtherPlayer, player);
 	
-	/* a temp node to traverse the list */
-	ChessCoordinateNode *tempNode = newList->FirstNode;
+	/*get the king of current player*/
 	ChessPiece * king = ChessPlayer_GetChessPiece(player, King, 0);
-
-	/* there is a legal move for other player */
-	if (newList != NULL)
-	{
-		while (tempNode != NULL)
-		{
-		/* check the coordinate of the player king to the legal coordinate of other player */
-			if (king->Coordinate == tempNode->Coordinate)
-			{
-				return True;
-			}
-			/* traverse the list */
-			tempNode = tempNode->NextNode;
-		}
+	
+	if (ChessCoordinateList_CheckRedundancy(newList, king->Coordinate)){
+		ChessCoordinateList_Free(newList);
+		return True;
 	}
+	ChessCoordinateList_Free(newList);
 	return False;
+
 }
 
 Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
 {
 	
-	/*if (Model_CheckCheckedPosition(board, player) && Model_GetAllLegalCoordinate(board, player, player->OtherPlayer) == NULL)	*/
-	if (Model_CheckCheckedPosition(board, player) && Model_GetAllLegalCoordinate(board, player, player) == NULL)
+	ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player);
+	if (Model_CheckCheckedPosition(board, player) &&  !CurrPlayerPossibleCoords->FirstNode)
 	{
+		ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 		return True;
-	}	
+	}
+	ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 	return False;
 }
 
-Boolean Model_Stalemate(ChessBoard * board, ChessPlayer * player)
-{
-	if (!Model_CheckCheckedPosition(board, player) && Model_GetAllLegalCoordinate(board, player, player->OtherPlayer) == NULL)
+Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player)
+{	ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player);
+	if (!Model_CheckCheckedPosition(board, player) &&  !CurrPlayerPossibleCoords->FirstNode)
 	{
+		ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 		return True;
-	}	
+	}
+	ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 	return False;
 }
 

@@ -52,7 +52,10 @@ build/lib%.a: build/%.o
 StructuredLibraryTest: build/StructuredLibraryTest.o $(MODEL_LIB_DEPEND) build/libControl.a build/libView.a
 	$(CC) build/StructuredLibraryTest.o -Lbuild -lControl -lView $(MODEL_LIB_COMPILE) -o build/$@ $(CFLAGS)
 	build/$@
-
+	
+CheckMate: build/TestCheckMate.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
+	$(CC) build/TestCheckMate.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+	
 Transform:  build/TestSpecialMove_Transforming.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(VIEW_LIB_DEPEND)
 	$(CC) build/TestSpecialMove_Transforming.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 

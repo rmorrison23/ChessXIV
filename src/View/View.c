@@ -191,6 +191,21 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	
 }
 
+void View_DisplayEvent(ChessBoard * CurrBoard, Event * EventHandle){
+	if (EventHandle->Type == Checkmate){
+		switch (EventHandle->Player->PlayerColor){
+			case White:
+				printf("White player is check mate. Black Player wins.\n");
+				break;
+			case Black:
+				printf("Black player is check mate. White Player wins.\n");
+				break;
+		}
+	} else if (EventHandle->Type == Stalemate){
+		printf("Game is in stalemate. Tie game.\n");
+	}
+}
+
 void DisplayChessBoard(ChessBoard * CurrChessBoard){
 	int i, j;
 	for (i = CHESS_BOARD_MAX_ROW - 1; i >= 0 ; i--){
@@ -241,12 +256,12 @@ void View_Initialize(void){
 
 /*clean up*/
 void View_CleanUp(void){
-	printf("Goodbye. See you next time\n");
+	
 }
 
-void View_ConcludeGame(ChessBoard * MainBoard, ChessPlayer * WinPlayer){
+void View_ConcludeGame(ChessBoard * MainBoard){
 	printf("Game concluded\n");
-	
+	printf("Goodbye. See you next time\n");
 }
 #else
 /*RYAN PUT YOUR CODE HERE. TO COMPILE USE make GUI_ENABLE=y*/

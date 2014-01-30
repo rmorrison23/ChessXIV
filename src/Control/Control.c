@@ -134,17 +134,28 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
-		/*delete the current legal coord list*/
-		
-		
-		/*check for checkmate*/
-		/*if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
+		/*check for checkmate first*/
+		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
+			LocalEvent->Type = Checkmate;
+			LocalEvent->Player = CurrentPlayer;
+			View_DisplayEvent(MainChessBoard, LocalEvent);
 			GameOnFlag = False;
-		} */
+		/*then check for stalemate*/
+		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer)){
+			LocalEvent->Type = Stalemate;			
+			View_DisplayEvent(MainChessBoard, LocalEvent);
+			GameOnFlag = False;		
+		/*check for checked position */
+		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer)){
+			printf("Player %d is in check\n", CurrentPlayer->PlayerColor);
+		}
 	}
 	
+	/*display chessboard for last time*/
+	DisplayChessBoard(MainChessBoard);
+	
 	/*conclude the game*/
-	View_ConcludeGame(MainChessBoard, CurrentPlayer);
+	View_ConcludeGame(MainChessBoard);
 	free(LocalEvent);
 	
 	return Handle;

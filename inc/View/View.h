@@ -6,7 +6,7 @@
 #include "Model.h"
 
 /*may add more type of event here*/
-typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation} EventTypeEnum;
+typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate} EventTypeEnum;
 
 /*may add more things to hang on to the event here*/
 typedef struct {
@@ -33,7 +33,10 @@ void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
 Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
 ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
 
-void View_ConcludeGame(ChessBoard *, ChessPlayer *);
+/*DisplayEvent*/
+void View_DisplayEvent(ChessBoard * CurrBoard, Event *);
+
+void View_ConcludeGame(ChessBoard *);
 
 /*for transformation: ask user which type to transform to*/
 ChessPieceTypeEnum View_AskMoveTransform(void);

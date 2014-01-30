@@ -28,6 +28,9 @@ ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 /*done,  undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
+/*check for stalemate position*/
+Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player);
+
 /* almost done, If this chess player is checkmakte, return True*/
 Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
 
