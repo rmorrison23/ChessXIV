@@ -2,6 +2,20 @@
 
 #ifndef GUI_ENABLE
 
+/*define basic colors*/
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
+/*define color of player*/
+#define WHITE_PLAYER_COLOR KBLU
+#define BLACK_PLAYER_COLOR KCYN
+#define HIGHLIGHT_COLOR KGRN
 
 ChessPieceTypeEnum View_AskMoveTransform(void){
 	Boolean ValidFlag = False;
@@ -59,6 +73,7 @@ static void PrintChessCoordinate(ChessPiece * CurrPiece){
 		}
 	  
 		if (CurrPiece->Player->PlayerColor == Black) PieceLetter += 'a' - 'A';
+		
 		printf("%c%d", PieceLetter, CurrPiece->Index);
 	}
   
@@ -210,8 +225,19 @@ void DisplayChessBoard(ChessBoard * CurrChessBoard){
 	int i, j;
 	for (i = CHESS_BOARD_MAX_ROW - 1; i >= 0 ; i--){
 		printf("%d  |  ", i + 1);
-		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){    
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
+		 	if (CurrChessBoard->Board[i][j]->Piece){
+				switch(CurrChessBoard->Board[i][j]->Piece->Player->PlayerColor){
+					case White:
+						printf(WHITE_PLAYER_COLOR);
+						break;
+					case Black:
+						printf(BLACK_PLAYER_COLOR);
+						break;
+				}
+			}
 			PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
+			printf(KNRM);
 			printf("  ");
 		}
 		printf("\n");
@@ -227,7 +253,26 @@ void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * Coo
 	Boolean HighlightFlag;
 	for (i = CHESS_BOARD_MAX_ROW - 1; i >= 0 ; i--){
 		printf("%d  |  ", i + 1);
-		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){    
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){   
+			if (ChessCoordinateList_CheckRedundancy(CoordList, CurrChessBoard->Board[i][j])){
+				printf(HIGHLIGHT_COLOR);
+			} else {
+				if (CurrChessBoard->Board[i][j]->Piece){
+				switch(CurrChessBoard->Board[i][j]->Piece->Player->PlayerColor){
+					case White:
+						printf(WHITE_PLAYER_COLOR);
+						break;
+					case Black:
+						printf(BLACK_PLAYER_COLOR);
+						break;
+				}
+				}
+			}
+		 	PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
+			printf(KNRM);
+			printf("  ");
+		 
+#if 0		 
 			PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
 			/*check if this coordinate is highlighted*/
 			CoordListNode = CoordList->FirstNode;
@@ -240,7 +285,8 @@ void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * Coo
 			}
 			/*Highlight by put an X*/
 			if (HighlightFlag) printf("X ");
-			else printf("  ");			
+			else printf("  ");
+#endif
 		}
 		printf("\n");
 	}
