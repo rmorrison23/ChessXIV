@@ -15,13 +15,13 @@
 #include <stdio.h>
 
 /* function to display the main menu to the screen */
-void drawMainMenu(SDL_Window *window, SDL_Renderer *renderer);
+int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
 
 /* function to display the one player menu to the screen */
-void drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer);
+int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
 
 /* function to display the one player menu to the screen */
-void drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer);
+int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
 
 /* function to display the advanced menu to the screen */
 void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer);
