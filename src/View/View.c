@@ -12,10 +12,12 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 
+#define KGRN_BKG	"\x1B[0;31;42m"
+
 /*define color of player*/
-#define WHITE_PLAYER_COLOR KBLU
-#define BLACK_PLAYER_COLOR KCYN
-#define HIGHLIGHT_COLOR KGRN
+#define WHITE_PLAYER_COLOR 	KBLU
+#define BLACK_PLAYER_COLOR 	KCYN
+#define HIGHLIGHT_COLOR 	KGRN_BKG
 
 ChessPieceTypeEnum View_AskMoveTransform(void){
 	Boolean ValidFlag = False;
@@ -72,9 +74,9 @@ static void PrintChessCoordinate(ChessPiece * CurrPiece){
 				break;
 		}
 	  
-		if (CurrPiece->Player->PlayerColor == Black) PieceLetter += 'a' - 'A';
+		/*if (CurrPiece->Player->PlayerColor == Black) PieceLetter += 'a' - 'A';*/
 		
-		printf("%c%d", PieceLetter, CurrPiece->Index);
+		printf("%c ", PieceLetter);
 	}
   
 }
@@ -165,13 +167,14 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	
 	unsigned char ReturnRank, ReturnFile;
 	
-	/*ask user what to do: 3 options are select a coordinate, undo and exit*/
-	printf("Enter Coordinate or 2 to undo or 3 to exit: ");
-	scanf("%s", UserInput);
+	
 	
 	Boolean ValidOptionFlag = False;
 	while (!ValidOptionFlag){
-			
+		/*ask user what to do: 3 options are select a coordinate, undo and exit*/
+		printf("enter coordinate or 2 to undo or 3 to exit: ");
+		scanf("%s", UserInput);
+		
 		/*get first non space character*/
 		while ((*OneLetter) == ' ') OneLetter++;
 		
@@ -271,22 +274,6 @@ void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * Coo
 		 	PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
 			printf(KNRM);
 			printf("  ");
-		 
-#if 0		 
-			PrintChessCoordinate(CurrChessBoard->Board[i][j]->Piece);
-			/*check if this coordinate is highlighted*/
-			CoordListNode = CoordList->FirstNode;
-			HighlightFlag = False;
-			while (CoordListNode && !HighlightFlag){
-				if (CoordListNode->Coordinate->Rank == i && CoordListNode->Coordinate->File == j){
-					HighlightFlag = True;
-				} else 
-					CoordListNode = CoordListNode->NextNode;
-			}
-			/*Highlight by put an X*/
-			if (HighlightFlag) printf("X ");
-			else printf("  ");
-#endif
 		}
 		printf("\n");
 	}
