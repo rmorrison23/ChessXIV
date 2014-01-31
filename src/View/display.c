@@ -225,7 +225,7 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
 	  }
 
 	  /* go to gameplay screen */
-	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - leftMargin
+	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - 3*leftMargin
 	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
 	    *screenMode = 3;
 	    done = 1;
