@@ -248,6 +248,32 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
 	  /*   done = 1; */
 	  /*   break; */
 	  /* } */
+
+	  /* difficulty choices*/  /* working: interface with data structure (color choice) here */
+	  /* easy */
+	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth - 70 */
+	  /*    && y_pos > SCREEN_HEIGHT/5 && y_pos < SCREEN_HEIGHT/5 + stringHeight){ */
+	   
+	  /*   done = 1; */
+	  /*   break; */
+	  /* } */
+
+	  /* moderate */
+	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth + 40 */
+	  /*    && y_pos > SCREEN_HEIGHT/5 + stringHeight && y_pos < SCREEN_HEIGHT/5 + 2*stringHeight){ */
+	   
+	  /*   done = 1; */
+	  /*   break; */
+	  /* } */
+
+	  /* challenging */
+	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth + 75 */
+	  /*    && y_pos > SCREEN_HEIGHT/5 + 2*stringHeight && y_pos < SCREEN_HEIGHT/5 + 3*stringHeight){ */
+	   
+	  /*   done = 1; */
+	  /*   break; */
+	  /* } */
+
 	}
 	else{break;}
       }    
