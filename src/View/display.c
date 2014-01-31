@@ -132,28 +132,30 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
   renderTexture2(title, renderer, (SCREEN_WIDTH - stringWidth)/2, SCREEN_HEIGHT*0);
   
   /* create timer option with buttons */
-  SDL_Texture *timeOption = renderText("Timer:", CALIBRI_FONT, optionColor, 50, renderer);
-  SDL_QueryTexture(timeOption, NULL, NULL, &stringWidth, NULL);
-  renderTexture2(timeOption, renderer, leftMargin, SCREEN_HEIGHT/5);
+  /* SDL_Texture *timeOption = renderText("Timer:", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* SDL_QueryTexture(timeOption, NULL, NULL, &stringWidth, NULL); */
+  /* renderTexture2(timeOption, renderer, leftMargin, SCREEN_HEIGHT/5); */
 
-  SDL_Texture *fiveMin_Button = renderText("5 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
-  SDL_QueryTexture(fiveMin_Button, NULL, NULL, NULL, &stringHeight);
-  renderTexture2(fiveMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5);
-  SDL_Texture *fifteenMin_Button = renderText("15 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(fifteenMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight);
-  SDL_Texture *sixtyMin_Button = renderText("60 Minutes", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(sixtyMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 2*stringHeight);
-  SDL_Texture *off_Button = renderText("Off", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(off_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 3*stringHeight);
+  /* SDL_Texture *fiveMin_Button = renderText("5 Minutes", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* SDL_QueryTexture(fiveMin_Button, NULL, NULL, NULL, &stringHeight); */
+  /* renderTexture2(fiveMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5); */
+  /* SDL_Texture *fifteenMin_Button = renderText("15 Minutes", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(fifteenMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight); */
+  /* SDL_Texture *sixtyMin_Button = renderText("60 Minutes", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(sixtyMin_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 2*stringHeight); */
+  /* SDL_Texture *off_Button = renderText("Off", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(off_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 3*stringHeight); */
     
   /* create color options */
   SDL_Texture *colorOption = renderText("Color:", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(colorOption, renderer, leftMargin, SCREEN_HEIGHT/5 + 4.5*stringHeight);
+  SDL_QueryTexture(colorOption, NULL, NULL, &stringWidth, NULL);
+  SDL_QueryTexture(colorOption, NULL, NULL, NULL, &stringHeight);
+  renderTexture2(colorOption, renderer, leftMargin, SCREEN_HEIGHT/5);
 
   SDL_Texture *black_Button = renderText("Black", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(black_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 4.5*stringHeight);
+  renderTexture2(black_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5);
   SDL_Texture *white_Button = renderText("White", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(white_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 5.5*stringHeight);
+  renderTexture2(white_Button, renderer, leftMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight);
   
   /* create difficulty options */
   SDL_Texture *diffOption = renderText("Difficulty:", CALIBRI_FONT, optionColor, 50, renderer);
@@ -169,13 +171,13 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
   renderTexture2(hard_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 2*stringHeight);
 
   /* create input options */
-  SDL_Texture *inputOption = renderText("Input:", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(inputOption, renderer, rightMargin + 75, SCREEN_HEIGHT/5 + 4*stringHeight);
+  /* SDL_Texture *inputOption = renderText("Input:", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(inputOption, renderer, rightMargin + 75, SCREEN_HEIGHT/5 + 4*stringHeight); */
 
-  SDL_Texture *kbd_Button = renderText("Keyboard", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(kbd_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 4*stringHeight);
-  SDL_Texture *mouse_Button = renderText("Mouse", CALIBRI_FONT, optionColor, 50, renderer);
-  renderTexture2(mouse_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 5*stringHeight);
+  /* SDL_Texture *kbd_Button = renderText("Keyboard", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(kbd_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 4*stringHeight); */
+  /* SDL_Texture *mouse_Button = renderText("Mouse", CALIBRI_FONT, optionColor, 50, renderer); */
+  /* renderTexture2(mouse_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 5*stringHeight); */
 
   /* create main menu button */
   SDL_Texture *mainMenu_Button = renderText("Main Menu", CALIBRI_FONT, buttonColor, 50, renderer);
