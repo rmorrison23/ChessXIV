@@ -24,6 +24,8 @@
 /* function to display the main menu to the screen */
 int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
+  SDL_Color greenText = {0x29, 0xEF, 0x48};
+
   /* rename window title */
   SDL_SetWindowTitle(window, TITLE);
 
@@ -48,6 +50,7 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
   SDL_RenderPresent(renderer);
 
+
   int done = 0;
 
   int buttonWidth = 0, buttonHeight = 0;
@@ -60,13 +63,14 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
   while(!done){
 
     while(SDL_PollEvent(&event)){
-
+     
       switch(event.type){
 
       case SDL_QUIT:
 	*screenMode = 100;
 	done = 1;
 	break;
+
       case SDL_KEYUP:
 	if(event.key.keysym.sym == SDLK_ESCAPE){
 	  *screenMode = 100;
@@ -74,6 +78,38 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 	}
 	break;
 	
+      case SDL_MOUSEMOTION:
+	/* highlight when mouse over one player button */
+	if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth
+	   && event.motion.y > SCREEN_HEIGHT/2.5 && event.motion.y < SCREEN_HEIGHT/2.5 + buttonHeight - 20){
+	  onePlayer_Button = renderText(ONE_PLAYER, CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
+	  SDL_RenderPresent(renderer);
+	   break; 
+	}
+	/* highlight when mouse over two player button */
+	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
+	   && event.motion.y > SCREEN_HEIGHT/2.5 + buttonHeight + 25 && event.motion.y < SCREEN_HEIGHT/2.5 + 2*buttonHeight - 10){
+	  twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5 + buttonHeight);
+	  SDL_RenderPresent(renderer);	 
+	  break;
+	}
+	/* highlight when mouse over AI versus AI button */
+	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
+	   && event.motion.y > SCREEN_HEIGHT/2.5 + 2*buttonHeight + 35 && event.motion.y < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
+	  twoPlayer_Button = renderText("AI Versus AI", CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
+	  SDL_RenderPresent(renderer);	 
+	  break;
+	}
+	/* default view */
+	else{
+	  *screenMode = 0;
+	  done = 1;
+	  break;
+	}
+
       case SDL_MOUSEBUTTONDOWN:
       	if(event.button.button == SDL_BUTTON_LEFT){
       	  x_pos = event.button.x;
