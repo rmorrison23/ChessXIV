@@ -40,22 +40,35 @@ int main(int argc, char *argv[]){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     
-    /* testing draw functions here; they are not yet linked with events handling/bools */
-    /* so only one draw can be run at a time right now */
+    int zeroCase = 0;
+    int *screenMode;     /* 0 = main, 1 = one player, 2 = two players, 3 = game screen, 100 = esc */
+    screenMode = &zeroCase;
+    int playing = 0;
+    int on = 1;
 
-    int *screenMode = 0;	/* 0 = main, 1 = one player, 2 = two players, 3 = game screen */
+    *screenMode = drawMainMenu(window, renderer, screenMode);
+  
+      while(!playing){
 
-    screenMode = drawMainMenu(window, renderer, screenMode);
+	if(*screenMode == 0){
+	  *screenMode = drawMainMenu(window, renderer, screenMode);
+	}
+	if(*screenMode == 1){
+	  *screenMode = drawOnePlayerMenu(window, renderer, screenMode);
+	}
+	if(*screenMode == 2){
+	  *screenMode = drawTwoPlayerMenu(window, renderer, screenMode);
+	}
+	if(*screenMode == 3){
+	  drawGameplayScreen(window, renderer);
+	  playing = 1;
+	}
+	if(*screenMode == 100){
+	  break;
+	}
+      }    
+   
 
-    if(screenMode == 1){
-     screenMode = drawOnePlayerMenu(window, renderer, screenMode);
-    }
-    if(screenMode == 2){
-      screenMode = drawTwoPlayerMenu(window, renderer, screenMode);
-    }
-    if(screenMode == 3){
-      drawGameplayScreen(window, renderer);
-    }
     /* drawOnePlayerMenu(window, renderer); */
 
     /* drawTwoPlayerMenu(window, renderer); */
