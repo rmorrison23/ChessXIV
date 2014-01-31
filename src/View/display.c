@@ -231,6 +231,23 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
 	    done = 1;
 	    break;
 	  }
+
+	  /* color choices */    /* working: interface with data structure (color choice) here */
+	  /* black */
+	  /* if(x_pos > leftMargin + stringWidth - 50  && x_pos < leftMargin + 2*stringWidth - 130 */
+	  /*    && y_pos > SCREEN_HEIGHT/5 && y_pos < SCREEN_HEIGHT/5 + stringHeight){ */
+	   
+	  /*   done = 1; */
+	  /*   break; */
+	  /* } */
+
+	  /* white */
+	  /* if(x_pos > leftMargin + stringWidth - 50  && x_pos < leftMargin + 2*stringWidth - 115 */
+	  /*    && y_pos > SCREEN_HEIGHT/5 + stringHeight && y_pos < SCREEN_HEIGHT/5 + 2*stringHeight){ */
+	 
+	  /*   done = 1; */
+	  /*   break; */
+	  /* } */
 	}
 	else{break;}
       }    
