@@ -64,13 +64,16 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
       switch(event.type){
 
       case SDL_QUIT:
+	*screenMode = 100;
 	done = 1;
 	break;
       case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE)
+	if(event.key.keysym.sym == SDLK_ESCAPE){
+	  *screenMode = 100;
 	  done = 1;
+	}
 	break;
- 
+	
       case SDL_MOUSEBUTTONDOWN:
       	if(event.button.button == SDL_BUTTON_LEFT){
       	  x_pos = event.button.x;
@@ -78,27 +81,28 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
-	    screenMode = 1;
+	    *screenMode = 1;
 	    done = 1;
 	    break;
 	  }
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
-	    screenMode = 2;
+	    *screenMode = 2;
 	    done = 1;
 	    break;
 	  }
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	    screenMode = 3;
+	    *screenMode = 3;
 	    done = 1;
 	    break;
 	  }
-      	}      	
+      	}
+	else{break;}
       }      
     }    
   }
-  return screenMode;
+  return *screenMode;
 }
 
 
@@ -161,6 +165,7 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
   SDL_Texture *moderate_Button = renderText("Moderate", CALIBRI_FONT, optionColor, 50, renderer);
   renderTexture2(moderate_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + stringHeight);
   SDL_Texture *hard_Button = renderText("Challenging", CALIBRI_FONT, optionColor, 50, renderer);
+  SDL_QueryTexture(diffOption, NULL, NULL, &stringWidth, NULL);
   renderTexture2(hard_Button, renderer, rightMargin + stringWidth + 25, SCREEN_HEIGHT/5 + 2*stringHeight);
 
   /* create input options */
@@ -194,11 +199,14 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
       switch(event.type){
 
       case SDL_QUIT:
+	*screenMode = 100;
 	done = 1;
 	break;
       case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE)
+	if(event.key.keysym.sym == SDLK_ESCAPE){
+	  *screenMode = 100;
 	  done = 1;
+	}
 	break;
  
       case SDL_MOUSEBUTTONDOWN:
@@ -206,19 +214,27 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
       	  x_pos = event.button.x;
 	  y_pos = event.button.y;
 	  
+	  /* go back to main menu */
+	  if(x_pos > leftMargin && x_pos < leftMargin + stringWidth + 50
+	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
+	    *screenMode = 0;
+	    done = 1;
+	    break;
+	  }
 
 	  /* go to gameplay screen */
 	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - leftMargin
 	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
-	    screenMode = 3;
+	    *screenMode = 3;
 	    done = 1;
 	    break;
 	  }
 	}
+	else{break;}
       }    
     }
   }
-  return screenMode;
+  return *screenMode;
 }
 /* function to display the two player menu to the screen */
 int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
@@ -292,33 +308,43 @@ int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
       switch(event.type){
 
       case SDL_QUIT:
+	*screenMode = 100;
 	done = 1;
 	break;
       case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE)
+	if(event.key.keysym.sym == SDLK_ESCAPE){
+	  *screenMode = 100;
 	  done = 1;
+	}
 	break;
  
       case SDL_MOUSEBUTTONDOWN:
       	if(event.button.button == SDL_BUTTON_LEFT){
+	  /* get position of mouse click */
       	  x_pos = event.button.x;
 	  y_pos = event.button.y;
 
+	  /* go to gameplay screen */
 	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - leftMargin
 	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){
-
-	    screenMode = 3;
-
+	    *screenMode = 3;
 	    done = 1;
 	    break;
 	  }
+	  /* go back to main menu */
+	  if(x_pos > leftMargin && x_pos < leftMargin + stringWidth + 125
+	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
+	    *screenMode = 0;
+	    done = 1;
+	    break;
+	  }	 
 	 
-	 
-      	}      	
+      	}
+	else{break;}
       }      
     }    
   }
-  return screenMode;
+  return *screenMode;
 }
 
 /* function to display the advanced menu to the screen */
