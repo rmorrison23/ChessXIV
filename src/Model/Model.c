@@ -582,6 +582,24 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 				
 			}
 		}
+		/* kingside castling */
+		if(piece->MoveFirstFlag && chessboard->Board[piece->Coordinate->Rank][7] == Rook) {
+		  targetRank = piece->Coordinate->Rank;
+		  if(chessboard->Board[targetRank][7]->MoveFirstFlag) {
+		    if(chessboard->Board[targetRank][5]->Piece == NULL && chessboard->Board[targetRank][6]->Piece == NULL) {
+		      output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][6]);
+		    }
+		  }
+		}
+		/* queenside castling */
+		if(piece->MoveFirstFlag && chessboard->Board[piece->Coordinate->Rank][0] == Rook) {
+		  targetRank = piece->Coordinate->Rank;
+		  if(chessboard->Board[targetRank][0]->MoveFirstFlag) {
+		    if(chessboard->Board[targetRank][1]->Piece == NULL && chessboard->Board[targetRank][2]->Piece == NULL && chessboard->Board[targetRank][3]->Piece == NULL) {
+		      output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][1]);
+		    }
+		  }
+		}
 		
 	  break;
 	}
