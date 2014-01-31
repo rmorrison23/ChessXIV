@@ -79,18 +79,23 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
       	  x_pos = event.button.x;
 	  y_pos = event.button.y;
 
+	  /* one player options */
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
 	    *screenMode = 1;
 	    done = 1;
 	    break;
 	  }
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+
+	  /* two player options */
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth + 40
 	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
 	    *screenMode = 2;
 	    done = 1;
 	    break;
 	  }
+
+	  /* AI versus AI */
 	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
 	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
 	    *screenMode = 3;
