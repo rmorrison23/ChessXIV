@@ -1,3 +1,10 @@
+#files under build directory
+build/*
+bin/*
+
+#temporary files by text editor
+*~
+
 # Object files
 *.o
 *.ko

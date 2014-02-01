@@ -1,8 +1,7 @@
-
 #include "ChessBoard.h"
 
 
-ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorChoice){
+ChessBoard * ChessBoard_Initialize(void){
 	
 	/*malloc the board*/
 	ChessBoard * ChessBoardToReturn = (ChessBoard *) malloc(sizeof(ChessBoard));
@@ -14,31 +13,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	assert(ChessBoardToReturn->WhitePlayer && ChessBoardToReturn->BlackPlayer);
 	ChessBoardToReturn->WhitePlayer->PlayerColor = White;
 	ChessBoardToReturn->BlackPlayer->PlayerColor = Black;
-	
-	/*switch the AI choice*/
-	switch(AIChoice){
-		case 0:		/*human vs human*/
-			ChessBoardToReturn->WhitePlayer->PlayerControl = Human;
-			ChessBoardToReturn->BlackPlayer->PlayerControl = Human;
-			break;
-		case 1:		/*human vs computer*/
-			switch (ColorChoice){
-				case 0:		/*human is white*/
-					ChessBoardToReturn->WhitePlayer->PlayerControl = Human;
-					ChessBoardToReturn->BlackPlayer->PlayerControl = AI;
-					break;
-				case 1:
-					ChessBoardToReturn->WhitePlayer->PlayerControl = AI;
-					ChessBoardToReturn->BlackPlayer->PlayerControl = Human;
-					break;
-			}
-			break;
-		case 2:		/*computer vs computer*/
-			ChessBoardToReturn->WhitePlayer->PlayerControl = Human;
-			ChessBoardToReturn->BlackPlayer->PlayerControl = Human;
-			break;
-	}
-
+	ChessBoardToReturn->WhitePlayer->OtherPlayer = ChessBoardToReturn->BlackPlayer;
+	ChessBoardToReturn->BlackPlayer->OtherPlayer = ChessBoardToReturn->WhitePlayer;
 	
 	/*malloc all coordinate on the board*/
 	int i,j;
@@ -49,6 +25,7 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 			ChessBoardToReturn->Board[i][j]->Piece = NULL;
 			ChessBoardToReturn->Board[i][j]->Rank = i;
 			ChessBoardToReturn->Board[i][j]->File = j;
+			ChessBoardToReturn->Board[i][j]->MainBoard = ChessBoardToReturn;
 		}
 	}
 	
@@ -56,6 +33,7 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	/*White first*/
 	/*Pawns x 8*/
 	ChessPiece * CurrPiece;
+	int CurrPieceIdx = 0;
 	for (i = 0; i < 8; i++){
 		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
 		assert(CurrPiece);
@@ -63,7 +41,9 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[1][i];
-		ChessBoardToReturn->WhitePlayer->Pawn[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[1][i]->Piece = CurrPiece;
 	}
 	
@@ -75,7 +55,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][7*i];
-		ChessBoardToReturn->WhitePlayer->Rook[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][7*i]->Piece = CurrPiece;
 	}
 	
@@ -87,7 +68,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][1+5*i];
-		ChessBoardToReturn->WhitePlayer->Knight[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][1+5*i]->Piece = CurrPiece;
 	}
 	
@@ -99,7 +81,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][2+3*i];
-		ChessBoardToReturn->WhitePlayer->Bishop[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][2+3*i]->Piece = CurrPiece;
 	}
 	
@@ -110,7 +93,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[0][3];
-	ChessBoardToReturn->WhitePlayer->Queen[0] = CurrPiece;
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[0][3]->Piece = CurrPiece;
 	
 	/*King x 1*/
@@ -120,12 +104,14 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[0][4];
-	ChessBoardToReturn->WhitePlayer->King[0] = CurrPiece;
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[0][4]->Piece = CurrPiece;
 	
 	
 	/*Then black*/
 	/*Pawns x 8*/
+	CurrPieceIdx = 0;
 	for (i = 0; i < 8; i++){
 		CurrPiece = (ChessPiece *) malloc(sizeof(ChessPiece));
 		assert(CurrPiece);
@@ -133,7 +119,9 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[6][i];
-		ChessBoardToReturn->BlackPlayer->Pawn[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		CurrPiece->PawnMoveFirstFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[6][i]->Piece = CurrPiece;
 	}
 	
@@ -145,7 +133,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][7*i];
-		ChessBoardToReturn->BlackPlayer->Rook[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[7][7*i]->Piece = CurrPiece;
 	}
 	
@@ -157,7 +146,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][1+5*i];
-		ChessBoardToReturn->BlackPlayer->Knight[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[7][1+5*i]->Piece = CurrPiece;
 	}
 	
@@ -169,7 +159,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 		CurrPiece->Index = i;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][2+3*i];
-		ChessBoardToReturn->BlackPlayer->Bishop[i] = CurrPiece;
+		CurrPiece->AliveFlag = True;
+		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[7][2+3*i]->Piece = CurrPiece;
 	}
 	
@@ -180,7 +171,8 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[7][3];
-	ChessBoardToReturn->BlackPlayer->Queen[0] = CurrPiece;
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[7][3]->Piece = CurrPiece;
 	
 	/*King x 1*/
@@ -190,137 +182,53 @@ ChessBoard * InitializeChessBoard(unsigned char AIChoice, unsigned char ColorCho
 	CurrPiece->Index = 0;
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[7][4];
-	ChessBoardToReturn->BlackPlayer->King[0] = CurrPiece;
+	CurrPiece->AliveFlag = True;
+	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[7][4]->Piece = CurrPiece;
-#if 0	
-	PlayerControlEnum WhitePlayerControl, BlackPlayerControl;
-  /*switch the AI choice*/
-  switch(AIChoice){
-    case 0:		/*human vs human*/
-      WhitePlayerControl = Human;
-      BlackPlayerControl = Human;
-      break;
-    case 1:		/*human vs computer*/
-      switch (ColorChoice){
-	case 0:		/*human is white*/
-	  WhitePlayerControl = Human;
-	  BlackPlayerControl = AI;
-	  break;
-	case 1:
-	  WhitePlayerControl = AI;
-	  BlackPlayerControl = Human;
-	  break;
-      }
-      break;
-    case 2:		/*computer vs computer*/
-      WhitePlayerControl = Human;
-      BlackPlayerControl = Human;
-      break;
-  }
-  
-  /*get the white one first*/
-  
-  ChessBoardToReturn->Board[0][0].OccupyingPiece.Type = Rook;
-  ChessBoardToReturn->Board[0][0].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[0][0].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][0].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][1].OccupyingPiece.Type = Knight;
-  ChessBoardToReturn->Board[0][1].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[0][1].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][1].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][2].OccupyingPiece.Type = Bishop;
-  ChessBoardToReturn->Board[0][2].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[0][2].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][2].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][3].OccupyingPiece.Type = Queen;
-  ChessBoardToReturn->Board[0][3].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[0][3].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][3].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][4].OccupyingPiece.Type = King;
-  ChessBoardToReturn->Board[0][4].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[0][4].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][4].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][5].OccupyingPiece.Type = Bishop;
-  ChessBoardToReturn->Board[0][5].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[0][5].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][5].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][6].OccupyingPiece.Type = Knight;
-  ChessBoardToReturn->Board[0][6].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[0][6].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][6].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  ChessBoardToReturn->Board[0][7].OccupyingPiece.Type = Rook;
-  ChessBoardToReturn->Board[0][7].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[0][7].OccupyingPiece.Player.PlayerColor = White;
-  ChessBoardToReturn->Board[0][7].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  
-  for (i = 0; i < CHESS_BOARD_MAX_COL; i++){
-    ChessBoardToReturn->Board[1][i].OccupyingPiece.Type = Pawn;
-    ChessBoardToReturn->Board[1][i].OccupyingPiece.Index = i;
-    ChessBoardToReturn->Board[1][i].OccupyingPiece.Player.PlayerColor = White;
-    ChessBoardToReturn->Board[1][i].OccupyingPiece.Player.PlayerControl = WhitePlayerControl;
-  }
-  
-  /*black pieces*/
-  ChessBoardToReturn->Board[7][0].OccupyingPiece.Type = Rook;
-  ChessBoardToReturn->Board[7][0].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[7][0].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][0].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][1].OccupyingPiece.Type = Knight;
-  ChessBoardToReturn->Board[7][1].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[7][1].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][1].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][2].OccupyingPiece.Type = Bishop;
-  ChessBoardToReturn->Board[7][2].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[7][2].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][2].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][3].OccupyingPiece.Type = Queen;
-  ChessBoardToReturn->Board[7][3].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[7][3].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][3].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][4].OccupyingPiece.Type = King;
-  ChessBoardToReturn->Board[7][4].OccupyingPiece.Index = 0;
-  ChessBoardToReturn->Board[7][4].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][4].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][5].OccupyingPiece.Type = Bishop;
-  ChessBoardToReturn->Board[7][5].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[7][5].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][5].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][6].OccupyingPiece.Type = Knight;
-  ChessBoardToReturn->Board[7][6].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[7][6].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][6].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  ChessBoardToReturn->Board[7][7].OccupyingPiece.Type = Rook;
-  ChessBoardToReturn->Board[7][7].OccupyingPiece.Index = 1;
-  ChessBoardToReturn->Board[7][7].OccupyingPiece.Player.PlayerColor = Black;
-  ChessBoardToReturn->Board[7][7].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  
-  for (i = 0 ; i < CHESS_BOARD_MAX_COL; i++){
-    ChessBoardToReturn->Board[6][i].OccupyingPiece.Type = Pawn;
-    ChessBoardToReturn->Board[6][i].OccupyingPiece.Index = i;
-    ChessBoardToReturn->Board[6][i].OccupyingPiece.Player.PlayerColor = Black;
-    ChessBoardToReturn->Board[6][i].OccupyingPiece.Player.PlayerControl = BlackPlayerControl;
-  }
-  
-  /*get the empty coordinate*/
-  for (i = 2 ; i < 6; i++){
-    for (j = 0; j < CHESS_BOARD_MAX_COL; j++){
-      ChessBoardToReturn->Board[i][j].OccupyingPiece.Type = None;
-    }
-  }
-#endif  
   return ChessBoardToReturn;
+}
+
+ChessBoard * ChessBoard_InitializeEmpty(void){
+	
+	/*malloc the board*/
+	ChessBoard * ChessBoardToReturn =  ChessBoard_Initialize();
+	
+	/*break the link between pieces and coordinates*/
+	int i,j;
+	for (i = 0; i < 16; i++){
+		ChessBoardToReturn->BlackPlayer->Pieces[i]->Coordinate = NULL;
+		ChessBoardToReturn->BlackPlayer->Pieces[i]->AliveFlag = False;
+		ChessBoardToReturn->WhitePlayer->Pieces[i]->Coordinate = NULL;
+		ChessBoardToReturn->WhitePlayer->Pieces[i]->AliveFlag = False;
+	}
+	
+	for (i = 0; i < 8; i++)
+		for (j = 0; j < 8; j++)
+		ChessBoardToReturn->Board[i][j]->Piece = NULL;
+	
+	return ChessBoardToReturn;
+	
+}
+
+void ChessBoard_Free(ChessBoard * CurrBoard){
+	int i,j;
+	/*free coordinate*/
+	for (i = 0; i < CHESS_BOARD_MAX_ROW ; i++){
+		for (j = 0; j < CHESS_BOARD_MAX_COL; j++){			
+			free(CurrBoard->Board[i][j]);
+		}
+	}
+	
+	/*free the pieces*/
+	for (i = 0; i < 16; i++) {
+		free(CurrBoard->WhitePlayer->Pieces[i]);
+		free(CurrBoard->BlackPlayer->Pieces[i]);
+	}
+	
+	/*free the player*/
+	free(CurrBoard->WhitePlayer);
+	free(CurrBoard->BlackPlayer);
+	
+	/*free the board*/
+	free(CurrBoard);
 }

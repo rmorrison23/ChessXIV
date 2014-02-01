@@ -1,0 +1,5 @@
+To install this program, please do the following:
+make
+
+To remove the program, please do the following:
+make clean

@@ -8,7 +8,6 @@ Group 1:
   - Kevin Duong
   - Jamie Lee
   - Hanchel Chang
-  - Lloyd Estacio
   - Ryan Morrison
   - Andrew Trinh
 
