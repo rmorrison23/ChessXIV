@@ -16,7 +16,149 @@
 
 #include "display.h"
 
+#ifdef QUAN_VERSION
 
+/* QUAN_VERSION: function to display the main menu to the screen */
+Event drawMainMenu(ViewHandle * MainHandle){
+	
+	SDL_Window * window = MainHandle->CurrentWindow->Window;
+	SDL_Renderer * renderer = MainHandle->CurrentWindow->WindowRenderer;
+	
+	SDL_Color greenText = {0x29, 0xEF, 0x48};
+
+	/* rename window title */
+	/*SDL_SetWindowTitle(window, TITLE);*/
+	SDL_SetWindowTitle(window, "quan's title");
+	/* create main menu background image */
+	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	backSplashObject->ImageFileName = "Assets/Menu_Backgrounds/Background_1600_900.jpg";
+	ObjectHandle_Render(MainHandle, backSplashObject);
+	ObjectHandleList_AppendObject(backSplashObject);
+  
+  /*SDL_Texture *backSplash = NULL;
+  backSplash = loadTexture("Assets/Menu_Backgrounds/Background_1600_900.jpg", renderer);
+  renderTexture(backSplash, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
+  
+  printf("Successful\n");
+  
+  Event ReturnEvent = {.Type = SelectCoordinate, .Coordinate = NULL, .Player = NULL};
+  
+  return ReturnEvent;
+#if 0
+  /* create title */
+  SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
+  SDL_Texture *title = renderText(TITLE, CALIBRI_FONT, titleColor, 200, renderer);
+  renderTexture2(title, renderer, (SCREEN_WIDTH - TITLE_WIDTH)/2, SCREEN_HEIGHT*0);
+
+  /* create main menu buttons */
+  SDL_Color buttonColor = {255, 255, 255}; /* default white */
+  SDL_Texture *onePlayer_Button = renderText(ONE_PLAYER, CALIBRI_FONT, buttonColor, 72, renderer);
+  renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
+  SDL_Texture *twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, buttonColor, 72, renderer);
+  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90));
+  SDL_Texture *advanced_Button = renderText("AI Versus AI", CALIBRI_FONT, buttonColor, 72, renderer);
+  renderTexture2(advanced_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
+
+  SDL_RenderPresent(renderer);
+
+
+  int done = 0;
+
+  int buttonWidth = 0, buttonHeight = 0;
+  int x_pos = 0, y_pos = 0;
+
+  SDL_Event event;
+  SDL_QueryTexture(onePlayer_Button, NULL, NULL, &buttonWidth, NULL);
+  SDL_QueryTexture(onePlayer_Button, NULL, NULL, NULL, &buttonHeight);
+
+  while(!done){
+
+    while(SDL_PollEvent(&event)){
+     
+      switch(event.type){
+
+      case SDL_QUIT:
+	*screenMode = 100;
+	done = 1;
+	break;
+
+      case SDL_KEYUP:
+	if(event.key.keysym.sym == SDLK_ESCAPE){
+	  *screenMode = 100;
+	  done = 1;
+	}
+	break;
+	
+      case SDL_MOUSEMOTION:
+	/* highlight when mouse over one player button */
+	if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth
+	   && event.motion.y > SCREEN_HEIGHT/2.5 && event.motion.y < SCREEN_HEIGHT/2.5 + buttonHeight - 20){
+	  onePlayer_Button = renderText(ONE_PLAYER, CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
+	  SDL_RenderPresent(renderer);
+	   break; 
+	}
+	/* highlight when mouse over two player button */
+	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
+	   && event.motion.y > SCREEN_HEIGHT/2.5 + buttonHeight + 25 && event.motion.y < SCREEN_HEIGHT/2.5 + 2*buttonHeight - 10){
+	  twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5 + buttonHeight);
+	  SDL_RenderPresent(renderer);	 
+	  break;
+	}
+	/* highlight when mouse over AI versus AI button */
+	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
+	   && event.motion.y > SCREEN_HEIGHT/2.5 + 2*buttonHeight + 35 && event.motion.y < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
+	  twoPlayer_Button = renderText("AI Versus AI", CALIBRI_FONT, greenText, 72, renderer);
+	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
+	  SDL_RenderPresent(renderer);	 
+	  break;
+	}
+	/* default view */
+	else{
+	  *screenMode = 0;
+	  done = 1;
+	  break;
+	}
+
+      case SDL_MOUSEBUTTONDOWN:
+      	if(event.button.button == SDL_BUTTON_LEFT){
+      	  x_pos = event.button.x;
+	  y_pos = event.button.y;
+
+	  /* one player options */
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
+	    *screenMode = 1;
+	    done = 1;
+	    break;
+	  }
+
+	  /* two player options */
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth + 40
+	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
+	    *screenMode = 2;
+	    done = 1;
+	    break;
+	  }
+
+	  /* AI versus AI */
+	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
+	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
+	    *screenMode = 3;
+	    done = 1;
+	    break;
+	  }
+      	}
+	else{break;}
+      }      
+    }    
+  }
+#endif
+  
+}
+
+#else
 /* function to display the main menu to the screen */
 int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
@@ -141,7 +283,7 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
   }
   return *screenMode;
 }
-
+#endif
 
 /* function to display the one player menu to the screen */
 int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){

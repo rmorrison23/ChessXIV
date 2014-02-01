@@ -5,6 +5,20 @@
 
 #include "Model.h"
 
+/*****************************************************************
+ * Common define
+ *****************************************************************/
+
+/*may add more type of event here*/
+typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate} EventTypeEnum;
+
+/*may add more things to hang on to the event here*/
+typedef struct {
+	EventTypeEnum Type;
+	ChessCoordinate * Coordinate;
+	ChessPlayer *	Player;
+} Event;
+
 #ifdef GUI_ENABLE
 
 #ifdef LINUX_OS
@@ -17,21 +31,34 @@
 	#include <SDL2_ttf/SDL_ttf.h>
 #endif
 
-typedef enum {Color, PNG, Text} ObjectType;
+typedef enum {Color, Image, Text} ObjectType;
 typedef enum {OnePlayerButton, TwoPlayerButton, AIvsAIButton} ObjectTag;
 
-typedef struct ObjectHandleNodeStruct ObjectHandleNode;
-struct ObjectHandleNodeStruct {
-	ObjectHandleNode * PrevNode, * NextNode;
-	SDL_Renderer * Renderer;
-	SDL_Texture * Texture;
+typedef struct {
+	/*id info*/
 	ObjectType		Type;
 	ObjectTag		Tag;
 	int			Index;
 	
 	/*location information*/
-	int x,y, width, height;
+	int X,Y, Width, Height;
+	
+	/*texture to change*/
+	SDL_Texture * Texture;
+	
+	/*information only apply to certain types*/
+	/*Image*/char * ImageFileName;
+	
+} ObjectHandle;
+
+typedef struct ObjectHandleNodeStruct ObjectHandleNode;
+struct ObjectHandleNodeStruct {
+	ObjectHandleNode * PrevNode, * NextNode;
+	
+	ObjectHandle * Object;
 };
+
+
 
 typedef struct {
 	ObjectHandleNode * FirstNode, * LastNode;
@@ -51,7 +78,7 @@ typedef struct {
 #include "display.h"
 #include "constants.h"
 #include "sdlUtilities.h"
-#include "ObjectList.h"
+#include "ObjectHandleList.h"
 
 #else
 typedef struct {
@@ -60,15 +87,7 @@ typedef struct {
 #endif
 
 
-/*may add more type of event here*/
-typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate} EventTypeEnum;
 
-/*may add more things to hang on to the event here*/
-typedef struct {
-	EventTypeEnum Type;
-	ChessCoordinate * Coordinate;
-	ChessPlayer *	Player;
-} Event;
 
 /*initialize*/
 ViewHandle * View_Initialize(void);

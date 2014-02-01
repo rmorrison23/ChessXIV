@@ -7,3 +7,20 @@ ObjectHandleList * ObjectHandleList_Initialize(void){
 	ReturnPt->LastNode = NULL;
 	return ReturnPt;
 }
+
+ObjectHandleList * ObjectHandleList_AppendObject(ObjectHandleList * List, ObjectHandle * Object){
+	ObjectHandleNode * NewNode = malloc(sizeof(ObjectHandleNode));
+	assert(NewNode);
+	NewNode->Object = Object;
+	NewNode->NextNode = NULL;
+	if (!List->FirstNode){
+		List->FirstNode = NewNode;
+		List->LastNode = NewNode;
+		NewNode->PrevNode = NULL;		
+	} else {
+		List->LastNode->NextNode = NewNode;
+		NewNode->PrevNode = List->LastNode;
+		List->LastNode = NewNode;
+	}
+	return List;
+}

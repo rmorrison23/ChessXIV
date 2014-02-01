@@ -3,14 +3,15 @@
 
 #ifdef GUI_ENABLE
 int main(void){
-	ViewHandle * MainViewHandle = View_Intialize(void);
+	ViewHandle * MainViewHandle = View_Initialize();
 	ChessBoard * MainChessBoard = ChessBoard_Initialize();
-	MainViewHandle = View_GetOptions(MainViewHandle, MainChessBoard);  
+	MainViewHandle = SetOptions(MainViewHandle, MainChessBoard);  
 	MainViewHandle = View_CleanUp(MainViewHandle);
 	
 	
 	TTF_Quit();
 	SDL_Quit();
+	return 0;
 }
 
 #endif

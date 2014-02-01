@@ -346,14 +346,18 @@ ViewHandle * View_CleanUp(ViewHandle *MainHandle){
 /*for settings*/
 ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	int screenMode;
+	
+#ifdef QUAN_VERSION
+	drawMainMenu(MainHandle);
+#else
 	drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
 	
 	Boolean playing;
-	while(!playing){
+	/*while(!playing){
 		switch (screenMode){
-			case 0:
+			case 0:*/
 				drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
-				break;
+	/*			break;
 			case 1:
 				drawOnePlayerMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
 				break;
@@ -366,8 +370,8 @@ ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 				break;
 		}
 		
-	}
-	
+	}*/
+#endif
 	return MainBoard;
 }
 

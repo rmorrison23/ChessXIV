@@ -1,5 +1,5 @@
 CC	:= gcc
-CFLAGS	:= -Wall -g
+CFLAGS	:= -g
 LDFLAGS :=
 
 MODULES   := Model Control View
@@ -15,9 +15,13 @@ ifeq ($(SESSION),ubuntu)
 	CFLAGS +=-DLINUX_OS
 endif
 
+ifeq ($(QUAN_VERSION), y)
+	CFLAGS +=-DQUAN_VERSION
+endif
+
 ifeq ($(GUI_ENABLE),y)
 	GUI_FLAG=-DGUI_ENABLE $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-	VIEW_LIB+= display render sdlUtilities ObjectHandleList
+	VIEW_LIB+= display ObjectHandleList ObjectHandle render sdlUtilities
 	LDFLAGS+= $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 else
         GUI_FLAG=
