@@ -165,6 +165,12 @@ ControlHandle * Control_CleanUp(ControlHandle * Handle){
 	Model_CleanUp(Handle->MainChessBoard, Handle->MainMoveList);
 	View_CleanUp();
 	free(Handle);
+	
+#ifdef GUI_ENABLE
+	TTF_Quit();
+	SDL_Quit();
+#endif
+	
 	return NULL;
 }
 

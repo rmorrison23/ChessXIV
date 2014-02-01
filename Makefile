@@ -17,7 +17,7 @@ endif
 
 ifeq ($(GUI_ENABLE),y)
 	GUI_FLAG=-DGUI_ENABLE $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-	VIEW_LIB+= display render sdlUtilities
+	VIEW_LIB+= display render sdlUtilities ObjectHandleList
 	LDFLAGS+= $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 else
         GUI_FLAG=
@@ -79,8 +79,11 @@ Castling:  build/TestSpecialMove_Castling.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DE
 ModelUnitTest: build/ModelUnitTest.o $(MODEL_LIB_DEPEND)
 	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 
-TestGUI: build/TestDrawingFuncs.o $(VIEW_LIB_DEPEND)
+TestDrawingFuncs: build/TestDrawingFuncs.o $(VIEW_LIB_DEPEND)
 	$(CC) build/TestDrawingFuncs.o -Lbuild $(VIEW_LIB_COMPILE) $(LDFLAGS) -o bin/$@ $(CFLAGS)
+
+TestGUI: build/TestGUI.o $(VIEW_LIB_DEPEND) $(MODEL_LIB_DEPEND)
+	$(CC) build/TestGUI.o -Lbuild $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) $(LDFLAGS) -o bin/$@ $(CFLAGS)
 	
 ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
 	$(CC) build/ViewUnitTest.o -Lbuild -lModel -lView -o bin/$@ $(CFLAGS)

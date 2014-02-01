@@ -46,6 +46,13 @@ typedef struct {
 typedef struct {
 	WindowHandle * CurrentWindow;	
 } ViewHandle;
+
+#include "render.h"
+#include "display.h"
+#include "constants.h"
+#include "sdlUtilities.h"
+#include "ObjectList.h"
+
 #else
 typedef struct {
 	int a;		/*just dummy variable for ViewHandle of commandline display*/

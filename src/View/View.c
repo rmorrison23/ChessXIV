@@ -302,15 +302,74 @@ void View_ConcludeGame(ChessBoard * MainBoard){
  * ********************************************************/
 
 /*initialize*/
-void View_Initialize(void){
+ViewHandle * View_Initialize(void){
+	SDL_Window *window = NULL;
+	SDL_Renderer *renderer = NULL;
+
+	if(SDL_Init(SDL_INIT_EVERYTHING) >= 0){
+		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+						SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		renderer = SDL_CreateRenderer(window, -1, 0);
+	}
+	else{
+		//error check here
+	}
+	if(TTF_Init() != 0){
+		//error check here
+	}
+		
+	// clear screen
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
 	
+	ViewHandle * ReturnViewHandle = malloc(sizeof(ViewHandle));
+	ReturnViewHandle->CurrentWindow = malloc(sizeof(WindowHandle));
+	ReturnViewHandle->CurrentWindow->Window = window;
+	ReturnViewHandle->CurrentWindow->WindowRenderer = renderer;
+	ReturnViewHandle->CurrentWindow->ObjectList = ObjectHandleList_Initialize();
+	
+	return ReturnViewHandle;
 }
 
 /*clean up*/
-void View_CleanUp(void);
+ViewHandle * View_CleanUp(ViewHandle *MainHandle){
+	SDL_RenderPresent(MainHandle->CurrentWindow->WindowRenderer);   
+	SDL_DestroyRenderer(MainHandle->CurrentWindow->WindowRenderer);
+	SDL_DestroyWindow(MainHandle->CurrentWindow->Window);
+	
+	free(MainHandle->CurrentWindow);
+	free(MainHandle);
+	return NULL;
+	
+}
 
 /*for settings*/
-ChessBoard * SetOptions(ChessBoard *);
+ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
+	int screenMode;
+	drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
+	
+	Boolean playing;
+	while(!playing){
+		switch (screenMode){
+			case 0:
+				drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
+				break;
+			case 1:
+				drawOnePlayerMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
+				break;
+			case 2:
+				drawTwoPlayerMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
+				break;
+			case 3:
+				drawGameplayScreen(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer);
+				playing = 1;
+				break;
+		}
+		
+	}
+	
+	return MainBoard;
+}
 
 /*for displaying*/
 void DisplayChessBoard(ChessBoard *);
