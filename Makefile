@@ -1,26 +1,37 @@
 CC	:= gcc
-CFLAGS	:= -ansi -Wall -g
-
-ifeq ($(GUI_ENABLE),y)
-	GUI_FLAG=-DGUI_ENABLE
-else
-        GUI_FLAG=
-endif
+CFLAGS	:= -Wall -g
+LDFLAGS :=
 
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))
 
 MODEL_LIB := Model ChessCoordinate ChessPlayer ChessCoordinateList ChessMoveList ChessBoard ChessMove
+
+CONTROL_LIB := Control
+
+VIEW_LIB := View
+
+ifeq ($(SESSION),ubuntu)
+	CFLAGS +=-DLINUX_OS
+endif
+
+ifeq ($(GUI_ENABLE),y)
+	GUI_FLAG=-DGUI_ENABLE $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+	VIEW_LIB+= display render sdlUtilities
+	LDFLAGS+= $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+else
+        GUI_FLAG=
+        CFLAGS +=-ansi
+endif
+
 MODEL_LIB_DEPEND := $(addprefix build/lib,$(MODEL_LIB))
 MODEL_LIB_DEPEND := $(addsuffix .a,$(MODEL_LIB_DEPEND))
 MODEL_LIB_COMPILE := $(addprefix -l,$(MODEL_LIB))
 
-CONTROL_LIB := Control
 CONTROL_LIB_DEPEND := $(addprefix build/lib,$(CONTROL_LIB))
 CONTROL_LIB_DEPEND := $(addsuffix .a,$(CONTROL_LIB_DEPEND))
 CONTROL_LIB_COMPILE := $(addprefix -l,$(CONTROL_LIB))
 
-VIEW_LIB := View
 VIEW_LIB_DEPEND := $(addprefix build/lib,$(VIEW_LIB))
 VIEW_LIB_DEPEND := $(addsuffix .a,$(VIEW_LIB_DEPEND))
 VIEW_LIB_COMPILE := $(addprefix -l,$(VIEW_LIB))
@@ -67,6 +78,9 @@ Castling:  build/TestSpecialMove_Castling.o $(MODEL_LIB_DEPEND) $(CONTROL_LIB_DE
 	
 ModelUnitTest: build/ModelUnitTest.o $(MODEL_LIB_DEPEND)
 	$(CC) build/ModelUnitTest.o -Lbuild $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+
+TestGUI: build/TestDrawingFuncs.o $(VIEW_LIB_DEPEND)
+	$(CC) build/TestDrawingFuncs.o -Lbuild $(VIEW_LIB_COMPILE) $(LDFLAGS) -o bin/$@ $(CFLAGS)
 	
 ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
 	$(CC) build/ViewUnitTest.o -Lbuild -lModel -lView -o bin/$@ $(CFLAGS)

@@ -297,22 +297,36 @@ void View_ConcludeGame(ChessBoard * MainBoard){
 	printf("Goodbye. See you next time\n");
 }
 #else
-/*RYAN PUT YOUR CODE HERE. TO COMPILE USE make GUI_ENABLE=y*/
-/*for settings*/
-PlayerControlEnum AskPlayerControl(ChessPlayer *);
-AIDifficultyLevel AskAIDifficultyLevel(void);
-
-/*for displaying*/
-void DisplayChessBoard(ChessBoard *);
-void HighlightCoordinates(ChessCoordinateList *);
-
-/*get event from user*/
-Event * View_GetEvent(void);
+/**********************************************************
+ * Start defining GUI releated functions
+ * ********************************************************/
 
 /*initialize*/
-void View_Initialize(void);
+void View_Initialize(void){
+	
+}
 
 /*clean up*/
 void View_CleanUp(void);
+
+/*for settings*/
+ChessBoard * SetOptions(ChessBoard *);
+
+/*for displaying*/
+void DisplayChessBoard(ChessBoard *);
+void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
+
+/*get event from user*/
+/*this function is supposed to overwrite the input pointer with new event data*/
+Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
+ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+
+/*DisplayEvent*/
+void View_DisplayEvent(ChessBoard * CurrBoard, Event *);
+
+void View_ConcludeGame(ChessBoard *);
+
+/*for transformation: ask user which type to transform to*/
+ChessPieceTypeEnum View_AskMoveTransform(void);
 
 #endif

@@ -11,7 +11,6 @@
 /*                   dimensions                                         */
 /************************************************************************/
 
-#include <stdio.h>
 #include "render.h"
 
 /* function to load a texture */
