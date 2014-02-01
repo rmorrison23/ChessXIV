@@ -7,58 +7,77 @@ ChessBoard * Model_Initialize(void){
 /* move piece to next location */
 ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, ChessMove * move)
 {	
+  ChessMove *rookMove;
+
 	/*if the move piece is a pawn, set first move flag to false*/
 	if (move->MovePiece->Type == Pawn){
 		move->MovePiece->PawnMoveFirstFlag = False;
 	}
+
+	move->MoveType = Model_GetMoveType(board, move);
+
+	if(move->MoveType == Castling) {
+	  /* piece to move, moved to next coordinate */
+	  move->StartPosition->Piece->Coordinate = move->NextPosition;
+	  move->NextPosition->Piece = move->MovePiece;	
 	
-	/* the place to move to has an enemy piece */
-	if (move->NextPosition->Piece != NULL)
-	{
-		/* send to grave yard*/
-		move->CapturePiece = move->NextPosition->Piece;
-		/* kill it */
-		move->NextPosition->Piece->AliveFlag = False;
-		/* set that dead piece coordinate to null */
-		move->NextPosition->Piece->Coordinate = NULL;
+	  /* delete piece pointer at previous location */
+	  move->StartPosition->Piece = NULL;
+	  
+	  /* since castling requires two moves, we create 'rookMove' based on king/queen-side */
+	  if(move->NextPosition->File == 1) {
+	    rookMove->MovePiece = board->Board[move->NextPosition->Rank][0]->Piece;
+	    rookMove->StartPosition = board->Board[move->NextPosition->Rank][0];
+	    rookMove->NextPosition = board->Board[move->NextPosition->Rank][2];
+	    rookMove->MoveType = Castling;
+
+	    rookMove->StartPosition->Piece->Coordinate = rookMove->NextPosition;
+	    rookMove->NextPosition->Piece = rookMove->MovePiece;
+
+	    rookMove->StartPosition->Piece = NULL;
+	  }
+	  if(move->NextPosition->File == 6) {
+	    rookMove->MovePiece = board->Board[move->NextPosition->Rank][7]->Piece;
+	    rookMove->StartPosition = board->Board[move->NextPosition->Rank][7];
+	    rookMove->NextPosition = board->Board[move->NextPosition->Rank][5];
+	    rookMove->MoveType = Castling;
+
+	    rookMove->StartPosition->Piece->Coordinate = rookMove->NextPosition;
+	    rookMove->NextPosition->Piece = rookMove->MovePiece;
+
+	    rookMove->StartPosition->Piece = NULL;
+	  }
+	    
+
+	  /* update move list */
+	  ChessMoveList_AppendMove(moveList, move);
+	  ChessMoveList_AppendMove(moveList, rookMove);
+
+	}
+
+	else {	
+	  /* the place to move to has an enemy piece */
+	  if (move->NextPosition->Piece != NULL)
+	    {
+	      /* send to grave yard*/
+	      move->CapturePiece = move->NextPosition->Piece;
+	      /* kill it */
+	      move->NextPosition->Piece->AliveFlag = False;
+	      /* set that dead piece coordinate to null */
+	      move->NextPosition->Piece->Coordinate = NULL;
 		
-		/* it is dead */
-		move->CaptureFlag = True;
-	}
-	/* piece to move, moved to next coordinate */
-	move->StartPosition->Piece->Coordinate = move->NextPosition;
-	move->NextPosition->Piece = move->MovePiece;	
+	      /* it is dead */
+	      move->CaptureFlag = True;
+	    }
+	  /* piece to move, moved to next coordinate */
+	  move->StartPosition->Piece->Coordinate = move->NextPosition;
+	  move->NextPosition->Piece = move->MovePiece;	
 	
-	/* delete piece pointer at previous location */
-	move->StartPosition->Piece = NULL;
+	  /* delete piece pointer at previous location */
+	  move->StartPosition->Piece = NULL;
 
-	/* update move list */
-	ChessMoveNode * newMoveNode = malloc(sizeof(ChessMoveNode));
-	assert (newMoveNode);
-
-	/* point new List to old list */
-	newMoveNode->List = moveList;
-
-	/* point new move to move */
-	newMoveNode->Move = move;
-	
-	/* set next node to null */
-	newMoveNode->NextNode = NULL;
-
-	/* list is empty */
-	if (moveList ->FirstNode == NULL)
-	{
-		moveList->FirstNode = newMoveNode;
-		moveList->LastNode = newMoveNode;
-		newMoveNode->PrevNode = NULL;
-	}
-
-	/* list is not empty */
-	else
-	{
-		moveList->LastNode->NextNode = newMoveNode;
-		newMoveNode->PrevNode = moveList->LastNode;
-		moveList->LastNode = newMoveNode;
+	  /* update move list */
+	  ChessMoveList_AppendMove(moveList, move);
 	}
 	return board;
 }
@@ -107,6 +126,37 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
       
       return board;
 }
+
+ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
+  
+  if(move->MovePiece->Type == Pawn) {
+    /* for transformation, we want to check if pawn is at rank 0 or 7 */
+    if(move->NextPosition->Rank == 0 || move->NextPosition->Rank == 7) {
+      return Transformation;
+    }
+    /* for en passant, check if pawn is moving diagonally for capture */
+    if(move->NextPosition->File != move->StartPosition->File) {
+      /* check if there is a pawn diagonally for it to capture */
+      /* if not, then it is a special move */
+      if(move->NextPosition->Piece == NULL) {
+	return EnPassant;
+      }
+    }
+  }
+
+  /* for castling, check if king is moving more than one space over */
+  if(move->MovePiece->Type == King) {
+    if(move->StartPosition->File == 4) {
+      if(move->NextPosition->File == 6 || move->NextPosition->File == 1) {
+	return Castling;
+      }
+    }
+  }
+
+  return Normal;
+    
+}
+
 ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn)
 {
 	int i = 0;
