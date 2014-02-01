@@ -55,25 +55,57 @@ void renderTexture2(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y){
   renderTexture(texture, renderer, x, y, width, height);
 }
 
-/* function to render text */
-SDL_Texture *renderText(const char *message, const char *fontFile, SDL_Color color,
-			int fontSize, SDL_Renderer *renderer){
+SDL_Texture *renderText(char *String, char *imageFileName, SDL_Color Color, int TextSize, 
+			MainHandle->CurrentWindow->WindowRenderer){
 
-  //open desired font
-  TTF_Font *font = TTF_OpenFont(fontFile, fontSize);
-
-  /* error check */
-
-  //render to a surface and load surface into a texture
-  SDL_Surface *surface = TTF_RenderText_Blended(font, message, color);
-
-  /* error check */
-
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-  /* error check */
-
-  SDL_FreeSurface(surface);
+  TTF_Font *font = TTF_OpenFont(fontFile, TextSize);
+  SDL_Surface *surface = TTF_RenderText_Blended(imageFileName, String, Color);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(MainHandle->CurrentWindow->WindowRenderer, surface);
+  SDL_FreeSurface(surface); 
   TTF_CloseFont(font);
   return texture;
 }
+
+SDL_Texture *renderFilledBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
+			     MainHandle->CurrentWindow->WindowRenderer){
+
+  SDL_Rect Box = {X, Y, Width, Height};
+  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, hexR, hexG, hexB, hexA);
+  SDL_RenderFillRect(MainHandle->CurrentWindow->WindowRenderer, &Box);
+  
+  return no;
+}
+
+SDL_Texture *renderEmptyBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
+			     MainHandle->CurrentWindow->WindowRenderer){
+
+  SDL_Rect Box = {X, Y, Width, Height};
+  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, hexR, hexG, hexB, hexA);
+  SDL_RenderDrawRect(MainHandle->CurrentWindow->WindowRenderer, &Box);
+  
+  return no;
+
+}
+
+/* old function to render text */
+/* SDL_Texture *renderText(const char *message, const char *fontFile, SDL_Color color, */
+/* 			int fontSize, SDL_Renderer *renderer){ */
+
+/*   //open desired font */
+/*   TTF_Font *font = TTF_OpenFont(fontFile, fontSize); */
+
+/*   /\* error check *\/ */
+
+/*   //render to a surface and load surface into a texture */
+/*   SDL_Surface *surface = TTF_RenderText_Blended(font, message, color); */
+
+/*   /\* error check *\/ */
+
+/*   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface); */
+
+/*   /\* error check *\/ */
+
+/*   SDL_FreeSurface(surface); */
+/*   TTF_CloseFont(font); */
+/*   return texture; */
+/* } */

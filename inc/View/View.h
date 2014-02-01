@@ -51,7 +51,7 @@ typedef struct {
 	
 	/*Text*/int TextSize; char * FontName; char * String;
 	
-	/*Color*/SDL_Color Color;
+  /*Color*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
 	
 } ObjectHandle;
 
