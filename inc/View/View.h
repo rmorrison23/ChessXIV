@@ -49,6 +49,10 @@ typedef struct {
 	/*information only apply to certain types*/
 	/*Image*/char * ImageFileName;
 	
+	/*Text*/int TextSize; char * FontName; char * String;
+	
+	/*Color*/SDL_Color Color;
+	
 } ObjectHandle;
 
 typedef struct ObjectHandleNodeStruct ObjectHandleNode;
@@ -103,7 +107,7 @@ void DisplayChessBoard(ChessBoard *);
 void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
 
 /*get event from user*/
-/*this function is supposed to overwrite the input pointer with new event data*/
+/*this function is supposed to  overwrite the input pointer with new event data*/
 Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
 ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
 
