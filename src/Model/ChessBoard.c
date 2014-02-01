@@ -42,7 +42,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[1][i];
 		CurrPiece->AliveFlag = True;
-		CurrPiece->PawnMoveFirstFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[1][i]->Piece = CurrPiece;
 	}
@@ -56,6 +56,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][7*i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][7*i]->Piece = CurrPiece;
 	}
@@ -69,6 +70,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][1+5*i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][1+5*i]->Piece = CurrPiece;
 	}
@@ -82,6 +84,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][2+3*i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[0][2+3*i]->Piece = CurrPiece;
 	}
@@ -94,6 +97,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[0][3];
 	CurrPiece->AliveFlag = True;
+	CurrPiece->MoveFirstFlag = 0;
 	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[0][3]->Piece = CurrPiece;
 	
@@ -105,6 +109,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[0][4];
 	CurrPiece->AliveFlag = True;
+	CurrPiece->MoveFirstFlag = 0;
 	ChessBoardToReturn->WhitePlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[0][4]->Piece = CurrPiece;
 	
@@ -120,7 +125,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[6][i];
 		CurrPiece->AliveFlag = True;
-		CurrPiece->PawnMoveFirstFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[6][i]->Piece = CurrPiece;
 	}
@@ -134,6 +139,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][7*i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[7][7*i]->Piece = CurrPiece;
 	}
@@ -160,6 +166,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][2+3*i];
 		CurrPiece->AliveFlag = True;
+		CurrPiece->MoveFirstFlag = 0;
 		ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 		ChessBoardToReturn->Board[7][2+3*i]->Piece = CurrPiece;
 	}
@@ -172,6 +179,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[7][3];
 	CurrPiece->AliveFlag = True;
+	CurrPiece->MoveFirstFlag = 0;
 	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[7][3]->Piece = CurrPiece;
 	
@@ -183,6 +191,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[7][4];
 	CurrPiece->AliveFlag = True;
+	CurrPiece->MoveFirstFlag = 0;
 	ChessBoardToReturn->BlackPlayer->Pieces[CurrPieceIdx++] = CurrPiece;
 	ChessBoardToReturn->Board[7][4]->Piece = CurrPiece;
   return ChessBoardToReturn;

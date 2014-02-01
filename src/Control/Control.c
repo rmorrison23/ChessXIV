@@ -84,7 +84,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			ExitStateFlag = False;
 			while (!ExitStateFlag){
 			 	/*highlight the legal coordinates of selected piece*/
-				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
+			  LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer,MainMoveList);
 				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
 				
 				LocalEvent = View_GetEvent(MainChessBoard, LocalEvent);
@@ -135,18 +135,18 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
 		/*check for checkmate first*/
-		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
+		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Checkmate;
 			LocalEvent->Player = CurrentPlayer;
 			View_DisplayEvent(MainChessBoard, LocalEvent);
 			GameOnFlag = False;
 		/*then check for stalemate*/
-		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer)){
+		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Stalemate;			
 			View_DisplayEvent(MainChessBoard, LocalEvent);
 			GameOnFlag = False;		
 		/*check for checked position */
-		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer)){
+		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer, MainMoveList)){
 			printf("Player %d is in check\n", CurrentPlayer->PlayerColor);
 		}
 	}

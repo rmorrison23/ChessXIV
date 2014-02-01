@@ -9,10 +9,8 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 {	
   ChessMove *rookMove;
 
-	/*if the move piece is a pawn, set first move flag to false*/
-	if (move->MovePiece->Type == Pawn){
-		move->MovePiece->PawnMoveFirstFlag = False;
-	}
+	/* set first move flag to false*/
+	move->MovePiece->MoveFirstFlag++;
 
 	move->MoveType = Model_GetMoveType(board, move);
 
@@ -23,6 +21,8 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	
 	  /* delete piece pointer at previous location */
 	  move->StartPosition->Piece = NULL;
+
+	  rookMove = malloc(sizeof(ChessMove));
 	  
 	  /* since castling requires two moves, we create 'rookMove' based on king/queen-side */
 	  if(move->NextPosition->File == 1) {
@@ -72,6 +72,7 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	
 	  /* delete piece pointer at previous location */
 	  move->StartPosition->Piece = NULL;
+	  board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece = NULL;
 
 	  /* update move list */
 	  ChessMoveList_AppendMove(moveList, move);
@@ -94,6 +95,9 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	  /* piece to move, moved to next coordinate */
 	  move->StartPosition->Piece->Coordinate = move->NextPosition;
 	  move->NextPosition->Piece = move->MovePiece;	
+	  if(move->MoveType == Transformation) {
+	    move->MovePiece->Type = move->Transform_IntoType;
+	  }
 	
 	  /* delete piece pointer at previous location */
 	  move->StartPosition->Piece = NULL;
@@ -115,35 +119,80 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
       
       /* need to move back twice */
       for (i = 0; i < 2; i ++)
-      {	tempNode = moveList->LastNode;
-		/* moving back a position (1 undo) */
-		tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
-		tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
-		
-		/* need to restore a piece from the graveyard */
-		if (tempNode->Move->CaptureFlag)
-		{
-		/* bring back the dead */
-		tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
-		tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
-		}
-		/*nothing to restore from graveyard */
-		else
-		{
-		tempNode->Move->NextPosition->Piece = NULL;
-		}
-	
-		moveList = ChessMoveList_PopLastMove(moveList);
-#if 0
-		/*breaking the forward link of previous node*/
-		tempNode->PrevNode->NextNode = NULL;
-		/*moving the node back one */
-		tempNode = tempNode->PrevNode;
-		/*update the last node */
-		moveList->LastNode = tempNode;
+      {	
+	tempNode = moveList->LastNode;
 
-		free(tempNode->NextNode);
-#endif
+	if(tempNode->Move->MoveType == Transformation) {
+	  
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->Type = Pawn;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
+
+	else if(tempNode->Move->MoveType == EnPassant) {
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  /* bring back the dead */
+	  tempNode->Move->NextPosition->Piece = NULL;
+	  board->Board[tempNode->Move->StartPosition->Rank][tempNode->Move->NextPosition->File]->Piece = tempNode->Move->CapturePiece;
+	  tempNode->Move->CapturePiece->Coordinate = board->Board[tempNode->Move->StartPosition->Rank][tempNode->Move->NextPosition->File];
+	  tempNode->Move->CapturePiece->AliveFlag = True;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}	  
+
+	else if(tempNode->Move->MoveType == Castling) {
+	  /* moving back rook position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+
+	  tempNode = moveList->LastNode;
+	  /* moving back king position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
+	
+	else {
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+		
+	  /* need to restore a piece from the graveyard */
+	  if (tempNode->Move->CaptureFlag)
+	    {
+	      /* bring back the dead */
+	      tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
+	      tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
+	      tempNode->Move->CapturePiece->AliveFlag = True;
+	    }
+	  /*nothing to restore from graveyard */
+	  else
+	    {
+	      tempNode->Move->NextPosition->Piece = NULL;
+	    }
+	
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
       }
       
       return board;
@@ -179,7 +228,7 @@ ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
     
 }
 
-ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn)
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn, ChessMoveList * MoveList)
 {
 	int i = 0;
 	
@@ -198,7 +247,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 		/* making sure the piece is alive before storing */
 		if (player->Pieces[i]->AliveFlag == True)
 		{
-			newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
+		  newChessCoordinateList1 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn, MoveList);
 			firstListPiece = 1;
 		}
 		i++;
@@ -212,7 +261,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 		if (player->Pieces[i]->AliveFlag == True)
 		{
 			/* storing coordinate into the temp list */
-			newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn);
+		  newChessCoordinateList2 = Model_GetLegalCoordinates(board, player->Pieces[i], PlayerInTurn, MoveList);
 			
 			/* appending the two list so there is no duplicate coordinate */
 			newChessCoordinateList1 = ChessCoordinateList_AppendNoRedundancy(newChessCoordinateList1, newChessCoordinateList2);
@@ -222,10 +271,10 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 	return newChessCoordinateList1;
 }
 
-Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
+Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player, ChessMoveList * MoveList)
 {
 	/* grab list of legal move of other player */
-	ChessCoordinateList * newList = Model_GetAllLegalCoordinate(board, player->OtherPlayer, player);
+  ChessCoordinateList * newList = Model_GetAllLegalCoordinate(board, player->OtherPlayer, player, MoveList);
 	
 	/*get the king of current player*/
 	ChessPiece * king = ChessPlayer_GetChessPiece(player, King, 0);
@@ -239,11 +288,11 @@ Boolean Model_CheckCheckedPosition(ChessBoard * board, ChessPlayer * player)
 
 }
 
-Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
+Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player, ChessMoveList * MoveList)
 {
 	
-	ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player);
-	if (Model_CheckCheckedPosition(board, player) &&  !CurrPlayerPossibleCoords->FirstNode)
+  ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player, MoveList);
+  if (Model_CheckCheckedPosition(board, player, MoveList) &&  !CurrPlayerPossibleCoords->FirstNode)
 	{
 		ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 		return True;
@@ -252,9 +301,9 @@ Boolean Model_CheckCheckmate(ChessBoard * board, ChessPlayer * player)
 	return False;
 }
 
-Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player)
-{	ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player);
-	if (!Model_CheckCheckedPosition(board, player) &&  !CurrPlayerPossibleCoords->FirstNode)
+Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player, ChessMoveList * MoveList)
+{	ChessCoordinateList * CurrPlayerPossibleCoords = Model_GetAllLegalCoordinate(board, player, player, MoveList);
+  if (!Model_CheckCheckedPosition(board, player, MoveList) &&  !CurrPlayerPossibleCoords->FirstNode)
 	{
 		ChessCoordinateList_Free(CurrPlayerPossibleCoords);
 		return True;
@@ -317,7 +366,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			
 			
 			/* if hasn't moved yet, check rank+2 if empty */
-			if(piece->PawnMoveFirstFlag) {
+			if(!(piece->MoveFirstFlag)) {
 				targetRank = piece->Coordinate->Rank + 2;
 				targetFile = piece->Coordinate->File;
 				if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
@@ -332,25 +381,29 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			if(piece->Coordinate->Rank == 4) {
 			  /* check to make sure there's a pawn directly next to it */
 			  if(piece->Coordinate->File < 7) {
-			    if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece == Pawn) {
-			      /* check to see if last move was pawn skipping spaces */
-			      if(moveList->LastNode->Move->StartPosition->Rank == 6) {
-				/* if so, add to list of moves */
-				targetRank = 5;
-				targetFile = piece->Coordinate->File + 1;
-				output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			    if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece != NULL) {
+			      if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece->Type == Pawn) {
+				/* check to see if last move was pawn skipping spaces */
+				if(moveList->LastNode->Move->StartPosition->Rank == 6) {
+				  /* if so, add to list of moves */
+				  targetRank = 5;
+				  targetFile = piece->Coordinate->File + 1;
+				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+				}
 			      }
 			    }
 			  }
 			  /* check the other side */
 			  if(piece->Coordinate->File > 0) {
-			    if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece == Pawn) {
-			      /* check if last move was pawn skipping spaces */
-			      if(moveList->LastNode->Move->StartPosition->Rank == 6) {
-				/* if so, add to list of moves */
-				targetRank = 5;
-				targetFile = piece->Coordinate->File - 1;
-				output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			    if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece != NULL) {
+			      if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece->Type == Pawn) {
+				/* check if last move was pawn skipping spaces */
+				if(moveList->LastNode->Move->StartPosition->Rank == 6) {
+				  /* if so, add to list of moves */
+				  targetRank = 5;
+				  targetFile = piece->Coordinate->File - 1;
+				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+				}
 			      }
 			    }
 			  }
@@ -387,7 +440,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 			
 			/* if hasn't moved yet, check rank-2 if empty */
-			if(piece->PawnMoveFirstFlag) {
+			if(!(piece->MoveFirstFlag)) {
 				targetRank = piece->Coordinate->Rank - 2;
 				targetFile = piece->Coordinate->File;
 				if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
@@ -402,25 +455,29 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			if(piece->Coordinate->Rank == 3) {
 			  /* check to make sure there's a pawn directly next to it */
 			  if(piece->Coordinate->File < 7) {
-			    if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece == Pawn) {
-			      /* check to see if last move was pawn skipping spaces */
-			      if(moveList->LastNode->Move->StartPosition->Rank == 1) {
-				/* if so, add to list of moves */
-				targetRank = 2;
-				targetFile = piece->Coordinate->File + 1;
-				output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			    if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece != NULL) {
+			      if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece->Type == Pawn) {
+				/* check to see if last move was pawn skipping spaces */
+				if(moveList->LastNode->Move->StartPosition->Rank == 1) {
+				  /* if so, add to list of moves */
+				  targetRank = 2;
+				  targetFile = piece->Coordinate->File + 1;
+				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+				}
 			      }
 			    }
 			  }
 			  /* check the other side */
 			  if(piece->Coordinate->File > 0) {
-			    if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece == Pawn) {
-			      /* check if last move was pawn skipping spaces */
-			      if(moveList->LastNode->Move->StartPosition->Rank == 1) {
-				/* if so, add to list of moves */
-				targetRank = 2;
-				targetFile = piece->Coordinate->File - 1;
-				output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			    if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece != NULL) {
+			      if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece->Type == Pawn) {
+				/* check if last move was pawn skipping spaces */
+				if(moveList->LastNode->Move->StartPosition->Rank == 1) {
+				  /* if so, add to list of moves */
+				  targetRank = 2;
+				  targetFile = piece->Coordinate->File - 1;
+				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+				}
 			      }
 			    }
 			  }
@@ -603,7 +660,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	            
 		      
 		if(piece->Player == playerinturn){
-			OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn);				
+		  OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn, moveList);				
 			for(dir_index = 0; dir_index < 8; dir_index++)
 			{
 			
@@ -655,10 +712,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 		}
 		/* kingside castling */
-		if(piece->MoveFirstFlag && chessboard->Board[piece->Coordinate->Rank][7]->Piece != NULL) {
+		if(!(piece->MoveFirstFlag) && chessboard->Board[piece->Coordinate->Rank][7]->Piece != NULL) {
 		  if(chessboard->Board[piece->Coordinate->Rank][7]->Piece->Type == Rook) {
 		    targetRank = piece->Coordinate->Rank;
-		    if(chessboard->Board[targetRank][7]->MoveFirstFlag) {
+		    if(!(chessboard->Board[targetRank][7]->Piece->MoveFirstFlag)) {
 		      if(chessboard->Board[targetRank][5]->Piece == NULL && chessboard->Board[targetRank][6]->Piece == NULL) {
 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][6]);
 		      }
@@ -666,10 +723,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		  }
 		}
 		/* queenside castling */
-		if(piece->MoveFirstFlag && chessboard->Board[piece->Coordinate->Rank][0]->Piece != NULL) {
+		if(!(piece->MoveFirstFlag) && chessboard->Board[piece->Coordinate->Rank][0]->Piece != NULL) {
 		  if(chessboard->Board[piece->Coordinate->Rank][0]->Piece->Type == Rook) {
 		    targetRank = piece->Coordinate->Rank;
-		    if(chessboard->Board[targetRank][0]->MoveFirstFlag) {
+		    if(!(chessboard->Board[targetRank][0]->Piece->MoveFirstFlag)) {
 		      if(chessboard->Board[targetRank][1]->Piece == NULL && chessboard->Board[targetRank][2]->Piece == NULL && chessboard->Board[targetRank][3]->Piece == NULL) {
 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][1]);
 		      }
