@@ -9,3 +9,36 @@ ChessPiece * ChessPlayer_GetChessPiece(ChessPlayer * Player, ChessPieceTypeEnum 
 	}
 	return 0;
 } 
+
+ChessMoveList * ChessPlayer_GetAllLegalMoves(ChessBoard * board, ChessPlayer * player, ChessMoveList * history){
+	
+	/*ChessCoordinateList * coordlist = Model_GetAllLegalCoordinate(board, player, player);	
+	ChessMoveList * list = ChessMoveList_Initialize();
+	int i;
+	
+	for ( i = 0; i < 16; i++ )
+	{
+		if (player->Pieces[i]->AliveFlag)
+		{
+			coordlist = Model_GetAllLegalCoordinate(Pieces[i]);
+			ChessCoordinateNode * CurrNode = coordlist->FirstNode, *NextNode;
+			
+			while (CurrNode){
+				NewMove = ChessMove_Initialize();
+				NewMove->Piece = player->Pieces[i];
+				NewMove->StartPosition = player->Pieces[i]->Coordinate;
+				NewMove->NextPosition = CurrNode->Coordinate;
+				NewMove->Type = GetMoveType(NewMove);
+				NewMove->CapturePiece = NewMove->NextPosition->Piece;
+				ChessMoveList_AppendMove(list, NewMove);
+				NextNode = CurrNode->NextNode;
+				CurrNode = NextNode;
+			}
+			ChessCoordinateList_Free(coordlist);
+		}
+	}
+	
+	return list;*/
+	return 0;
+	
+}

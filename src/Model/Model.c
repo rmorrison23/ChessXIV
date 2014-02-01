@@ -116,7 +116,7 @@ ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlay
 	int firstListPiece = 0;
 	
 	/* create a permanent coordinate list that is initually empty to be return */
-	ChessCoordinateList *newChessCoordinateList1 = NULL;
+	ChessCoordinateList *newChessCoordinateList1 = ChessCoordinateList_Initialize();
 	/* create a temp coordinate list to be append */
 	ChessCoordinateList *newChessCoordinateList2;
 
