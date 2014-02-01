@@ -18,9 +18,9 @@ ChessBoard * Model_Initialize(void);
 
 Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *);
 
-ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, ChessPlayer *);
+ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, ChessPlayer *, ChessMoveList *);
 
-ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn);
+ChessCoordinateList * Model_GetAllLegalCoordinate( ChessBoard * board, ChessPlayer * player, ChessPlayer * PlayerInTurn, ChessMoveList *);
 
 /* done, actually move the pieces to its destination */
 ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
@@ -28,14 +28,17 @@ ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 /*done,  undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
+/* check type of move */
+ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move);
+
 /*check for stalemate position*/
-Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player);
+Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player, ChessMoveList *);
 
 /* almost done, If this chess player is checkmakte, return True*/
-Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *);
+Boolean Model_CheckCheckmate(ChessBoard *, ChessPlayer *, ChessMoveList *);
 
 /* done, If this chess player is in checked position and must get out, return True*/
-Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *);
+Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *, ChessMoveList *);
 
 /* almost done */
 Boolean Model_Stalemate(ChessBoard *, ChessPlayer *);

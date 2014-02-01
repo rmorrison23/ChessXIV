@@ -27,6 +27,10 @@ int main(void){
 	MainChessBoard->Board[0][0]->Piece = WRook;	
 	
 	/*set up some other piece of whites*/
+	ChessPiece * WQueen = ChessPlayer_GetChessPiece(MainChessBoard->WhitePlayer, Queen, 0);
+	WQueen->AliveFlag = True;
+	WQueen->Coordinate = MainChessBoard->Board[1][0];
+	MainChessBoard->Board[1][0]->Piece = WQueen;
 		
 	/*set up some other pieces of black*/
 	ChessPiece * BKing = ChessPlayer_GetChessPiece(MainChessBoard->BlackPlayer, King, 0);
