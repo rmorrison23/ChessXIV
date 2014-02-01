@@ -27,23 +27,27 @@ Event drawMainMenu(ViewHandle * MainHandle){
 	SDL_Color greenText = {0x29, 0xEF, 0x48};
 
 	/* rename window title */
-	/*SDL_SetWindowTitle(window, TITLE);*/
 	SDL_SetWindowTitle(window, "quan's title");
 	/* create main menu background image */
 	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	backSplashObject->ImageFileName = "Assets/Menu_Backgrounds/Background_1600_900.jpg";
 	ObjectHandle_Render(MainHandle, backSplashObject);
-	ObjectHandleList_AppendObject(backSplashObject);
+	ObjectHandleList_AppendObject(MainHandle, backSplashObject);
   
-  /*SDL_Texture *backSplash = NULL;
-  backSplash = loadTexture("Assets/Menu_Backgrounds/Background_1600_900.jpg", renderer);
-  renderTexture(backSplash, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);*/
+	/* create title */
+	SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
+	ObjectHandle * title = ObjectHandle_Initialize(Text, 50, 100, 0, 0);
+	title->FontName = CALIBRI_FONT;
+	title->Color 	= titleColor;
+	ObjectHandle_Render(MainHandle, title);
+	ObjectHandleList_AppendObject(MainHandle, title);
+ 
   
-  printf("Successful\n");
-  
-  Event ReturnEvent = {.Type = SelectCoordinate, .Coordinate = NULL, .Player = NULL};
-  
-  return ReturnEvent;
+	printf("Successful\n");
+
+	Event ReturnEvent = {.Type = SelectCoordinate, .Coordinate = NULL, .Player = NULL};
+
+	return ReturnEvent;
 #if 0
   /* create title */
   SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
