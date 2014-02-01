@@ -28,6 +28,9 @@ ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 /*done,  undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
+/* check type of move */
+ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move);
+
 /*check for stalemate position*/
 Boolean Model_CheckStalemate(ChessBoard * board, ChessPlayer * player);
 

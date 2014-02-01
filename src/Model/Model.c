@@ -55,6 +55,28 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 
 	}
 
+	else if(move->MoveType == EnPassant) {
+	  /* send piece at same rank as starting position but same file as next position to graveyard */
+	  move->CapturePiece = board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece;
+	  /* kill it */
+	  board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece->AliveFlag = False;
+	  /* set that dead piece coordinate to null */
+	  board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece->Coordinate = NULL;
+		
+	  /* it is dead */
+	  move->CaptureFlag = True;
+
+	  /* piece to move, moved to next coordinate */
+	  move->StartPosition->Piece->Coordinate = move->NextPosition;
+	  move->NextPosition->Piece = move->MovePiece;	
+	
+	  /* delete piece pointer at previous location */
+	  move->StartPosition->Piece = NULL;
+
+	  /* update move list */
+	  ChessMoveList_AppendMove(moveList, move);
+	}	  
+
 	else {	
 	  /* the place to move to has an enemy piece */
 	  if (move->NextPosition->Piece != NULL)
