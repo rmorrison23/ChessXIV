@@ -23,7 +23,8 @@ void ChessPlayer_UpdateTime(ChessPlayer * Player) {
 
 ChessMoveList * ChessPlayer_GetAllLegalMoves(ChessBoard * board, ChessPlayer * player, ChessMoveList * history){
 	
-	/*ChessCoordinateList * coordlist = Model_GetAllLegalCoordinate(board, player, player);	
+	/*ChessCoordinateList * coordlist = Model_GetAllLegalCoordinate(board, player, player, history);	*/
+	ChessCoordinateList * coordlist;
 	ChessMoveList * list = ChessMoveList_Initialize();
 	int i;
 	
@@ -31,25 +32,23 @@ ChessMoveList * ChessPlayer_GetAllLegalMoves(ChessBoard * board, ChessPlayer * p
 	{
 		if (player->Pieces[i]->AliveFlag)
 		{
-			coordlist = Model_GetAllLegalCoordinate(Pieces[i]);
-			ChessCoordinateNode * CurrNode = coordlist->FirstNode, *NextNode;
+			coordlist = Model_GetLegalCoordinates(board, player->Pieces[i], player, history);
+			ChessCoordinateNode * CurrNode = coordlist->FirstNode;
 			
 			while (CurrNode){
-				NewMove = ChessMove_Initialize();
-				NewMove->Piece = player->Pieces[i];
+				ChessMove * NewMove = ChessMove_Initialize();
+				NewMove->MovePiece = player->Pieces[i];
 				NewMove->StartPosition = player->Pieces[i]->Coordinate;
 				NewMove->NextPosition = CurrNode->Coordinate;
-				NewMove->Type = GetMoveType(NewMove);
+				NewMove->MoveType = Model_GetMoveType(board, NewMove);
 				NewMove->CapturePiece = NewMove->NextPosition->Piece;
 				ChessMoveList_AppendMove(list, NewMove);
-				NextNode = CurrNode->NextNode;
-				CurrNode = NextNode;
+				CurrNode = CurrNode->NextNode;
 			}
 			ChessCoordinateList_Free(coordlist);
 		}
 	}
 	
-	return list;*/
-	return 0;
+	return list;
 	
 }

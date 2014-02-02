@@ -778,6 +778,20 @@ void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
 	
 }
 
-ChessMove * Model_GetBestMove(ChessBoard * MainBoard, ChessPlayer * PlayerInTurn){
+ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMoveList * history){
+	if (player->AIDifficulty == Easy)
+	{
+		ChessMoveList * LegalMoveList = ChessPlayer_GetAllLegalMoves(board, player, history);
+		ChessMoveNode * CurrNode = LegalMoveList->FirstNode;
+		int LegalMoveCount = ChessMoveList_Count(LegalMoveList);
+		srand(time(NULL));
+		int SelectedLegalMove = (rand()%LegalMoveCount);
+		int i;
+		for (i = 0; i < SelectedLegalMove; i++)
+		{
+			CurrNode = CurrNode->NextNode;
+		}
+		return CurrNode->Move;
+	}
 	return NULL;
 }

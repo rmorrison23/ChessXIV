@@ -134,7 +134,10 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);	
 			
 		} else {
-			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer);
+			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer, MainMoveList);
+			if (Model_GetMoveType(MainChessBoard, LocalChessMove) == Transformation){
+				LocalChessMove->Transform_IntoType = Rook;
+			}
 		}
 		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;

@@ -139,12 +139,12 @@ AIDifficultyLevel AskAIDifficultyLevel(void){
 }
 
 ChessBoard * SetOptions(ChessBoard * MainBoard){
-	AskPlayerControl(MainBoard->WhitePlayer);
+	MainBoard->WhitePlayer->PlayerControl = AskPlayerControl(MainBoard->WhitePlayer);
 	if (MainBoard->WhitePlayer->PlayerControl == AI){
 		MainBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
 	}
 	
-	AskPlayerControl(MainBoard->BlackPlayer);
+	MainBoard->BlackPlayer->PlayerControl = AskPlayerControl(MainBoard->BlackPlayer);
 	if (MainBoard->BlackPlayer->PlayerControl == AI){
 		MainBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
 	} 

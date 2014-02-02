@@ -3,6 +3,7 @@
 
 #include "ChessStructures.h"
 #include <time.h>
+#include "Model.h"
 
 /*#include "ChessPiece.h"*/
 

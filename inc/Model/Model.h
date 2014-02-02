@@ -2,6 +2,7 @@
 #define MODEL_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 /*include headers inside Model directory*/
 #include "ChessStructures.h"
@@ -12,7 +13,6 @@
 #include "ChessMove.h"
 #include "ChessCoordinate.h"
 #include "ArtificialIntelligence.h"
-
 
 ChessBoard * Model_Initialize(void);
 
@@ -43,7 +43,7 @@ Boolean Model_CheckCheckedPosition(ChessBoard *, ChessPlayer *, ChessMoveList *)
 /* almost done */
 Boolean Model_Stalemate(ChessBoard *, ChessPlayer *);
 
-ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *);
+ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *, ChessMoveList *);
 
 void Model_CleanUp(ChessBoard *, ChessMoveList *);
 
