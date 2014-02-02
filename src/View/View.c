@@ -346,32 +346,42 @@ ViewHandle * View_CleanUp(ViewHandle *MainHandle){
 /*for settings*/
 ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	int screenMode;
-	
-#ifdef QUAN_VERSION
+
 	drawMainMenu(MainHandle);
-#else
-	drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
+	Event LocalEvent = GetSDLEvent(MainHandle);
 	
-	Boolean playing;
-	/*while(!playing){
-		switch (screenMode){
-			case 0:*/
-				drawMainMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
-	/*			break;
-			case 1:
-				drawOnePlayerMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
-				break;
-			case 2:
-				drawTwoPlayerMenu(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer, &screenMode);
-				break;
-			case 3:
-				drawGameplayScreen(MainHandle->CurrentWindow->Window, MainHandle->CurrentWindow->WindowRenderer);
-				playing = 1;
-				break;
-		}
-		
-	}*/
-#endif
+	switch (LocalEvent->Type){
+		case Option_OnePlayer:
+			drawOnePlayerMenu(MainHandle);
+			while (not enough 2 things){			
+				Event LocalEvent = GetSDLEvent(MainHandle);
+				switch(
+					case black
+						
+					
+					case white
+					
+					case easy
+					
+					medium
+					
+					difficult
+				
+				WindowRender(MainHandle);
+			}
+			break;
+		case Option_TwoPlayer:
+			MainBoard->WhitePlayer->PlayerControl = Human;
+			MainBoard->BlackPlayer->PlayerControl = Human;
+			break;
+		case Option_AIvsAI:
+			MainBoard->WhitePlayer->PlayerControl = AI;
+			MainBoard->WhitePlayer->AIDifficulty = Difficult;			
+			MainBoard->BlackPlayer->PlayerControl = AI;
+			MainBoard->BlackPlayer->AIDifficulty = Difficult;
+			break;
+	}
+	
 	return MainBoard;
 }
 
