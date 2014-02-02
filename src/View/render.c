@@ -56,34 +56,34 @@ void renderTexture2(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y){
 }
 
 SDL_Texture *renderText(char *String, char *imageFileName, SDL_Color Color, int TextSize, 
-			MainHandle->CurrentWindow->WindowRenderer){
+			SDL_Renderer *renderer){
 
-  TTF_Font *font = TTF_OpenFont(fontFile, TextSize);
-  SDL_Surface *surface = TTF_RenderText_Blended(imageFileName, String, Color);
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(MainHandle->CurrentWindow->WindowRenderer, surface);
+  TTF_Font *font = TTF_OpenFont(imageFileName, TextSize);
+  SDL_Surface *surface = TTF_RenderText_Blended(font, String, Color);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface); 
   TTF_CloseFont(font);
   return texture;
 }
 
 SDL_Texture *renderFilledBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
-			     MainHandle->CurrentWindow->WindowRenderer){
+			     SDL_Renderer *renderer){
 
   SDL_Rect Box = {X, Y, Width, Height};
-  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, hexR, hexG, hexB, hexA);
-  SDL_RenderFillRect(MainHandle->CurrentWindow->WindowRenderer, &Box);
+  SDL_SetRenderDrawColor(renderer, hexR, hexG, hexB, hexA);
+  SDL_RenderFillRect(renderer, &Box);
   
-  return no;
+  return NULL;
 }
 
 SDL_Texture *renderEmptyBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
-			     MainHandle->CurrentWindow->WindowRenderer){
+			     SDL_Renderer *renderer){
 
   SDL_Rect Box = {X, Y, Width, Height};
-  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, hexR, hexG, hexB, hexA);
-  SDL_RenderDrawRect(MainHandle->CurrentWindow->WindowRenderer, &Box);
+  SDL_SetRenderDrawColor(renderer, hexR, hexG, hexB, hexA);
+  SDL_RenderDrawRect(renderer, &Box);
   
-  return no;
+  return NULL;
 
 }
 
