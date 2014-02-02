@@ -12,13 +12,20 @@ ControlHandle * Control_Initialize(void){
 	/*initialize the board*/
 	ReturnHandle->MainChessBoard = Model_Initialize();
 	
-	ReturnHandle->MainChessBoard = SetOptions(ReturnHandle->MainChessBoard);
+	/*Initialize view*/
+	ViewHandle * MainViewHandle = View_Initialize();
 	
+	Event * EventReturn =  SetOptions(MainViewHandle, ReturnHandle->MainChessBoard);
+	
+	if (EventReturn->Type == Exit) {
+		Control_CleanUp(ReturnHandle);
+		exit(0);
+	}
 	/*intialize move list*/
 	ReturnHandle->MainMoveList = ChessMoveList_Initialize();
 	
 	/*initialize the view*/
-	View_Initialize();
+	
 	
 	return ReturnHandle;
 }
@@ -163,7 +170,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 
 ControlHandle * Control_CleanUp(ControlHandle * Handle){
 	Model_CleanUp(Handle->MainChessBoard, Handle->MainMoveList);
-	View_CleanUp();
+	View_CleanUp(Handle->MainViewHandle);
 	free(Handle);
 	
 #ifdef GUI_ENABLE

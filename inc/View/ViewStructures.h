@@ -21,6 +21,7 @@ typedef struct {
 #endif
 } Event;
 
+#ifdef GUI_ENABLE
 
 #define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {255,165,0}
 #define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {165,165,255}
@@ -79,5 +80,6 @@ typedef struct {
 typedef struct {
 	WindowHandle * CurrentWindow;	
 } ViewHandle;
+#endif
 
 #endif

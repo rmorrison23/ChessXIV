@@ -11,6 +11,7 @@
 typedef struct {
 	ChessBoard * MainChessBoard;
 	ChessMoveList * MainMoveList;
+	ViewHandle * MainViewHandle;
 } ControlHandle;
 
 
