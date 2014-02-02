@@ -661,7 +661,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	case King: 
 	      curr_coor = piece->Coordinate;
 	            
-		      
+#if 0      
 		if(piece->Player == playerinturn){
 		  OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn, moveList);				
 			for(dir_index = 0; dir_index < 8; dir_index++)
@@ -695,6 +695,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 			ChessCoordinateList_Free(OpponentLegalMoves);
 		} else {			
+#endif
 			for(dir_index = 0; dir_index < 8; dir_index++){
 				target_coor = piece->Coordinate;
 				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
@@ -713,7 +714,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 						
 				
 			}
-		}
+		/*}*/
 		/* kingside castling */
 		if(!(piece->MoveFirstFlag) && chessboard->Board[piece->Coordinate->Rank][7]->Piece != NULL) {
 		  if(chessboard->Board[piece->Coordinate->Rank][7]->Piece->Type == Rook) {
@@ -736,6 +737,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		    }
 		  }
 		}
+		/*}*/
 		
 	  break;
 	}
@@ -751,7 +753,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			moveTo->MovePiece = piece;
 			moveTo->StartPosition = piece->Coordinate;
 			moveTo->NextPosition = node1->Coordinate;
-			if (Model_CheckLegalMove(chessboard, moveTo)){
+			if (Model_CheckLegalMove(chessboard, moveTo) == False){
 				output = ChessCoordinateList_RemoveAtNode(output, node1);
 			}
 			node1 = node2;
@@ -783,7 +785,6 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	char pieces[10] = "";
 	char captureType[10] = "";
 	char transformType[10] = "";
-	char file1;
 	char file2;
 	int castlingFLag = 0;
 
@@ -806,67 +807,27 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	/* going though the list and printing the move */
 	while (temp)
 	{
-		/* getting the player color */
-		switch(temp->Move->MovePiece->Player->PlayerColor)
-		{
-		  case White:
-		    strcpy(playerColor,  "White");
-		    break;
-		  case Black:
-		    strcpy(playerColor,  "Black");
-		    break;
-		}
-		
 		/* getting the move piece */
 		switch(temp->Move->MovePiece->Type)
 		{
 		  case Pawn:
-		    strcpy(pieces,  "Pawn");
+		    strcpy(pieces,  "P");
 		    break;
 		  case Queen:
-		    strcpy(pieces,  "Queen");
+		    strcpy(pieces,  "Q");
 		    break;
 		  case King:
-		    strcpy(pieces,  "King");
+		    strcpy(pieces,  "K");
 		    break;
 		  case Rook:
-		    strcpy(pieces,  "Rook");
+		    strcpy(pieces,  "R");
 		    break;
 		  case Bishop:
-		    strcpy(pieces,  "Bishop");
+		    strcpy(pieces,  "B");
 		    break;
 		  case Knight:
-		    strcpy(pieces,  "Knight");
+		    strcpy(pieces,  "N");
 		    break;
-		}
-		
-		/* getting the file position */
-		switch(temp->Move->StartPosition->File)
-		{
-		  case 0:
-		    file1 = 'a';
-		    break;
-		  case 1:
-		    file1 = 'b';
-		    break;
-		  case 2:
-		    file1 = 'c';
-		    break;
-		  case 3:
-		    file1 = 'd';
-		    break;
-		  case 4:
-		    file1 = 'e';
-		    break;
-		  case 5:
-		    file1 = 'f';
-		    break;
-		  case 6:
-		    file1 = 'g';
-		    break;
-		  case 7:
-		    file1 = 'h';
-		    break; 
 		}
 		
 		/* getting the ending file positon */
@@ -904,8 +865,26 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		    /* first move of the castlilng */
 		    if (castlingFLag == 0)
 		    {
-		      /* print castling only once for the two castling move */
-		      fprintf(File, "Castling"); 
+		      if (temp->Move->MovePiece->Player->PlayerColor == White &&
+			  temp->Move->MovePiece->Coordinate->Rank == 0)
+		      {
+			 fprintf(File, "0-0-0"); 
+		      }
+		      else if (temp->Move->MovePiece->Player->PlayerColor  == White &&
+			  temp->Move->MovePiece->Coordinate->Rank == 7)
+		      {
+			fprintf(File, "0-0"); 
+		      }
+		      else if (temp->Move->MovePiece->Player->PlayerColor  == Black &&
+			  temp->Move->MovePiece->Coordinate->Rank == 7)
+		      {
+			 fprintf(File, "0-0-0"); 
+		      }
+		      else
+		      {
+			fprintf(File, "0-0"); 
+		      }
+		     
 		      castlingFLag = 1;
 		    }
 		    /* second move of the castling */
@@ -915,82 +894,38 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		      castlingFLag = 0;
 		    }
 		}
-		else if (temp->Move->MoveType == Normal)
-		{
-		  fprintf(File, "Normal");
-		}
-		else if (temp->Move->MoveType == EnPassant)
-		{
-		  fprintf(File, "En Passant");
-		}
-		else
-		{
-		  fprintf(File, "Transformation");
-		}
-		
-		/* print the move */
-		fprintf(File, "  Move #%d: %s %s move from %c%c to %c%c", counter, playerColor, pieces, file1, temp->Move->StartPosition->Rank, file2, temp->Move->NextPosition->Rank);
-
-		
-		/* print what the pawn transform to */
-		if (temp->Move->MoveType == Transformation)
+		else if (temp->Move->MoveType == Transformation)
 		{
 		  switch (temp->Move->Transform_IntoType)
 		  {
 		    case Rook:
-		      strcpy(transformType,  "Rook");
+		      strcpy(transformType,  "R");
 		      break;
 		    case Queen:
-		      strcpy(transformType,  "Queen");
+		      strcpy(transformType,  "Q");
 		      break;
 		    case Bishop:
-		      strcpy(transformType,  "Bishop");
+		      strcpy(transformType,  "B");
 		      break;
 		    case Knight:
-		      strcpy(transformType,  "Knight");
+		      strcpy(transformType,  "N");
 		      break;
 		    case Pawn:
 		      break;
 		    case King:
 		      break;
 		  }
-		  fprintf(File, "    Pawn transforms into %s", transformType);
+		  fprintf(File, "%d. %c%c%s ", counter, file2, temp->Move->NextPosition->Rank, transformType);
 		}
-		  
-		/* print the capture piece */
-		if (temp->Move->CaptureFlag == True)
+		else
 		{
-		  switch(temp->Move->CapturePiece->Type)
-		    {
-		      case Pawn:
-			strcpy(captureType,  "Pawn");
-			break;
-		      case Queen:
-			strcpy(captureType,  "Queen");
-			break;
-		      case King:
-			strcpy(captureType,  "King");
-			break;
-		      case Rook:
-			strcpy(captureType,  "Rook");
-			break;
-		      case Bishop:
-			strcpy(captureType,  "Bishop");
-			break;
-		      case Knight:
-			strcpy(captureType,  "Knight");
-			break;
-		    }
-		  /* a somewhat special message if the queen is capture */
-		  if (temp->Move->CapturePiece->Type == Queen)
+		  if (pieces == "P")
 		  {
-		    fprintf(File, "    %s player has captured the graceful %s", playerColor, captureType);
+		     fprintf(File, "%d. %c%c ", counter, file2, temp->Move->NextPosition->Rank);
 		  }
-
-		  /* capture message for everything else besides king */
 		  else
 		  {
-		    fprintf(File, "    %s has captured a %s", playerColor, captureType);
+		    fprintf(File, "%d. %s%c%c ", counter, pieces, file2, temp->Move->NextPosition->Rank);
 		  }
 		}
 			
@@ -1027,20 +962,35 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 	/* create a temporary board */
 	ChessBoard * tempBoard =  ChessBoard_InitializeEmpty();
 	
+	/* create a duplicate move */
+	ChessMove * tempMove = ChessMove_Initialize();
+	int rank, file;
+	int rank2, file2;
+	
 	/* duplicate chess buard */
 	tempBoard = Model_duplicateChessBoard(tempBoard, board);
 	
+	/* populate the temp move */
+	rank = moveTo->StartPosition->Rank;
+	file = moveTo->StartPosition->File;
+	tempMove->StartPosition = tempBoard->Board[rank][file];
+	tempMove->MovePiece = tempMove->StartPosition->Piece;
+	
+	rank2 = moveTo->NextPosition->Rank;
+	file2 = moveTo->NextPosition->File;
+	tempMove->NextPosition = tempBoard->Board[rank2][file2];
+	
 	/* perform the "temp" move */
-	tempBoard = Model_PerformMove(tempBoard, moveList, moveTo);
+	tempBoard = Model_PerformMove(tempBoard, moveList, tempMove);
 	
 	/* check to see if the king is in check */
-	checkKing = !Model_CheckCheckedPosition(tempBoard, moveTo->MovePiece->Player);
+	checkKing = Model_CheckCheckedPosition(tempBoard, tempMove->MovePiece->Player, moveList);
 
 	/* free everything */
 	ChessMoveList_Free(moveList);
 	ChessBoard_Free(tempBoard);
 	
-	return checkKing;
+	return !checkKing;
 }
 
 ChessBoard * Model_duplicateChessBoard(ChessBoard * tempBoard, ChessBoard * oldboard)
@@ -1060,7 +1010,7 @@ ChessBoard * Model_duplicateChessBoard(ChessBoard * tempBoard, ChessBoard * oldb
   {
     tempBoard->WhitePlayer->Pieces[counter]->AliveFlag = oldboard->WhitePlayer->Pieces[counter]->AliveFlag;
 
-    tempBoard->WhitePlayer->Pieces[counter]->PawnMoveFirstFlag = oldboard->WhitePlayer->Pieces[counter]->PawnMoveFirstFlag;
+    tempBoard->WhitePlayer->Pieces[counter]->MoveFirstFlag = oldboard->WhitePlayer->Pieces[counter]->MoveFirstFlag;
     
     /* link between coordinate and pieces property copy */
     if (oldboard->WhitePlayer->Pieces[counter]->Coordinate)
@@ -1075,7 +1025,7 @@ ChessBoard * Model_duplicateChessBoard(ChessBoard * tempBoard, ChessBoard * oldb
     /* BLACK */
     tempBoard->BlackPlayer->Pieces[counter]->AliveFlag = oldboard->BlackPlayer->Pieces[counter]->AliveFlag;
 
-    tempBoard->BlackPlayer->Pieces[counter]->PawnMoveFirstFlag = oldboard->BlackPlayer->Pieces[counter]->PawnMoveFirstFlag;
+    tempBoard->BlackPlayer->Pieces[counter]->MoveFirstFlag = oldboard->BlackPlayer->Pieces[counter]->MoveFirstFlag;
     
     /* link between coordinate and pieces property copy */
     if (oldboard->BlackPlayer->Pieces[counter]->Coordinate)
