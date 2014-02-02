@@ -53,7 +53,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	/* one player button */
 	int onePlayerSize = 72;
 	SDL_Color onePlayerColor = {255, 255, 255};
-	ObjectHandle *onePlayerButton = ObjectHandle_Initialize(Text, Option_OnePlayer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5, 0, 0);
+	ObjectHandle *onePlayerButton = ObjectHandle_Initialize(Button, Option_OnePlayer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5, 0, 0);
 
 	strcpy(onePlayerButton->String, "One Player");
 
@@ -67,7 +67,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	/* two player button */
 	int twoPlayerSize = 72;
 	SDL_Color twoPlayerColor = {255, 255, 255};
-	ObjectHandle *twoPlayerButton = ObjectHandle_Initialize(Text, Option_TwoPlayer, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90), 0, 0);
+	ObjectHandle *twoPlayerButton = ObjectHandle_Initialize(Button, Option_TwoPlayer, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90), 0, 0);
 
 	strcpy(twoPlayerButton->String, "Two Players");
 
@@ -81,7 +81,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	/* AI versus AI button */
 	int AIversusAISize = 72;
 	SDL_Color AIversusAIColor = {255, 255, 255};
-	ObjectHandle *AIversusAIButton = ObjectHandle_Initialize(Text, Option_AIvsAI, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667, 0, 0);
+	ObjectHandle *AIversusAIButton = ObjectHandle_Initialize(Button, Option_AIvsAI, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667, 0, 0);
 
 	strcpy(AIversusAIButton->String, "AI and AI");
 	strcpy(AIversusAIButton->FontName, "Assets/fonts/Calibri.ttf");

@@ -10,8 +10,19 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, ObjectTagEnum TagIn, int
 	Handle->Width = width;
 	Handle->Height = height;
 	
-	strcpy(Handle->ImageFileName,"");
-	/*text and color too set NULL*/
+	switch (type){
+		case Image:
+			Handle->ImageFileName = (char *) malloc(sizeof(char) * 255);
+			assert(Handle->ImageFileName);
+			break;
+		case Text:
+		case Button:			
+			Handle->FontName = (char *) malloc(sizeof(char) * 255);
+			Handle->String = (char *) malloc(sizeof(char) * 255);
+			assert(Handle->FontName && Handle->String);
+			break;
+	}
+	
 	
 	return Handle;
 	
@@ -33,6 +44,7 @@ void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	    
 	  }
 	  break;
+	case Button:
 	case Text:
 
 	Object->Texture = renderText(Object->String, Object->FontName, Object->Color, Object->TextSize, MainHandle->CurrentWindow->WindowRenderer);
@@ -41,6 +53,7 @@ void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	SDL_QueryTexture(Object->Texture , NULL, NULL, NULL, &(Object->Height));
 	/*printf("text is %d wide and %d high\n", Object->Width, Object->Height);*/
 	  break;
+	case Coordinate:
 	case Color:
 	  Object->Texture = renderFilledBox(Object->hexR, Object->hexG, Object->hexB, Object->hexA, Object->X, Object->Y, Object->Width, Object->Height, MainHandle->CurrentWindow->WindowRenderer);
 	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, 0, 0);
@@ -81,23 +94,31 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 
 		switch(event.type){
 
-			/*case SDL_QUIT:
-
-
+			case SDL_QUIT:
+				ReturnEvent.Type = Exit;
+				DoneFlag = True;
 				break;
 	
-
-			case SDL_MOUSEMOTION:
-				
-				break;*/
-
 			case SDL_MOUSEBUTTONDOWN:
 				/*find out where it is clicked then*/
 				ObjectSelectedList = GetObjectByCoordinate(MainHandle, event.motion.x, event.motion.y);
 				Node  = ObjectSelectedList->FirstNode;
 				while (Node){
 					ObjectSelected = Node->Object;
-					switch (ObjectSelected->Tag){
+					switch (ObjectSelected->Type){
+						case Button:
+							ReturnEvent.Type = ButtonClicked;
+							ReturnEvent.Object = ObjectSelected;
+							DoneFlag = True;
+							break;
+						case Coordinate:
+							ReturnEvent.Type = CoordinateClicked;
+							ReturnEvent.Object = ObjectSelected;
+							DoneFlag = True;
+							break;
+					}
+					
+					/*switch (ObjectSelected->Tag){
 						case Option_OnePlayer:
 							ReturnEvent.Type = Option_OnePlayer_Clicked;
 							DoneFlag = True;
@@ -131,7 +152,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 							DoneFlag = True;
 							break;
 							
-					}
+					}*/
 					Node = Node->NextNode;
 				}
 				

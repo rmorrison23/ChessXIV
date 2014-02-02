@@ -4,10 +4,7 @@
 
 /*may add more type of event here*/
 typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate,	\
-	Option_OnePlayer_Clicked, Option_TwoPlayer_Clicked, Option_AIvsAI_Clicked, 		\
-	Option_Black_Clicked, Option_White_Clicked,						\
-	Option_EasyAI_Clicked, Option_MediumAI_Clicked, Option_DifficultAI_Clicked,		\
-	Option_PlayButton_Clicked
+	ButtonClicked, CoordinateClicked
 } EventTypeEnum;
 
 #ifdef GUI_ENABLE
@@ -28,7 +25,7 @@ typedef struct {
 #define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {255,165,0}
 #define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {165,165,255}
 
-typedef enum {Color, Image, Text, Button, Outline} ObjectType;
+typedef enum {Color, Image, Text, Button, Coordinate, Outline} ObjectType;
 typedef enum {
 	Option_OnePlayer, Option_TwoPlayer, Option_AIvsAI, 		\
 	Option_Black, Option_White,						\
@@ -52,11 +49,11 @@ struct ObjectHandleStruct {
 	SDL_Texture * Texture;
 	
 	/*information only apply to certain types*/
-	/*Image*/char  ImageFileName[255];
+	/*Image*/char * ImageFileName;
 	
-	/*Text*/int TextSize; char FontName[255]; char String[255];
+	/*Text and button*/int TextSize; char * FontName; char * String;
 	
-  /*Color*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
+  /*color, coordinate or outline*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
 	
 };
 

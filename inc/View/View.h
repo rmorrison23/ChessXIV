@@ -53,7 +53,7 @@ ViewHandle * View_Initialize(void);
 ViewHandle * View_CleanUp(ViewHandle *);
 
 /*for settings*/
-ChessBoard * SetOptions(ViewHandle *, ChessBoard *);
+Event * SetOptions(ViewHandle *, ChessBoard *);
 
 /*for displaying*/
 void DisplayChessBoard(ChessBoard *);
