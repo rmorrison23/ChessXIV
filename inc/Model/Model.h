@@ -45,6 +45,11 @@ Boolean Model_Stalemate(ChessBoard *, ChessPlayer *);
 
 ChessMove * Model_GetBestMove(ChessBoard *, ChessPlayer *, ChessMoveList *);
 
+ChessBoard * Model_duplicateChessBoard(ChessBoard *, ChessBoard *);
+
+/* done, log file */
+int writeToLogFile(char fname[100], ChessMoveList *);
+
 void Model_CleanUp(ChessBoard *, ChessMoveList *);
 
 void ModelSpeak(void);

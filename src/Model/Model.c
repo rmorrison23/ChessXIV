@@ -1,4 +1,7 @@
 #include "Model.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 ChessBoard * Model_Initialize(void){
 	return ChessBoard_Initialize();
@@ -658,7 +661,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	case King: 
 	      curr_coor = piece->Coordinate;
 	            
-		      
+#if 0      
 		if(piece->Player == playerinturn){
 		  OpponentLegalMoves = Model_GetAllLegalCoordinate(chessboard, piece->Player->OtherPlayer, playerinturn, moveList);				
 			for(dir_index = 0; dir_index < 8; dir_index++)
@@ -692,6 +695,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 			ChessCoordinateList_Free(OpponentLegalMoves);
 		} else {			
+#endif
 			for(dir_index = 0; dir_index < 8; dir_index++){
 				target_coor = piece->Coordinate;
 				target_coor = ChessCoordinate_Offset(target_coor, Rank_Offset8[dir_index], File_Offset8[dir_index]);
@@ -710,7 +714,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 						
 				
 			}
-		}
+		/*}*/
 		/* kingside castling */
 		if(!(piece->MoveFirstFlag) && chessboard->Board[piece->Coordinate->Rank][7]->Piece != NULL) {
 		  if(chessboard->Board[piece->Coordinate->Rank][7]->Piece->Type == Rook) {
@@ -733,6 +737,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		    }
 		  }
 		}
+		/*}*/
 		
 	  break;
 	}
@@ -744,7 +749,11 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		ChessCoordinateNode * node1 = output->FirstNode, * node2;
 		while (node1){
 			node2 = node1->NextNode;
-			if (False/*replace this with your boolean return*/){
+			ChessMove * moveTo = ChessMove_Initialize();
+			moveTo->MovePiece = piece;
+			moveTo->StartPosition = piece->Coordinate;
+			moveTo->NextPosition = node1->Coordinate;
+			if (Model_CheckLegalMove(chessboard, moveTo) == False){
 				output = ChessCoordinateList_RemoveAtNode(output, node1);
 			}
 			node1 = node2;
@@ -754,11 +763,283 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 	return output;
 }
 
+int writeToLogFile(char fname[100], ChessMoveList * moveList)
+{
+	/* creating the file */
+	FILE *File;
+	
+	/* file type */
+	char ftype[] = ".txt";
+	
+	/* a copy of the file name */
+	char fname_tmp[100];  
+	
+	/* node pointer to traverses the list */
+	ChessMoveNode * temp = moveList->FirstNode;
+	
+	/* move counter */
+	int counter = 1;
+	
+	/* string to convert the enum type into a char[] type */
+	char playerColor[10] = "";
+	char pieces[10] = "";
+	char captureType[10] = "";
+	char transformType[10] = "";
+	char file2;
+	int castlingFLag = 0;
+
+	/* copy file name to new file */
+	strcpy(fname_tmp, fname);
+	
+	/* concat the file type to the name */
+	strcat(fname_tmp, ftype);
+
+	/* open the file */
+	File = fopen(fname_tmp, "w");
+	
+	/* file could not be open */
+	if (!File) 
+	{
+	  printf("Cannot open file \"%s\" for writing!\n", fname);
+	  return 1;
+	}
+	
+	/* going though the list and printing the move */
+	while (temp)
+	{
+		/* getting the move piece */
+		switch(temp->Move->MovePiece->Type)
+		{
+		  case Pawn:
+		    strcpy(pieces,  "P");
+		    break;
+		  case Queen:
+		    strcpy(pieces,  "Q");
+		    break;
+		  case King:
+		    strcpy(pieces,  "K");
+		    break;
+		  case Rook:
+		    strcpy(pieces,  "R");
+		    break;
+		  case Bishop:
+		    strcpy(pieces,  "B");
+		    break;
+		  case Knight:
+		    strcpy(pieces,  "N");
+		    break;
+		}
+		
+		/* getting the ending file positon */
+		switch(temp->Move->NextPosition->File)
+		{
+		  case 0:
+		    file2 = 'a';
+		    break;
+		  case 1:
+		    file2 = 'b';
+		    break;
+		  case 2:
+		    file2 = 'c';
+		    break;
+		  case 3:
+		    file2 = 'd';
+		    break;
+		  case 4:
+		    file2 = 'e';
+		    break;
+		  case 5:
+		    file2 = 'f';
+		    break;
+		  case 6:
+		    file2 = 'g';
+		    break;
+		  case 7:
+		    file2 = 'h';
+		    break; 
+		}
+		
+		/*this is the castling move, it is basically two move in one */
+		if (temp->Move->MoveType == Castling)
+		{
+		    /* first move of the castlilng */
+		    if (castlingFLag == 0)
+		    {
+		      if (temp->Move->MovePiece->Player->PlayerColor == White &&
+			  temp->Move->MovePiece->Coordinate->Rank == 0)
+		      {
+			 fprintf(File, "0-0-0"); 
+		      }
+		      else if (temp->Move->MovePiece->Player->PlayerColor  == White &&
+			  temp->Move->MovePiece->Coordinate->Rank == 7)
+		      {
+			fprintf(File, "0-0"); 
+		      }
+		      else if (temp->Move->MovePiece->Player->PlayerColor  == Black &&
+			  temp->Move->MovePiece->Coordinate->Rank == 7)
+		      {
+			 fprintf(File, "0-0-0"); 
+		      }
+		      else
+		      {
+			fprintf(File, "0-0"); 
+		      }
+		     
+		      castlingFLag = 1;
+		    }
+		    /* second move of the castling */
+		    else
+		    {
+		      counter--;
+		      castlingFLag = 0;
+		    }
+		}
+		else if (temp->Move->MoveType == Transformation)
+		{
+		  switch (temp->Move->Transform_IntoType)
+		  {
+		    case Rook:
+		      strcpy(transformType,  "R");
+		      break;
+		    case Queen:
+		      strcpy(transformType,  "Q");
+		      break;
+		    case Bishop:
+		      strcpy(transformType,  "B");
+		      break;
+		    case Knight:
+		      strcpy(transformType,  "N");
+		      break;
+		    case Pawn:
+		      break;
+		    case King:
+		      break;
+		  }
+		  fprintf(File, "%d. %c%c%s ", counter, file2, temp->Move->NextPosition->Rank, transformType);
+		}
+		else
+		{
+		  if (pieces == "P")
+		  {
+		     fprintf(File, "%d. %c%c ", counter, file2, temp->Move->NextPosition->Rank);
+		  }
+		  else
+		  {
+		    fprintf(File, "%d. %s%c%c ", counter, pieces, file2, temp->Move->NextPosition->Rank);
+		  }
+		}
+			
+		/* advance the node */
+		temp = temp->NextNode;
+		
+		/* increase the counter */
+		counter++;
+	}
+	
+	/* un able to open or an error */
+	if (ferror(File)) 
+	{
+		printf("\nFile error while writing to file!\n");
+		return 2;
+	}
+	
+	/* close the file */
+	fclose(File);
+	
+	/*print that the file was saved successfully */
+	printf("%s was saved successfully. \n", fname_tmp);
+
+	return (0);
+}
+
 /* uses GetLegalCoordinates */
 /* see if move is legal */
 Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 {
-	return True;
+	Boolean checkKing = False;
+	ChessMoveList * moveList = ChessMoveList_Initialize();
+	
+	/* create a temporary board */
+	ChessBoard * tempBoard =  ChessBoard_InitializeEmpty();
+	
+	/* create a duplicate move */
+	ChessMove * tempMove = ChessMove_Initialize();
+	int rank, file;
+	int rank2, file2;
+	
+	/* duplicate chess buard */
+	tempBoard = Model_duplicateChessBoard(tempBoard, board);
+	
+	/* populate the temp move */
+	rank = moveTo->StartPosition->Rank;
+	file = moveTo->StartPosition->File;
+	tempMove->StartPosition = tempBoard->Board[rank][file];
+	tempMove->MovePiece = tempMove->StartPosition->Piece;
+	
+	rank2 = moveTo->NextPosition->Rank;
+	file2 = moveTo->NextPosition->File;
+	tempMove->NextPosition = tempBoard->Board[rank2][file2];
+	
+	/* perform the "temp" move */
+	tempBoard = Model_PerformMove(tempBoard, moveList, tempMove);
+	
+	/* check to see if the king is in check */
+	checkKing = Model_CheckCheckedPosition(tempBoard, tempMove->MovePiece->Player, moveList);
+
+	/* free everything */
+	ChessMoveList_Free(moveList);
+	ChessBoard_Free(tempBoard);
+	
+	return !checkKing;
+}
+
+ChessBoard * Model_duplicateChessBoard(ChessBoard * tempBoard, ChessBoard * oldboard)
+{
+  int rank, file;
+  int counter = 0;
+  
+  /* player property copy */
+  tempBoard->WhitePlayer->AIDifficulty = oldboard->WhitePlayer->AIDifficulty;
+  tempBoard->WhitePlayer->PlayerControl = oldboard->WhitePlayer->PlayerControl;
+  
+  tempBoard->BlackPlayer->AIDifficulty = oldboard->BlackPlayer->AIDifficulty;
+  tempBoard->BlackPlayer->PlayerControl = oldboard->BlackPlayer->PlayerControl;
+  
+   /* pieces property copy */
+  while (counter < 16)
+  {
+    tempBoard->WhitePlayer->Pieces[counter]->AliveFlag = oldboard->WhitePlayer->Pieces[counter]->AliveFlag;
+
+    tempBoard->WhitePlayer->Pieces[counter]->MoveFirstFlag = oldboard->WhitePlayer->Pieces[counter]->MoveFirstFlag;
+    
+    /* link between coordinate and pieces property copy */
+    if (oldboard->WhitePlayer->Pieces[counter]->Coordinate)
+    {
+      rank = oldboard->WhitePlayer->Pieces[counter]->Coordinate->Rank;
+      file = oldboard->WhitePlayer->Pieces[counter]->Coordinate->File;
+      
+      tempBoard->WhitePlayer->Pieces[counter]->Coordinate = tempBoard->Board[rank][file];
+      tempBoard->Board[rank][file]->Piece = tempBoard->WhitePlayer->Pieces[counter];
+    }
+    
+    /* BLACK */
+    tempBoard->BlackPlayer->Pieces[counter]->AliveFlag = oldboard->BlackPlayer->Pieces[counter]->AliveFlag;
+
+    tempBoard->BlackPlayer->Pieces[counter]->MoveFirstFlag = oldboard->BlackPlayer->Pieces[counter]->MoveFirstFlag;
+    
+    /* link between coordinate and pieces property copy */
+    if (oldboard->BlackPlayer->Pieces[counter]->Coordinate)
+    {
+      rank = oldboard->BlackPlayer->Pieces[counter]->Coordinate->Rank;
+      file = oldboard->BlackPlayer->Pieces[counter]->Coordinate->File;
+      
+      tempBoard->BlackPlayer->Pieces[counter]->Coordinate = tempBoard->Board[rank][file];
+      tempBoard->Board[rank][file]->Piece = tempBoard->BlackPlayer->Pieces[counter];
+    }
+    counter++;
+  }
+
+  return tempBoard;
 }
 
 void Model_CleanUp(ChessBoard * CurrBoard, ChessMoveList * MoveList){
