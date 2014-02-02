@@ -92,11 +92,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, AIversusAIButton);
   
 	windowRender(MainHandle);
-	
-
-	
-
-	
+		
 #if 0
   /* create title */
   SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
@@ -114,105 +110,111 @@ void drawMainMenu(ViewHandle * MainHandle){
 
   SDL_RenderPresent(renderer);
 
-
-  int done = 0;
-
-  int buttonWidth = 0, buttonHeight = 0;
-  int x_pos = 0, y_pos = 0;
-
-  SDL_Event event;
-  SDL_QueryTexture(onePlayer_Button, NULL, NULL, &buttonWidth, NULL);
-  SDL_QueryTexture(onePlayer_Button, NULL, NULL, NULL, &buttonHeight);
-
-  while(!done){
-
-    while(SDL_PollEvent(&event)){
-     
-      switch(event.type){
-
-      case SDL_QUIT:
-	*screenMode = 100;
-	done = 1;
-	break;
-
-      case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE){
-	  *screenMode = 100;
-	  done = 1;
-	}
-	break;
-	
-      case SDL_MOUSEMOTION:
-	/* highlight when mouse over one player button */
-	if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth
-	   && event.motion.y > SCREEN_HEIGHT/2.5 && event.motion.y < SCREEN_HEIGHT/2.5 + buttonHeight - 20){
-	  onePlayer_Button = renderText(ONE_PLAYER, CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
-	  SDL_RenderPresent(renderer);
-	   break; 
-	}
-	/* highlight when mouse over two player button */
-	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	   && event.motion.y > SCREEN_HEIGHT/2.5 + buttonHeight + 25 && event.motion.y < SCREEN_HEIGHT/2.5 + 2*buttonHeight - 10){
-	  twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5 + buttonHeight);
-	  SDL_RenderPresent(renderer);	 
-	  break;
-	}
-	/* highlight when mouse over AI versus AI button */
-	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	   && event.motion.y > SCREEN_HEIGHT/2.5 + 2*buttonHeight + 35 && event.motion.y < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	  twoPlayer_Button = renderText("AI Versus AI", CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
-	  SDL_RenderPresent(renderer);	 
-	  break;
-	}
-	/* default view */
-	else{
-	  *screenMode = 0;
-	  done = 1;
-	  break;
-	}
-
-      case SDL_MOUSEBUTTONDOWN:
-      	if(event.button.button == SDL_BUTTON_LEFT){
-      	  x_pos = event.button.x;
-	  y_pos = event.button.y;
-
-	  /* one player options */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
-	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
-	    *screenMode = 1;
-	    done = 1;
-	    break;
-	  }
-
-	  /* two player options */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
-	    *screenMode = 2;
-	    done = 1;
-	    break;
-	  }
-
-	  /* AI versus AI */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
-	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	    *screenMode = 3;
-	    done = 1;
-	    break;
-	  }
-      	}
-	else{break;}
-      }      
-    }    
-  }
 #endif
   
 }
 
 void drawOnePlayerMenu(ViewHandle * MainHandle){
-	
+
+  /* rename window title */
+  SDL_SetWindowTitle(window, "One Player Options");
+
+  /* create one player background image */
+  ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, Background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+  printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
+  strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, backSplashObject);
+
+  /* screen title */
+  int onePlayOptionsSize = SDL_INT_TEXT_SIZE*2;
+  SDL_Color onePlayOptionsColor = SDL_COLOR_SCREEN_TITLE;
+  ObjectHandle *onePlayOptions = ObjectHandle_Initialize(Text, Title, 75, SCREEN_HEIGHT*0, 0, 0);
+  strcpy(onePlayOptions->String, "ONE PLAYER OPTIONS");
+  strcpy(onePlayOptions->FontName, "Assets/fonts/Calibri.ttf");
+  onePlayOptions->Color = onePlayOptionsColor;
+  onePlayOptions->TextSize = onePlayOptionsSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, onePlayOptions);
+
+  /* color label */
+  int colorLabelSize = SDL_INT_TEXT_SIZE;
+  SDL_Color colorLabelColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *colorLabel = ObjectHandle_Initialize(Text, Label_Color, 50, SCREEN_HEIGHT/5, 0, 0);
+  strcpy(colorLabel->String, "Color: ");
+  strcpy(colorLabel->FontName, "Assets/fonts/Calibri.ttf");
+  colorLabel->Color = colorLabelColor;
+  colorLabel->TextSize = colorLabelSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, colorLabel);
+
+  /* black button */
+  int blackButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color blackButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *blackButton = ObjectHandle_Initialize(Button, Option_Black, 100, SCREEN_HEIGHT/5, 0, 0);
+  strcpy(blackButton->String, "Black");
+  strcpy(blackButton->FontName, "Assets/fonts/Calibri.ttf");
+  blackButton->Color = blackButtonColor;
+  blackButton->TextSize = blackButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, blackButton);
+
+  /* white button */
+  int whiteButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color whiteButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *whiteButton = ObjectHandle_Initialize(Button, Option_White, 100, SCREEN_HEIGHT/5 + 30, 0, 0);
+  strcpy(whiteButton->String, "White");
+  strcpy(whiteButton->FontName, "Assets/fonts/Calibri.ttf");
+  whiteButton->Color = whiteButtonColor;
+  whiteButton->TextSize = whiteButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, whiteButton);
+
+  /* difficulty label */
+  int difficultyLabelSize = SDL_INT_TEXT_SIZE;
+  SDL_Difficulty difficultyLabelColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *difficultyLabel = ObjectHandle_Initialize(Text, Label_Difficulty, 675, SCREEN_HEIGHT/5, 0, 0);
+  strcpy(colorLabel->String, "Difficulty: ");
+  strcpy(colorLabel->FontName, "Assets/fonts/Calibri.ttf");
+  colorLabel->Color = difficultyLabelColor;
+  colorLabel->TextSize = difficultyLabelSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, difficultyLabel);
+
+  /* Easy */
+  int easyButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color easyButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *easyButton = ObjectHandle_Initialize(Button, Option_EasyAI, 725, SCREEN_HEIGHT/5, 0, 0);
+  strcpy(easyButton->String, "Easy");
+  strcpy(easyButton->FontName, "Assets/fonts/Calibri.ttf");
+  easyButton->Color = easyButtonColor;
+  easyButton->TextSize = easyButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, easyButton);
+
+  /* Medium */
+  int mediumButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color mediumButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *mediumButton = ObjectHandle_Initialize(Button, Option_MediumAI, 725, SCREEN_HEIGHT/5 + 30, 0, 0);
+  strcpy(mediumButton->String, "Medium");
+  strcpy(mediumButton->FontName, "Assets/fonts/Calibri.ttf");
+  mediumButton->Color = mediumButtonColor;
+  mediumButton->TextSize = mediumButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, mediumButton);
+
+  /* Difficult  */
+  int difficultButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color difficultButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *difficultButton = ObjectHandle_Initialize(Button, Option_DifficultAI, 725, SCREEN_HEIGHT/5 + 60, 0, 0);
+  strcpy(difficultButton->String, "Difficult");
+  strcpy(difficultButton->FontName, "Assets/fonts/Calibri.ttf");
+  difficultButton->Color = difficultButtonColor;
+  difficultButton->TextSize = difficultButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, difficultButton);
+
+  /* Play  */
+  int playButtonSize = SDL_INT_TEXT_SIZE;
+  SDL_Color playButtonColor = SDL_COLOR_NORMAL_BUTTON;
+  ObjectHandle *playButton = ObjectHandle_Initialize(Button, Option_PlayButton, 900, 600, 0, 0);
+  strcpy(playButton->String, "Play");
+  strcpy(playButton->FontName, "Assets/fonts/Calibri.ttf");
+  playButton->Color = playButtonColor;
+  playButton->TextSize = playButtonSize;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playButton);
+
 }
 
 #else
@@ -245,100 +247,6 @@ int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode){
 
   SDL_RenderPresent(renderer);
 
-
-  int done = 0;
-
-  int buttonWidth = 0, buttonHeight = 0;
-  int x_pos = 0, y_pos = 0;
-
-  SDL_Event event;
-  SDL_QueryTexture(onePlayer_Button, NULL, NULL, &buttonWidth, NULL);
-  SDL_QueryTexture(onePlayer_Button, NULL, NULL, NULL, &buttonHeight);
-
-  while(!done){
-
-    while(SDL_PollEvent(&event)){
-     
-      switch(event.type){
-
-      case SDL_QUIT:
-	*screenMode = 100;
-	done = 1;
-	break;
-
-      case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE){
-	  *screenMode = 100;
-	  done = 1;
-	}
-	break;
-	
-      case SDL_MOUSEMOTION:
-	/* highlight when mouse over one player button */
-	if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth
-	   && event.motion.y > SCREEN_HEIGHT/2.5 && event.motion.y < SCREEN_HEIGHT/2.5 + buttonHeight - 20){
-	  onePlayer_Button = renderText(ONE_PLAYER, CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(onePlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5);
-	  SDL_RenderPresent(renderer);
-	   break; 
-	}
-	/* highlight when mouse over two player button */
-	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	   && event.motion.y > SCREEN_HEIGHT/2.5 + buttonHeight + 25 && event.motion.y < SCREEN_HEIGHT/2.5 + 2*buttonHeight - 10){
-	  twoPlayer_Button = renderText(TWO_PLAYERS, CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5 + buttonHeight);
-	  SDL_RenderPresent(renderer);	 
-	  break;
-	}
-	/* highlight when mouse over AI versus AI button */
-	else if(event.motion.x > SCREEN_WIDTH*0.6 && event.motion.x < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	   && event.motion.y > SCREEN_HEIGHT/2.5 + 2*buttonHeight + 35 && event.motion.y < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	  twoPlayer_Button = renderText("AI Versus AI", CALIBRI_FONT, greenText, 72, renderer);
-	  renderTexture2(twoPlayer_Button, renderer, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667);
-	  SDL_RenderPresent(renderer);	 
-	  break;
-	}
-	/* default view */
-	else{
-	  *screenMode = 0;
-	  done = 1;
-	  break;
-	}
-
-      case SDL_MOUSEBUTTONDOWN:
-      	if(event.button.button == SDL_BUTTON_LEFT){
-      	  x_pos = event.button.x;
-	  y_pos = event.button.y;
-
-	  /* one player options */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
-	     && y_pos > SCREEN_HEIGHT/2.5 && y_pos < SCREEN_HEIGHT/2.5 + buttonHeight){
-	    *screenMode = 1;
-	    done = 1;
-	    break;
-	  }
-
-	  /* two player options */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth + 40
-	     && y_pos > SCREEN_HEIGHT/2.5 + buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 2*buttonHeight){
-	    *screenMode = 2;
-	    done = 1;
-	    break;
-	  }
-
-	  /* AI versus AI */
-	  if(x_pos > SCREEN_WIDTH*0.6 && x_pos < SCREEN_WIDTH*0.6 + buttonWidth
-	     && y_pos > SCREEN_HEIGHT/2.5 + 2*buttonHeight && y_pos < SCREEN_HEIGHT/2.5 + 3*buttonHeight){
-	    *screenMode = 3;
-	    done = 1;
-	    break;
-	  }
-      	}
-	else{break;}
-      }      
-    }    
-  }
-  return *screenMode;
 }
 
 
@@ -425,97 +333,6 @@ int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMod
 
   SDL_RenderPresent(renderer);
 
-  int done = 0;
-  int x_pos = 0, y_pos = 0;
-
-  SDL_Event event;
-
-  while(!done){
-
-    while(SDL_PollEvent(&event)){
-
-      switch(event.type){
-
-      case SDL_QUIT:
-	*screenMode = 100;
-	done = 1;
-	break;
-      case SDL_KEYUP:
-	if(event.key.keysym.sym == SDLK_ESCAPE){
-	  *screenMode = 100;
-	  done = 1;
-	}
-	break;
- 
-      case SDL_MOUSEBUTTONDOWN:
-      	if(event.button.button == SDL_BUTTON_LEFT){
-      	  x_pos = event.button.x;
-	  y_pos = event.button.y;
-	  
-	  /* go back to main menu */
-	  if(x_pos > leftMargin && x_pos < leftMargin + stringWidth + 50
-	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
-	    *screenMode = 0;
-	    done = 1;
-	    break;
-	  }
-
-	  /* go to gameplay screen */
-	  if(x_pos > SCREEN_WIDTH - leftMargin - stringWidth && x_pos < SCREEN_WIDTH - 3*leftMargin
-	     && y_pos > SCREEN_HEIGHT/5 + 7*stringHeight && y_pos < SCREEN_HEIGHT/5 + 8*stringHeight){	   
-	    *screenMode = 3;
-	    done = 1;
-	    break;
-	  }
-
-	  /* color choices */    /* working: interface with data structure (color choice) here */
-	  /* black */
-	  /* if(x_pos > leftMargin + stringWidth - 50  && x_pos < leftMargin + 2*stringWidth - 130 */
-	  /*    && y_pos > SCREEN_HEIGHT/5 && y_pos < SCREEN_HEIGHT/5 + stringHeight){ */
-	   
-	  /*   done = 1; */
-	  /*   break; */
-	  /* } */
-
-	  /* white */
-	  /* if(x_pos > leftMargin + stringWidth - 50  && x_pos < leftMargin + 2*stringWidth - 115 */
-	  /*    && y_pos > SCREEN_HEIGHT/5 + stringHeight && y_pos < SCREEN_HEIGHT/5 + 2*stringHeight){ */
-	 
-	  /*   done = 1; */
-	  /*   break; */
-	  /* } */
-
-	  /* difficulty choices*/  /* working: interface with data structure (color choice) here */
-	  /* easy */
-	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth - 70 */
-	  /*    && y_pos > SCREEN_HEIGHT/5 && y_pos < SCREEN_HEIGHT/5 + stringHeight){ */
-	   
-	  /*   done = 1; */
-	  /*   break; */
-	  /* } */
-
-	  /* moderate */
-	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth + 40 */
-	  /*    && y_pos > SCREEN_HEIGHT/5 + stringHeight && y_pos < SCREEN_HEIGHT/5 + 2*stringHeight){ */
-	   
-	  /*   done = 1; */
-	  /*   break; */
-	  /* } */
-
-	  /* challenging */
-	  /* if(x_pos > rightMargin + stringWidth + 25 && x_pos < rightMargin + 2*stringWidth + 75 */
-	  /*    && y_pos > SCREEN_HEIGHT/5 + 2*stringHeight && y_pos < SCREEN_HEIGHT/5 + 3*stringHeight){ */
-	   
-	  /*   done = 1; */
-	  /*   break; */
-	  /* } */
-
-	}
-	else{break;}
-      }    
-    }
-  }
-  return *screenMode;
 }
 
 #endif
