@@ -345,7 +345,8 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	int screenMode;
 
 	drawMainMenu(MainHandle);
-	Event LocalEvent = GetSDLEvent(MainHandle);
+	Event LocalEvent = GetSDLEvent(MainHandle);	
+	ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 	ObjectHandle * Object;
 	PlayerColorEnum PlayerColorSelected;
 	AIDifficultyLevel AISelected;
@@ -455,7 +456,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 }
 
 /*for displaying*/
-void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard);
+void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
 {	
 	/*int XMargin = 225, YMargin = 50;
 	

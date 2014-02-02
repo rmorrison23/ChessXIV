@@ -56,3 +56,28 @@ void ObjectHandleList_ShallowFree(ObjectHandleList * List){
 	}
 
 }
+
+void ObjectHandleList_DeepFree(ObjectHandleList * List){
+	ObjectHandleNode * CurrNode, * NextNode;
+	CurrNode = List->FirstNode;
+	while (CurrNode){
+		NextNode = CurrNode->NextNode;
+		switch(CurrNode->Object->Type){
+			case Image:
+				free(CurrNode->Object->ImageFileName);
+				break;
+			case Text:
+			case Button:
+				free(CurrNode->Object->String);
+				free(CurrNode->Object->FontName);
+				break;
+		}
+		free(CurrNode->Object);
+		free(CurrNode);
+		CurrNode = NextNode;
+	}
+	
+	List->FirstNode = NULL;
+	List->LastNode = NULL;
+
+}

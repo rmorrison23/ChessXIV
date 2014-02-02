@@ -22,10 +22,15 @@ typedef struct {
 #endif
 } Event;
 
+
 #ifdef GUI_ENABLE
 
-#define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {255,165,0}
-#define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {165,165,255}
+#define SDL_COLOR_SCREEN_TITLE          (SDL_Color) {0xA8, 0xC6, 0xDB}
+#define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {0x29, 0xEF, 0x48}
+#define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {255, 255, 255}
+
+
+#define SDL_INT_TEXT_SIZE               50
 
 typedef enum {Color, Image, Text, Button, Piece, Coordinate, Outline} ObjectType;
 typedef enum {
@@ -33,9 +38,10 @@ typedef enum {
 	Option_Black, Option_White,						\
 	Option_EasyAI, Option_MediumAI, Option_DifficultAI,		\
 	Option_PlayButton, \
-	Title, Background \
+	Title, Background, \
 	BPawnPiece, BRookPiece, BKnightPiece, BBishopPiece, BQueenPiece, BKingPiece,	\
 	WPawnPiece, WRookPiece, WKnightPiece, WBishopPiece, WQueenPiece, WKingPiece,	\
+	Label_Color, Label_Difficulty	   \
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {

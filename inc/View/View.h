@@ -62,13 +62,13 @@ void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * MainBoard, C
 /*get event from user*/
 /*this function is supposed to overwrite the input pointer with new event data*/
 Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
-ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+
 
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 
 void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard *);
-ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+
 
 
 /*for transformation: ask user which type to transform to*/
