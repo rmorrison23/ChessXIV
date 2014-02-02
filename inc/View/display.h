@@ -29,11 +29,11 @@
 #include "View.h"
 
 #ifdef QUAN_VERSION
-Event drawMainMenu(ViewHandle * MainHandle);
+void drawMainMenu(ViewHandle * MainHandle);
 
 #else
 /* function to display the main menu to the screen */
-int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
+/* int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode); */
 #endif
 
 /* function to display the one player menu to the screen */

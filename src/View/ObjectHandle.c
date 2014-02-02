@@ -9,31 +9,36 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width,
 	Handle->Width = width;
 	Handle->Height = height;
 	
-	Handle->ImageFileName = NULL;
+	strcpy(Handle->ImageFileName,"");
 	/*text and color too set NULL*/
+	printf("inside: %p\n", Handle);
 	return Handle;
 	
 }
-
-ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
+#if 0
+void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
 	case Image:
 	  assert(Object->ImageFileName);
 	  Object->Texture =  loadTexture(Object->ImageFileName, MainHandle->CurrentWindow->WindowRenderer);
 	  if (Object->Width > 0 && Object->Height > 0){
-	    renderTexture(Handle->Texture, MainHandle->CurrentWindow->WindowRenderer, Handle->X, Handle->Y, Handle->Width, Handle->Height);
+	    renderTexture(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, Object->X, Object->Y, Object->Width, Object->Height);
+	   
 	  } else {
 	    
 	  }
 	  break;
 	case Text:
-	  Object->Texture = renderText(ObjectHandle->String, ObjectHandle->imageFileName, ObjectHandle->Color, ObjectHandle->TextSize, MainHandle->CurrentWindow->WindowRenderer);
+	  Object->Texture = renderText(Object->String, Object->ImageFileName, Object->Color, Object->TextSize, MainHandle->CurrentWindow->WindowRenderer);
+	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, Object->X, Object->Y);
 	  break;
 	case Color:
-	  Object->Texture = renderFilledBox(ObjectHandle->hexR, ObjectHandle->hexG, ObjectHandle->hexB, ObjectHandle->hexA, ObjectHandle->X, ObjectHandle->Y, ObjectHandle->Width, ObjectHandle->Height, MainHandle->CurrentWindow->WindowRenderer);
+	  Object->Texture = renderFilledBox(Object->hexR, Object->hexG, Object->hexB, Object->hexA, Object->X, Object->Y, Object->Width, Object->Height, MainHandle->CurrentWindow->WindowRenderer);
+	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, 0, 0);
 	  break;
 	case Outline:
-	  Object->Texture = renderEmptyBox(ObjectHandle->hexR, ObjectHandle->hexG, ObjectHandle->hexB, ObjectHandle->hexA, ObjectHandle->X, ObjectHandle->Y, ObjectHandle->Width, ObjectHandle->Height, MainHandle->CurrentWindow->WindowRenderer, X, Y, Width, Height);
+	  Object->Texture = renderEmptyBox(Object->hexR, Object->hexG, Object->hexB, Object->hexA, Object->X, Object->Y, Object->Width, Object->Height, MainHandle->CurrentWindow->WindowRenderer);
+	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, 0, 0);
 	  break;
 	}
 }
@@ -43,3 +48,10 @@ ObjectHandle * ObjectHandle_Free(ObjectHandle * object){
 	return NULL;
 }
 
+void windowRender(ViewHandle * MainHandle){
+
+  SDL_Renderer *renderer = MainHandle->CurrentWindow->WindowRenderer;
+
+
+}
+#endif

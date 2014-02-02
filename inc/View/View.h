@@ -2,7 +2,7 @@
 #define VIEW_H
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <string.h>
 #include "Model.h"
 
 /*****************************************************************
@@ -31,8 +31,8 @@ typedef struct {
 	#include <SDL2_ttf/SDL_ttf.h>
 #endif
 
-typedef enum {Color, Image, Text} ObjectType;
-typedef enum {OnePlayerButton, TwoPlayerButton, AIvsAIButton} ObjectTag;
+typedef enum {Color, Image, Text, Outline} ObjectType;
+typedef enum {Title, OnePlayerButton, TwoPlayerButton, AIvsAIButton} ObjectTag;
 
 typedef struct {
 	/*id info*/
@@ -47,7 +47,7 @@ typedef struct {
 	SDL_Texture * Texture;
 	
 	/*information only apply to certain types*/
-	/*Image*/char * ImageFileName;
+	/*Image*/char  ImageFileName[255];
 	
 	/*Text*/int TextSize; char * FontName; char * String;
 	

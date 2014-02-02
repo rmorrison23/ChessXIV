@@ -4,6 +4,6 @@
 #include "View.h"
 
 ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width, int height);
-ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Handle);
+void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Handle);
 ObjectHandle * ObjectHandle_Free(ObjectHandle * Handle);
 #endif

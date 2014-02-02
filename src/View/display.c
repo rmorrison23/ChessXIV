@@ -19,7 +19,7 @@
 #ifdef QUAN_VERSION
 
 /* QUAN_VERSION: function to display the main menu to the screen */
-Event drawMainMenu(ViewHandle * MainHandle){
+void drawMainMenu(ViewHandle * MainHandle){
 	
 	SDL_Window * window = MainHandle->CurrentWindow->Window;
 	SDL_Renderer * renderer = MainHandle->CurrentWindow->WindowRenderer;
@@ -30,24 +30,52 @@ Event drawMainMenu(ViewHandle * MainHandle){
 	SDL_SetWindowTitle(window, "quan's title");
 	/* create main menu background image */
 	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	backSplashObject->ImageFileName = "Assets/Menu_Backgrounds/Background_1600_900.jpg";
-	ObjectHandle_Render(MainHandle, backSplashObject);
+	printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
+	strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");
 	ObjectHandleList_AppendObject(MainHandle, backSplashObject);
   
 	/* create title */
+	int titleSize = 200;
 	SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
-	ObjectHandle * title = ObjectHandle_Initialize(Text, 50, 100, 0, 0);
-	title->FontName = CALIBRI_FONT;
+	ObjectHandle * title = ObjectHandle_Initialize(Text, (SCREEN_WIDTH - TITLE_WIDTH)/2, 0, 0, 0);
+	strcpy(title->FontName, "Assets/fonts/Calibri.ttf");
 	title->Color 	= titleColor;
-	ObjectHandle_Render(MainHandle, title);
+	title->TextSize = titleSize;
+	title->Tag = Title;
 	ObjectHandleList_AppendObject(MainHandle, title);
  
+	/* one player button */
+	int onePlayerSize = 72;
+	SDL_Color onePlayerColor = {255, 255, 255};
+	ObjectHandle *onePlayerButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5, 0, 0);
+	strcpy(onePlayerButton->FontName, "Assets/fonts/Calibri.ttf");
+	onePlayerButton->Color = onePlayerColor;
+	onePlayerButton->TextSize = onePlayerSize;
+	onePlayerButton->Tag = OnePlayerButton;
+	ObjectHandleList_AppendObject(MainHandle, onePlayerButton);
+
+	/* two player button */
+	int twoPlayerSize = 72;
+	SDL_Color twoPlayerColor = {255, 255, 255};
+	ObjectHandle *twoPlayerButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90), 0, 0);
+	strcpy(twoPlayerButton->FontName, "Assets/fonts/Calibri.ttf");
+	twoPlayerButton->Color = twoPlayerColor;
+	twoPlayerButton->TextSize = twoPlayerSize;
+	twoPlayerButton->Tag = TwoPlayerButton;
+	ObjectHandleList_AppendObject(MainHandle, twoPlayerButton);	
+
+	/* AI versus AI button */
+	int AIversusAISize = 72;
+	SDL_Color AIversusAIColor = {255, 255, 255};
+	ObjectHandle *AIversusAIButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667, 0, 0);
+	strcpy(AIversusAIButton->FontName, "Assets/fonts/Calibri.ttf");
+	AIversusAIButton->Color = AIversusAIColor;
+	AIversusAIButton->TextSize = AIversusAISize;
+	AIversusAIButton->Tag = AIvsAIButton;
+	ObjectHandleList_AppendObject(MainHandle, AIversusAIButton);
   
 	printf("Successful\n");
 
-	Event ReturnEvent = {.Type = SelectCoordinate, .Coordinate = NULL, .Player = NULL};
-
-	return ReturnEvent;
 #if 0
   /* create title */
   SDL_Color titleColor = {0xA8, 0xC6, 0xDB};

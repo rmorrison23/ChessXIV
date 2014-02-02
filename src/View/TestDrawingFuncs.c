@@ -10,10 +10,13 @@
 /******************************************************************************/
 
 #include <stdio.h>
+#include "View.h"
 #include "render.h"
 #include "display.h"
 #include "constants.h"
 #include "sdlUtilities.h"
+#include "ObjectHandle.h"
+#include "ObjectHandleList.h"
 
 
 int main(int argc, char *argv[]){
@@ -37,7 +40,7 @@ int main(int argc, char *argv[]){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
     /* ************************************testing************************************************ */
-    
+#if 0    
     /* IMAGE: This one works */
     SDL_Texture * backSplash = loadTexture("Assets/Menu_Backgrounds/Background_1600_900.jpg", renderer);
     renderTexture(backSplash, renderer, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -58,6 +61,14 @@ int main(int argc, char *argv[]){
     SDL_Texture *testOutlineBox = renderEmptyBox(255, 255, 255, 255, 150, 200, 75, 75, renderer);
     renderTexture2(testOutlineBox, renderer, NULL, NULL);
     SDL_RenderPresent(renderer);
+#endif
+
+   	ViewHandle * ReturnViewHandle = malloc(sizeof(ViewHandle));
+	ReturnViewHandle->CurrentWindow = malloc(sizeof(WindowHandle));
+	ReturnViewHandle->CurrentWindow->Window = window;
+	ReturnViewHandle->CurrentWindow->WindowRenderer = renderer;
+	ReturnViewHandle->CurrentWindow->ObjectList = ObjectHandleList_Initialize();
+	drawMainMenu(ReturnViewHandle);
 
     /* **********************************OLD STUFF****************************************************** */
     /* int zeroCase = 0; */
