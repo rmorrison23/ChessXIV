@@ -395,7 +395,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			  }
 			  /* check the other side */
 			  if(piece->Coordinate->File > 0) {
-			    if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece != NULL) {
+			    if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece != NULL) {
 			      if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece->Type == Pawn) {
 				/* check if last move was pawn skipping spaces */
 				if(moveList->LastNode->Move->StartPosition->Rank == 6) {
