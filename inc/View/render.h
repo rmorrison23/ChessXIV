@@ -34,17 +34,17 @@ void renderTexture(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y, i
 void renderTexture2(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y);
 
 SDL_Texture *renderText(char *String, char *imageFileName, SDL_Color Color, int TextSize, 
-			MainHandle->CurrentWindow->WindowRenderer);
+			SDL_Renderer *renderer);
 
 SDL_Texture *renderFilledBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
-			     MainHandle->CurrentWindow->WindowRenderer);
+			     SDL_Renderer *renderer);
 
 SDL_Texture *renderEmptyBox(int hexR, int hexG, int hexB, int hexA, int X, int Y, int Width, int Height, 
-			    MainHandle->CurrentWindow->WindowRenderer);
+			    SDL_Renderer *renderer);
 
 /* old function to render text */
 /* SDL_Texture *renderText(const char *message, const char *fontFile, SDL_Color color, */
-/* 			int fontSize, SDL_Renderer *renderer);
+/* 			int fontSize, SDL_Renderer *renderer);*/
 
 
 
