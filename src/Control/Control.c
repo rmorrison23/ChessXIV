@@ -20,12 +20,12 @@ ControlHandle * Control_Initialize(void){
 	
 	if (EventReturn->Type == Exit) {
 		Control_CleanUp(ReturnHandle);
-		exit(0);
+		exit(1);
 	}
 	/*intialize move list*/
 	ReturnHandle->MainMoveList = ChessMoveList_Initialize();
 	
-	/*initialize the view*/
+	
 	
 	
 	return ReturnHandle;

@@ -34,6 +34,11 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, ObjectTagEnum TagIn, int
 
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
+	case Piece:
+			/*switch(*/
+				
+				
+				
 	case Image:
 	  assert(Object->ImageFileName);
 	  Object->Texture =  loadTexture(Object->ImageFileName, MainHandle->CurrentWindow->WindowRenderer);

@@ -5,7 +5,8 @@
 int main(void){
 	ViewHandle * MainViewHandle = View_Initialize();
 	ChessBoard * MainChessBoard = ChessBoard_Initialize();
-	SetOptions(MainViewHandle, MainChessBoard);  
+	Event * LocalEvent = SetOptions(MainViewHandle, MainChessBoard);  
+	
 	MainViewHandle = View_CleanUp(MainViewHandle);
 	
 	  
