@@ -15,7 +15,7 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width,
 	return Handle;
 	
 }
-#if 0
+#if 1
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
 	case Image:
@@ -29,7 +29,7 @@ void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	  }
 	  break;
 	case Text:
-	  Object->Texture = renderText(Object->String, Object->ImageFileName, Object->Color, Object->TextSize, MainHandle->CurrentWindow->WindowRenderer);
+	  Object->Texture = renderText(Object->String, Object->FontName, Object->Color, Object->TextSize, MainHandle->CurrentWindow->WindowRenderer);
 	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, Object->X, Object->Y);
 	  break;
 	case Color:

@@ -1,7 +1,7 @@
 CX = gcc
-SDL = -framework SDL2 -framework SDL2_ttf -framework SDL2_image
-CFLAGS = -Wall -c -I../../inc/View -I../../inc/Model -I../../inc/Control -DGUI_ENABLE -g -DQUAN_VERSION
-LFLAGS = $(SDL)
+SDL = $(shell pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf)#-framework SDL2 -framework SDL2_ttf -framework SDL2_image
+CFLAGS =  -c -I../../inc/View -I../../inc/Model -I../../inc/Control -DGUI_ENABLE -g -DQUAN_VERSION -DLINUX_OS $(shell pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf)
+LFLAGS = $(SDL) 
 EXE = Chess
 
 
@@ -32,7 +32,7 @@ TestDrawingFuncs.o: TestDrawingFuncs.c #constants.h render.h display.h sdlUtilit
 	$(CX) $(CFLAGS) TestDrawingFuncs.c -o TestDrawingFuncs.o
 
 $(EXE): TestDrawingFuncs.o render.o display.o sdlUtilities.o ObjectHandleList.o ObjectHandle.o
-	$(CX) $(LFLAGS) TestDrawingFuncs.o render.o display.o sdlUtilities.o ObjectHandleList.o ObjectHandle.o -o $(EXE)
+	$(CX) TestDrawingFuncs.o render.o display.o sdlUtilities.o ObjectHandleList.o ObjectHandle.o  $(LFLAGS) -o $(EXE)
 
 clean:
 	rm *.o && rm $(EXE)

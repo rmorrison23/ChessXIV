@@ -13,6 +13,24 @@ ObjectHandleList * ObjectHandleList_AppendObject(ObjectHandleList * List, Object
 	assert(NewNode);
 	NewNode->Object = Object;
 	NewNode->NextNode = NULL;
+	/*NewNode->List = List;*/
+	if (List->FirstNode){		
+		List->LastNode->NextNode = NewNode;
+		NewNode->PrevNode = List->LastNode;
+		List->LastNode = NewNode;
+	} else {
+		/*empty list*/
+		List->FirstNode = NewNode;
+		List->LastNode = NewNode;
+		NewNode->PrevNode = NULL;
+		
+	}
+	return List;
+#if 0
+	ObjectHandleNode * NewNode = malloc(sizeof(ObjectHandleNode));
+	assert(NewNode);
+	NewNode->Object = Object;
+	NewNode->NextNode = NULL;
 	if (!List->FirstNode){
 		List->FirstNode = NewNode;
 		List->LastNode = NewNode;
@@ -23,4 +41,5 @@ ObjectHandleList * ObjectHandleList_AppendObject(ObjectHandleList * List, Object
 		List->LastNode = NewNode;
 	}
 	return List;
+#endif
 }
