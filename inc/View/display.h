@@ -32,14 +32,16 @@
 
 #ifdef QUAN_VERSION
 void drawMainMenu(ViewHandle * MainHandle);
-
+void drawOnePlayerMenu(ViewHandle * MainHandle);
 #else
 /* function to display the main menu to the screen */
 /* int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode); */
-#endif
 
 /* function to display the one player menu to the screen */
 int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
+#endif
+
+
 
 /* function to display the one player menu to the screen */
 int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);

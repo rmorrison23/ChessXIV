@@ -32,50 +32,64 @@ void drawMainMenu(ViewHandle * MainHandle){
 	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
 	strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");
+
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, backSplashObject);
-  
+
+
 	/* create title */
 	int titleSize = 200;
 	SDL_Color titleColor = {0xA8, 0xC6, 0xDB};
 	ObjectHandle * title = ObjectHandle_Initialize(Text, (SCREEN_WIDTH - TITLE_WIDTH)/2, 0, 0, 0);
+
 	strcpy(title->String, "C h e s s  X I V");
+
 	strcpy(title->FontName, "Assets/fonts/Calibri.ttf");
 	title->Color 	= titleColor;
 	title->TextSize = titleSize;
 	title->Tag = Title;
+
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, title);
  
 	/* one player button */
 	int onePlayerSize = 72;
 	SDL_Color onePlayerColor = {255, 255, 255};
 	ObjectHandle *onePlayerButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, SCREEN_HEIGHT/2.5, 0, 0);
+
 	strcpy(onePlayerButton->String, "One Player");
+
+
 	strcpy(onePlayerButton->FontName, "Assets/fonts/Calibri.ttf");
 	onePlayerButton->Color = onePlayerColor;
 	onePlayerButton->TextSize = onePlayerSize;
 	onePlayerButton->Tag = OnePlayerButton;
+
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, onePlayerButton);
 
 	/* two player button */
 	int twoPlayerSize = 72;
 	SDL_Color twoPlayerColor = {255, 255, 255};
 	ObjectHandle *twoPlayerButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, (SCREEN_HEIGHT*0.666667 - 90), 0, 0);
+
 	strcpy(twoPlayerButton->String, "Two Players");
+
 	strcpy(twoPlayerButton->FontName, "Assets/fonts/Calibri.ttf");
 	twoPlayerButton->Color = twoPlayerColor;
 	twoPlayerButton->TextSize = twoPlayerSize;
 	twoPlayerButton->Tag = TwoPlayerButton;
+
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, twoPlayerButton);	
 
 	/* AI versus AI button */
 	int AIversusAISize = 72;
 	SDL_Color AIversusAIColor = {255, 255, 255};
 	ObjectHandle *AIversusAIButton = ObjectHandle_Initialize(Text, SCREEN_WIDTH*0.6, SCREEN_HEIGHT*0.666667, 0, 0);
+
 	strcpy(AIversusAIButton->String, "AI and AI");
 	strcpy(AIversusAIButton->FontName, "Assets/fonts/Calibri.ttf");
 	AIversusAIButton->Color = AIversusAIColor;
 	AIversusAIButton->TextSize = AIversusAISize;
 	AIversusAIButton->Tag = AIvsAIButton;
+
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, AIversusAIButton);
   
 	printf("Successful\n");

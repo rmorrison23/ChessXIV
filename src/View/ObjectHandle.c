@@ -16,7 +16,10 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width,
 	
 }
 
+
 #if 1
+
+
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
 	case Image:
@@ -30,6 +33,7 @@ void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	  }
 	  break;
 	case Text:
+
 	  Object->Texture = renderText(Object->String, Object->FontName, Object->Color, Object->TextSize, MainHandle->CurrentWindow->WindowRenderer);
 	  renderTexture2(Object->Texture, MainHandle->CurrentWindow->WindowRenderer, Object->X, Object->Y);
 	  break;
@@ -60,7 +64,9 @@ void windowRender(ViewHandle * MainHandle){
 Event GetSDLEvent(ViewHandle * MainHandle){
 	SDL_Event event;
 	Event ReturnEvent; ReturnEvent.Type = NoEvent;
-	Object * ObjectSelected;
+	ObjectHandleList * ObjectSelectedList;
+	ObjectHandleNode * Node;
+	ObjectHandle * ObjectSelected;
 	while(SDL_PollEvent(&event)){
 
 		switch(event.type){
@@ -77,24 +83,24 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 
 			case SDL_MOUSEBUTTONDOWN:
 				/*find out where it is clicked then*/
-				ObjectHandleList * ObjectSelectedList = GetObjectByCoordinate(MainHandle, event.motion.x, event.motion.y);
-				ObjectHandleNode * Node  = ObjectSelectedList->FirstNode;
+				ObjectSelectedList = GetObjectByCoordinate(MainHandle, event.motion.x, event.motion.y);
+				Node  = ObjectSelectedList->FirstNode;
 				while (Node){
 					switch (ObjectSelected->Tag){
-						case WhiteColorButton:
-							ReturnEvent.Type = Option_White;
+						case Option_White:
+							ReturnEvent.Type = Option_White_Clicked;
 							break;
-						case BlackColorButton:
-							ReturnEvent.Type = Option_Black;
+						case Option_Black:
+							ReturnEvent.Type = Option_Black_Clicked;
 							break;
-						case EasyAIButton:
-							ReturnEvent.Type = Option_EasyAI;	
+						case Option_EasyAI:
+							ReturnEvent.Type = Option_EasyAI_Clicked;	
 							break;
-						case MediumAIButton:
-							ReturnEvent.Type = Option_MediumAI;
+						case Option_MediumAI:
+							ReturnEvent.Type = Option_MediumAI_Clicked;
 							break;
-						case DifficultAIButton:
-							ReturnEvent.Type = Option_DifficultAI;
+						case Option_DifficultAI:
+							ReturnEvent.Type = Option_DifficultAI_Clicked;
 							break;
 							
 					}
@@ -111,8 +117,9 @@ Event GetSDLEvent(ViewHandle * MainHandle){
  }
 
 ObjectHandleList * GetObjectByCoordinate(ViewHandle * MainHandle, int x, int y){
-	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList;
+	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList->FirstNode;
 	ObjectHandleList * ReturnList = ObjectHandleList_Initialize();
+	ObjectHandle * CurrentObject;
 	while (CurrNode){
 		ObjectHandle * CurrObject;
 		if ((CurrentObject->X) < x && (CurrentObject->X + CurrentObject->Width > x) && (CurrentObject->Y < y) && (CurrentObject->Y + CurrentObject->Height > y))
@@ -122,9 +129,19 @@ ObjectHandleList * GetObjectByCoordinate(ViewHandle * MainHandle, int x, int y){
 }
 
 ObjectHandle * GetObjectByTag(ViewHandle * MainHandle, ObjectTagEnum Tag){
-	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList;
+	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList->FirstNode;
 	while (CurrNode){
 		if (CurrNode->Object->Tag == Tag) return CurrNode->Object;		
 		CurrNode = CurrNode->NextNode;
 	}
 }
+
+void windowRender(ViewHandle * MainHandle){
+
+  SDL_Renderer *renderer = MainHandle->CurrentWindow->WindowRenderer;
+
+
+}
+#endif
+
+

@@ -12,4 +12,5 @@ ObjectHandleList * GetObjectByCoordinate(ViewHandle * MainHandle, int x, int y);
 
 Event GetSDLEvent(ViewHandle *);
 
+
 #endif
