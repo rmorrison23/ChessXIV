@@ -15,6 +15,8 @@ ChessBoard * ChessBoard_Initialize(void){
 	ChessBoardToReturn->BlackPlayer->PlayerColor = Black;
 	ChessBoardToReturn->WhitePlayer->OtherPlayer = ChessBoardToReturn->BlackPlayer;
 	ChessBoardToReturn->BlackPlayer->OtherPlayer = ChessBoardToReturn->WhitePlayer;
+	ChessBoardToReturn->WhitePlayer->ElapsedTime = 0;
+	ChessBoardToReturn->BlackPlayer->ElapsedTime = 0;
 	
 	/*malloc all coordinate on the board*/
 	int i,j;

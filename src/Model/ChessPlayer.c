@@ -10,6 +10,17 @@ ChessPiece * ChessPlayer_GetChessPiece(ChessPlayer * Player, ChessPieceTypeEnum 
 	return 0;
 } 
 
+void ChessPlayer_UpdateTime(ChessPlayer * Player) {
+  time_t current;
+  
+  time(&current);
+  if(Player->OtherPlayer->StartTime != NULL) {
+    Player->OtherPlayer->ElapsedTime += difftime(current, Player->OtherPlayer->StartTime);
+}
+  time(&(Player->StartTime)); 
+  
+}
+
 ChessMoveList * ChessPlayer_GetAllLegalMoves(ChessBoard * board, ChessPlayer * player, ChessMoveList * history){
 	
 	/*ChessCoordinateList * coordlist = Model_GetAllLegalCoordinate(board, player, player);	

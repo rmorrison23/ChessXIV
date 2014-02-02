@@ -41,6 +41,11 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
+	  ChessPlayer_UpdateTime(CurrentPlayer);
+	  if (CurrentPlayer->OtherPlayer->PlayerColor == 1)
+	  printf("Elapsed time of black player is %lf seconds.\n", CurrentPlayer->OtherPlayer->ElapsedTime);
+	  else if (CurrentPlayer->OtherPlayer->PlayerColor == 0)
+	  printf("Elapsed time of white player is %lf seconds.\n", CurrentPlayer->OtherPlayer->ElapsedTime);
 	 	 UndoMoveFlag = False;
 	 
 		if (CurrentPlayer->PlayerControl == Human){
