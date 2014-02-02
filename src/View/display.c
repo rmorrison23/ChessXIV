@@ -116,7 +116,8 @@ void drawMainMenu(ViewHandle * MainHandle){
 
 void drawOnePlayerMenu(ViewHandle * MainHandle){
 
-	SDL_Window * window = MainHandle->CurrentWindow->Window;
+  SDL_Window * window = MainHandle->CurrentWindow->Window;
+
   /* rename window title */
   SDL_SetWindowTitle(window, "One Player Options");
 
@@ -149,7 +150,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* black button */
   int blackButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color blackButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *blackButton = ObjectHandle_Initialize(Button, Option_Black, 100, SCREEN_HEIGHT/5, 0, 0);
+  ObjectHandle *blackButton = ObjectHandle_Initialize(Button, Option_Black, 200, SCREEN_HEIGHT/5, 0, 0);
   strcpy(blackButton->String, "Black");
   strcpy(blackButton->FontName, "Assets/fonts/Calibri.ttf");
   blackButton->Color = blackButtonColor;
@@ -159,7 +160,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* white button */
   int whiteButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color whiteButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *whiteButton = ObjectHandle_Initialize(Button, Option_White, 100, SCREEN_HEIGHT/5 + 30, 0, 0);
+  ObjectHandle *whiteButton = ObjectHandle_Initialize(Button, Option_White, 200, SCREEN_HEIGHT/5 + 75, 0, 0);
   strcpy(whiteButton->String, "White");
   strcpy(whiteButton->FontName, "Assets/fonts/Calibri.ttf");
   whiteButton->Color = whiteButtonColor;
@@ -179,7 +180,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Easy */
   int easyButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color easyButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *easyButton = ObjectHandle_Initialize(Button, Option_EasyAI, 725, SCREEN_HEIGHT/5, 0, 0);
+  ObjectHandle *easyButton = ObjectHandle_Initialize(Button, Option_EasyAI, 900, SCREEN_HEIGHT/5, 0, 0);
   strcpy(easyButton->String, "Easy");
   strcpy(easyButton->FontName, "Assets/fonts/Calibri.ttf");
   easyButton->Color = easyButtonColor;
@@ -189,7 +190,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Medium */
   int mediumButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color mediumButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *mediumButton = ObjectHandle_Initialize(Button, Option_MediumAI, 725, SCREEN_HEIGHT/5 + 30, 0, 0);
+  ObjectHandle *mediumButton = ObjectHandle_Initialize(Button, Option_MediumAI, 900, SCREEN_HEIGHT/5 + 75, 0, 0);
   strcpy(mediumButton->String, "Medium");
   strcpy(mediumButton->FontName, "Assets/fonts/Calibri.ttf");
   mediumButton->Color = mediumButtonColor;
@@ -199,7 +200,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Difficult  */
   int difficultButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color difficultButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *difficultButton = ObjectHandle_Initialize(Button, Option_DifficultAI, 725, SCREEN_HEIGHT/5 + 60, 0, 0);
+  ObjectHandle *difficultButton = ObjectHandle_Initialize(Button, Option_DifficultAI, 900, SCREEN_HEIGHT/5 + 150, 0, 0);
   strcpy(difficultButton->String, "Difficult");
   strcpy(difficultButton->FontName, "Assets/fonts/Calibri.ttf");
   difficultButton->Color = difficultButtonColor;
@@ -209,13 +210,12 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Play  */
   int playButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color playButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *playButton = ObjectHandle_Initialize(Button, Option_PlayButton, 900, 600, 0, 0);
+  ObjectHandle *playButton = ObjectHandle_Initialize(Button, Option_PlayButton, 900, 550, 0, 0);
   strcpy(playButton->String, "Play");
   strcpy(playButton->FontName, "Assets/fonts/Calibri.ttf");
   playButton->Color = playButtonColor;
   playButton->TextSize = playButtonSize;  
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playButton);
-
   
   windowRender(MainHandle);
 }
