@@ -10,6 +10,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include "View.h"
+
 static const int SCREEN_WIDTH  = 1200;
 static const int SCREEN_HEIGHT = 675;
 static const int BOARD_WIDTH   = 600;

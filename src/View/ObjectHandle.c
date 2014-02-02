@@ -15,6 +15,7 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width,
 	return Handle;
 	
 }
+
 #if 1
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){

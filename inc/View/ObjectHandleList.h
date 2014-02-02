@@ -3,5 +3,5 @@
 #include "View.h"
 
 ObjectHandleList * ObjectHandleList_Initialize(void);
-
+ObjectHandleList * ObjectHandleList_AppendObject(ObjectHandleList * List, ObjectHandle * Object);
 #endif

@@ -2,7 +2,7 @@
 #define SDLUTILITIES_H
 
 #include <stdio.h>
-#ifdef LINUX_OS
+/*#ifdef LINUX_OS
 	#include "SDL.h"
 	#include "SDL_image.h"
 	#include "SDL_ttf.h"
@@ -10,8 +10,8 @@
 	#include <SDL2/SDL.h>
 	#include <SDL2/SDL_image.h>
 	#include <SDL2_ttf/SDL_ttf.h>
-#endif
-
+#endif*/
+#include "View.h"
 #include "render.h"
 #include "display.h"
 #include "constants.h"

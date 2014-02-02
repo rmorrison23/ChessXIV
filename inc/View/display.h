@@ -24,9 +24,11 @@
 	#include <SDL2/SDL_image.h>
 	#include <SDL2_ttf/SDL_ttf.h>
 #endif
+
+#include "View.h"
 #include "render.h"
 #include "constants.h"
-#include "View.h"
+
 
 #ifdef QUAN_VERSION
 void drawMainMenu(ViewHandle * MainHandle);

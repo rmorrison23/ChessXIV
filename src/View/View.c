@@ -332,8 +332,7 @@ ViewHandle * View_Initialize(void){
 }
 
 /*clean up*/
-ViewHandle * View_CleanUp(ViewHandle *MainHandle){
-	SDL_RenderPresent(MainHandle->CurrentWindow->WindowRenderer);   
+ViewHandle * View_CleanUp(ViewHandle *MainHandle){	
 	SDL_DestroyRenderer(MainHandle->CurrentWindow->WindowRenderer);
 	SDL_DestroyWindow(MainHandle->CurrentWindow->Window);
 	
@@ -350,73 +349,74 @@ ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	drawMainMenu(MainHandle);
 	Event LocalEvent = GetSDLEvent(MainHandle);
 	ObjectHandle * Object;
-	
+	PlayerColorEnum PlayerColorSelected;
+	AIDifficultyLevel AISelected;
 	switch (LocalEvent.Type){
-		case Option_OnePlayer:
+		case Option_OnePlayer_Clicked:
 			drawOnePlayerMenu(MainHandle);
 			Boolean AISelectedFlag = False, PlayerSelectedFlag = False, OptionsDoneFlag = False;
 			while (!AISelectedFlag || !PlayerSelectedFlag || !OptionsDoneFlag){			
 				LocalEvent = GetSDLEvent(MainHandle);
 				switch((EventTypeEnum)LocalEvent.Type){
-					case Option_Black:
-						Object = GetObjectByTag(MainHandle, BlackColorButton);
+					case Option_Black_Clicked:
+						Object = GetObjectByTag(MainHandle, Option_Black);
 						Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
-						Object = GetObjectByTag(MainHandle, WhiteColorButton);
+						Object = GetObjectByTag(MainHandle, Option_White);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
 						PlayerSelectedFlag = True;
 						PlayerColorSelected = Black;
 						break;
 						
-					case Option_White:
-						Object = GetObjectByTag(MainHandle, WhiteColorButton);
+					case Option_White_Clicked:
+						Object = GetObjectByTag(MainHandle, Option_White);
 						Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
-						Object = GetObjectByTag(MainHandle, BlackColorButton);
+						Object = GetObjectByTag(MainHandle, Option_Black);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
 						PlayerSelectedFlag = True;
 						PlayerColorSelected = White;
 						break;
 						
-					case Option_EasyAI:
-						Object = GetObjectByTag(MainHandle, EasyAIButton);
+					case Option_EasyAI_Clicked:
+						Object = GetObjectByTag(MainHandle, Option_EasyAI);
 						Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
-						Object = GetObjectByTag(MainHandle, MediumAIButton);
+						Object = GetObjectByTag(MainHandle, Option_MediumAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
-						Object = GetObjectByTag(MainHandle, DifficultAIButton);
+						Object = GetObjectByTag(MainHandle, Option_DifficultAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
 						AISelectedFlag = True;
 						AISelected = Easy;
 						break;
 						
-					case Option_MediumAI:
-						Object = GetObjectByTag(MainHandle, MediumAIButton);
+					case Option_MediumAI_Clicked:
+						Object = GetObjectByTag(MainHandle, Option_MediumAI);
 						Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
-						Object = GetObjectByTag(MainHandle, EasyAIButton);
+						Object = GetObjectByTag(MainHandle, Option_EasyAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
-						Object = GetObjectByTag(MainHandle, DifficultAIButton);
+						Object = GetObjectByTag(MainHandle, Option_DifficultAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
 						AISelectedFlag = True;
 						AISelected = Medium;
 						break;
 						
-					case Option_DifficultAI:
-						Object = GetObjectByTag(MainHandle, DifficultAIButton);
+					case Option_DifficultAI_Clicked:
+						Object = GetObjectByTag(MainHandle, Option_DifficultAI);
 						Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
-						Object = GetObjectByTag(MainHandle, EasyAIButton);
+						Object = GetObjectByTag(MainHandle,Option_MediumAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
-						Object = GetObjectByTag(MainHandle, MediumAIButton);
+						Object = GetObjectByTag(MainHandle, Option_EasyAI);
 						Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*default color*/
 						AISelectedFlag = True;
 						AISelected = Difficult;
 						break;
 						
-					case Option_PlayGame:
+					case Option_PlayButton_Clicked:
 						OptionsDoneFlag = True;
 						break;
 									
 				}
 				
 				if (AISelectedFlag && PlayerSelectedFlag){
-					Object = GetObject(MainHandle, PlayButton);
+					Object = GetObjectByTag(MainHandle, Option_PlayButton);
 					Object->Color = SDL_COLOR_NORMAL_BUTTON;		/*selected color*/
 				}
 				
@@ -436,11 +436,11 @@ ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 			
 			break;
 			
-		case Option_TwoPlayer:
+		case Option_TwoPlayer_Clicked:
 			MainBoard->WhitePlayer->PlayerControl = Human;
 			MainBoard->BlackPlayer->PlayerControl = Human;
 			break;
-		case Option_AIvsAI:
+		case Option_AIvsAI_Clicked:
 			MainBoard->WhitePlayer->PlayerControl = AI;
 			MainBoard->WhitePlayer->AIDifficulty = Difficult;			
 			MainBoard->BlackPlayer->PlayerControl = AI;

@@ -14,7 +14,9 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#ifdef LINUX_OS
+#include "View.h"
+
+/*#ifdef LINUX_OS
 	#include "SDL.h"
 	#include "SDL_image.h"
 	#include "SDL_ttf.h"
@@ -22,7 +24,7 @@
 	#include <SDL2/SDL.h>
 	#include <SDL2/SDL_image.h>
 	#include <SDL2_ttf/SDL_ttf.h>
-#endif
+#endif*/
 
 /* function to load a texture */
 SDL_Texture *loadTexture(const char *fileName, SDL_Renderer *renderer);
