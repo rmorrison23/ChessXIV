@@ -47,14 +47,14 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	  else if (CurrentPlayer->OtherPlayer->PlayerColor == 0)
 	  printf("Elapsed time of white player is %lf seconds.\n", CurrentPlayer->OtherPlayer->ElapsedTime);
 	 	 UndoMoveFlag = False;
-	 
+	 	DisplayChessBoard(MainChessBoard);
 		if (CurrentPlayer->PlayerControl == Human){
 			Coordinate1 = NULL;
 			Coordinate2 = NULL;
 
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
 			/*let current user select 1 coordinate*/
-			DisplayChessBoard(MainChessBoard);
+
 			
 			/*state 1: No coordinates selected*/
 			ExitStateFlag = False;
@@ -135,7 +135,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			
 		} else {
 			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer, MainMoveList);
-			sleep(.5);
+			getchar();
 			if (Model_GetMoveType(MainChessBoard, LocalChessMove) == Transformation){
 				LocalChessMove->Transform_IntoType = Rook;
 			}
