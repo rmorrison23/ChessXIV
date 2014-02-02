@@ -3,7 +3,7 @@
 
 #include "View.h"
 
-ObjectHandle * ObjectHandle_Initialize(ObjectType type, int x, int y, int width, int height);
+ObjectHandle * ObjectHandle_Initialize(ObjectType type, ObjectTagEnum TagIn, int x, int y, int width, int height);
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Handle);
 ObjectHandle * ObjectHandle_Free(ObjectHandle * Handle);
 

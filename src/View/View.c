@@ -354,6 +354,7 @@ ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	AIDifficultyLevel AISelected;
 	switch (LocalEvent.Type){
 		case Option_OnePlayer_Clicked:
+			printf("One player clicked\n");
 			drawOnePlayerMenu(MainHandle);
 			Boolean AISelectedFlag = False, PlayerSelectedFlag = False, OptionsDoneFlag = False;
 			while (!AISelectedFlag || !PlayerSelectedFlag || !OptionsDoneFlag){			

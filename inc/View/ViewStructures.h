@@ -29,12 +29,12 @@ typedef struct {
 #define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {165,165,255}
 
 typedef enum {Color, Image, Text, Button, Outline} ObjectType;
-typedef enum {OnePlayerButton, TwoPlayerButton, AIvsAIButton, 	\
+typedef enum {
 	Option_OnePlayer, Option_TwoPlayer, Option_AIvsAI, 		\
 	Option_Black, Option_White,						\
 	Option_EasyAI, Option_MediumAI, Option_DifficultAI,		\
 	Option_PlayButton, \
-	Title
+	Title, Background \
 	
 } ObjectTagEnum;
 
