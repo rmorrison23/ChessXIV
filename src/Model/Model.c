@@ -765,7 +765,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 
 int writeToLogFile(char fname[100], ChessMoveList * moveList)
 {
-	/* creating the file */
+/*==================================Creating the file==================================*/	
 	FILE *File;
 	
 	/* file type */
@@ -777,16 +777,22 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	/* node pointer to traverses the list */
 	ChessMoveNode * temp = moveList->FirstNode;
 	
-	/* move counter */
-	int counter = 1;
-	
 	/* string to convert the enum type into a char[] type */
-	char playerColor[10] = "";
-	char pieces[10] = "";
-	char captureType[10] = "";
-	char transformType[10] = "";
-	char file2;
-	int castlingFLag = 0;
+	char pieces[2] = "";
+	char file1[2] = "";
+	char transformType[2] = "";
+	char pawnStartingFile[2] = "";
+	char rank1[2] ="";
+	int castlingFlag = 0;
+	Boolean check = False;
+	int turnNumber = 1;
+	
+	char CastlingText[6] = "";
+	char TransformationText[6] = "";
+	char NormalText[6] = "";
+	
+	char whiteMove[10] = "";
+	char blackMove[10] = "";
 
 	/* copy file name to new file */
 	strcpy(fname_tmp, fname);
@@ -794,6 +800,7 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	/* concat the file type to the name */
 	strcat(fname_tmp, ftype);
 
+/*==================================Opening the file==================================*/	
 	/* open the file */
 	File = fopen(fname_tmp, "w");
 	
@@ -804,6 +811,7 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	  return 1;
 	}
 	
+/*==================================Writing to the file==================================*/		
 	/* going though the list and printing the move */
 	while (temp)
 	{
@@ -811,131 +819,242 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		switch(temp->Move->MovePiece->Type)
 		{
 		  case Pawn:
-		    strcpy(pieces,  "P");
+		    strcpy(pieces, "P");
 		    break;
 		  case Queen:
-		    strcpy(pieces,  "Q");
+		    strcpy(pieces, "Q");
 		    break;
 		  case King:
-		    strcpy(pieces,  "K");
+		    strcpy(pieces, "K");
 		    break;
 		  case Rook:
-		    strcpy(pieces,  "R");
+		    strcpy(pieces, "R");
 		    break;
 		  case Bishop:
-		    strcpy(pieces,  "B");
+		    strcpy(pieces, "B");
 		    break;
 		  case Knight:
-		    strcpy(pieces,  "N");
+		    strcpy(pieces, "N");
 		    break;
 		}
+		
+		/* this is only use for pawn. Relavent for when they capture something */
+		switch (temp->Move->StartPosition->File)
+	    {
+		  case 0:
+		    strcpy(pawnStartingFile, "a");
+		    break;
+		  case 1:
+		    strcpy(pawnStartingFile, "b");
+		    break;
+		  case 2:
+		    strcpy(pawnStartingFile, "c");
+		    break;
+		  case 3:
+		    strcpy(pawnStartingFile, "d");
+		    break;
+		  case 4:
+		    strcpy(pawnStartingFile, "e");
+		    break;
+		  case 5:
+		    strcpy(pawnStartingFile, "f");
+		    break;
+		  case 6:
+		    strcpy(pawnStartingFile, "g");
+		    break;
+		  case 7:
+		    strcpy(pawnStartingFile, "h");
+		    break; 
+	    }
 		
 		/* getting the ending file positon */
 		switch(temp->Move->NextPosition->File)
 		{
 		  case 0:
-		    file2 = 'a';
+		    strcpy(file1, "a");
 		    break;
 		  case 1:
-		    file2 = 'b';
+		    strcpy(file1, "b");
 		    break;
 		  case 2:
-		    file2 = 'c';
+		    strcpy(file1, "c");
 		    break;
 		  case 3:
-		    file2 = 'd';
+		    strcpy(file1, "d");
 		    break;
 		  case 4:
-		    file2 = 'e';
+		    strcpy(file1, "e");
 		    break;
 		  case 5:
-		    file2 = 'f';
+		    strcpy(file1, "f");
 		    break;
 		  case 6:
-		    file2 = 'g';
+		    strcpy(file1, "g");
 		    break;
 		  case 7:
-		    file2 = 'h';
+		    strcpy(file1, "h");
 		    break; 
 		}
-		
 		/*this is the castling move, it is basically two move in one */
 		if (temp->Move->MoveType == Castling)
 		{
-		    /* first move of the castlilng */
-		    if (castlingFLag == 0)
-		    {
-		      if (temp->Move->MovePiece->Player->PlayerColor == White &&
+			/* first move of the castlilng */
+			if (castlingFlag == 0)
+			{
+			  /* white queenside */
+			  if (temp->Move->MovePiece->Player->PlayerColor == White &&
 			  temp->Move->MovePiece->Coordinate->Rank == 0)
-		      {
-			 fprintf(File, "0-0-0"); 
-		      }
-		      else if (temp->Move->MovePiece->Player->PlayerColor  == White &&
+			  {
+				strcpy(CastlingText, "0-0-0"); 
+			  }
+			  /* white kingside */
+			  else if (temp->Move->MovePiece->Player->PlayerColor  == White &&
 			  temp->Move->MovePiece->Coordinate->Rank == 7)
-		      {
-			fprintf(File, "0-0"); 
-		      }
-		      else if (temp->Move->MovePiece->Player->PlayerColor  == Black &&
+			  {
+				strcpy(CastlingText, "0-0"); 
+			  }
+			  /* black queenside */
+			  else if (temp->Move->MovePiece->Player->PlayerColor  == Black &&
 			  temp->Move->MovePiece->Coordinate->Rank == 7)
-		      {
-			 fprintf(File, "0-0-0"); 
-		      }
-		      else
-		      {
-			fprintf(File, "0-0"); 
-		      }
-		     
-		      castlingFLag = 1;
-		    }
-		    /* second move of the castling */
-		    else
-		    {
-		      counter--;
-		      castlingFLag = 0;
-		    }
+			  {
+				strcpy(CastlingText, "0-0-0"); 
+			  }
+			  /* black kingside */
+			  else
+			  {
+				strcpy(CastlingText, "0-0"); 
+			  }
+			  castlingFlag = 1;
+			}
+			/* second move of the castling */
+			else
+			{
+			  castlingFlag = 0;
+			}
 		}
+		
+		/* pawn transformation move */
 		else if (temp->Move->MoveType == Transformation)
 		{
 		  switch (temp->Move->Transform_IntoType)
 		  {
-		    case Rook:
-		      strcpy(transformType,  "R");
-		      break;
-		    case Queen:
-		      strcpy(transformType,  "Q");
-		      break;
-		    case Bishop:
-		      strcpy(transformType,  "B");
-		      break;
-		    case Knight:
-		      strcpy(transformType,  "N");
-		      break;
-		    case Pawn:
-		      break;
-		    case King:
-		      break;
+			case Rook:
+			  strcpy(transformType, "R");
+			  break;
+			case Queen:
+			  strcpy(transformType, "Q");
+			  break;
+			case Bishop:
+			  strcpy(transformType, "B");
+			  break;
+			case Knight:
+			  strcpy(transformType, "N");
+			  break;
+			case Pawn:
+			  break;
+			case King:
+			  break;
 		  }
-		  fprintf(File, "%d. %c%c%s ", counter, file2, temp->Move->NextPosition->Rank, transformType);
+		  if (temp->Move->CaptureFlag == True)
+		  {
+		    strcat(TransformationText, pawnStartingFile);
+			strcat(TransformationText, "x");
+		  }
+		  strcat(TransformationText, file1);
+		  sprintf(rank1, "%d", temp->Move->NextPosition->Rank + 1);
+		  strcat(TransformationText, rank1);
+		  strcat(TransformationText, transformType);
 		}
+		
+		/* every other move */
 		else
 		{
-		  if (pieces == "P")
+		  if (temp->Move->MovePiece->Type == Pawn && temp->Move->CaptureFlag == True)
 		  {
-		     fprintf(File, "%d. %c%c ", counter, file2, temp->Move->NextPosition->Rank);
+			strcat(NormalText, pawnStartingFile);
+			strcat(NormalText, "x");
 		  }
 		  else
 		  {
-		    fprintf(File, "%d. %s%c%c ", counter, pieces, file2, temp->Move->NextPosition->Rank);
+			strcat(NormalText, pieces);
+			if (temp->Move->CaptureFlag == True)
+			{
+			  strcat(NormalText, "x");
+			}
+		  }
+		  strcat(NormalText, file1);
+		  sprintf(rank1, "%d", temp->Move->NextPosition->Rank + 1);
+		  strcat(NormalText, rank1);
+		}
+		
+/*==================================Storing the move into respective player==================================*/		
+		/* concatinating/copying the move into the respective player color */
+		if (temp->Move->MovePiece->Player->PlayerColor == White)
+		{
+		  switch (temp->Move->MoveType)
+		  {
+		    case Castling:
+			  strcpy(whiteMove, CastlingText);
+			  break;
+			case Transformation:
+			  strcpy(whiteMove, TransformationText);
+			  strcpy(TransformationText, "");
+			  break;
+			default:
+			  strcpy(whiteMove, NormalText);
+			  strcpy(NormalText, "");
+			  break;
+		  }
+		  
+		  /* white put black king in check */
+		  check = Model_CheckCheckedPosition(temp->Move->StartPosition->MainBoard, temp->Move->MovePiece->Player, moveList);
+		  if (check == True)
+		  {
+			check = False;
+			strcat(whiteMove, "+");
 		  }
 		}
-			
+		
+		/* concatinating/copying the move into the respective player color */
+		else
+		{
+		  switch (temp->Move->MoveType)
+		  {
+		    case Castling:
+			  strcpy(blackMove, CastlingText);
+			  break;
+			case Transformation:
+			  strcpy(blackMove, TransformationText);
+			  strcpy(TransformationText, "");
+			  break;
+			default:
+			  strcpy(blackMove, NormalText);
+			  strcpy(NormalText, "");
+			  break;
+		  }
+		  
+		  /*black put white king in check */
+		  check = Model_CheckCheckedPosition(temp->Move->StartPosition->MainBoard, temp->Move->MovePiece->Player, moveList);
+		  if (check == True)
+		  {
+			check = False;
+			strcat(blackMove, "+");
+		  }
+		  
+		  /* print the move only when the castlingFlag is 0 because we do not want to print duplicate black's castling move */
+		  /* we print when it is black's turn because white goes first always */
+		  if (castlingFlag == 0)
+		  {
+		    fprintf(File, "%d. %s %s\n", turnNumber, whiteMove, blackMove);
+		    turnNumber++;
+		  }
+		}
+		
 		/* advance the node */
 		temp = temp->NextNode;
-		
-		/* increase the counter */
-		counter++;
 	}
 	
+/*==================================Closing the file==================================*/	
 	/* un able to open or an error */
 	if (ferror(File)) 
 	{
@@ -951,6 +1070,7 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 
 	return (0);
 }
+
 
 /* uses GetLegalCoordinates */
 /* see if move is legal */

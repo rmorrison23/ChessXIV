@@ -145,6 +145,9 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalEvent->Player = CurrentPlayer;
 			View_DisplayEvent(MainChessBoard, LocalEvent);
 			GameOnFlag = False;
+/*==================================================CHECKING LOG FILE==========================*/
+			writeToLogFile("log", MainMoveList);
+/*==================================================CHECKING LOG FILE==========================*/
 		/*then check for stalemate*/
 		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Stalemate;			
