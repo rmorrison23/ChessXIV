@@ -9,22 +9,9 @@
  * Common define
  *****************************************************************/
 
-/*may add more type of event here*/
-typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate,
-	Option_OnePlayer, Option_TwoPlayer, Option_AIvsAI, 
-	Option_Black, Option_White,
-	Option_EasyAI, Option_MediumAI, Option_DifficultyAI
-} EventTypeEnum;
 
-/*may add more things to hang on to the event here*/
-typedef struct {
-	EventTypeEnum Type;
-	ChessCoordinate * Coordinate;
-	ChessPlayer *	Player;
-} Event;
 
 #ifdef GUI_ENABLE
-
 #ifdef LINUX_OS
 	#include "SDL.h"
 	#include "SDL_image.h"
@@ -34,59 +21,19 @@ typedef struct {
 	#include <SDL2/SDL_image.h>
 	#include <SDL2_ttf/SDL_ttf.h>
 #endif
+#endif
 
-typedef enum {Color, Image, Text, Outline} ObjectType;
-typedef enum {Title, OnePlayerButton, TwoPlayerButton, AIvsAIButton} ObjectTag;
+#include "ViewStructures.h"
 
-typedef struct {
-	/*id info*/
-	ObjectType		Type;
-	ObjectTag		Tag;
-	int			Index;
-	
-	/*location information*/
-	int X,Y, Width, Height;
-	
-	/*texture to change*/
-	SDL_Texture * Texture;
-	
-	/*information only apply to certain types*/
-	/*Image*/char  ImageFileName[255];
-	
-	/*Text*/int TextSize; char FontName[255]; char String[255];
-	
-  /*Color*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
-	
-} ObjectHandle;
-
-typedef struct ObjectHandleNodeStruct ObjectHandleNode;
-struct ObjectHandleNodeStruct {
-	ObjectHandleNode * PrevNode, * NextNode;
-	
-	ObjectHandle * Object;
-};
-
-
-
-typedef struct {
-	ObjectHandleNode * FirstNode, * LastNode;
-} ObjectHandleList;
-
-typedef struct {
-	SDL_Window * Window;
-	SDL_Renderer * WindowRenderer;
-	ObjectHandleList * ObjectList;
-} WindowHandle;
-
-typedef struct {
-	WindowHandle * CurrentWindow;	
-} ViewHandle;
+#ifdef GUI_ENABLE
 
 #include "render.h"
 #include "display.h"
 #include "constants.h"
 #include "sdlUtilities.h"
 #include "ObjectHandleList.h"
+#include "ObjectHandle.h"
+
 
 #else
 typedef struct {
