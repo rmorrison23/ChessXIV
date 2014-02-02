@@ -176,7 +176,13 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 		scanf("%s", UserInput);
 		
 		/*get first non space character*/
-		while ((*OneLetter) == ' ') OneLetter++;
+		OneLetter = UserInput;
+		while ((*OneLetter) == ' ' && (OneLetter - UserInput) < 10) OneLetter++;
+		
+		if (OneLetter - UserInput == 10){
+			printf("Invalid choice\n");
+			continue;
+		}
 		
 		if (*OneLetter >= 'a' && *OneLetter <= 'h'){
 			ReturnFile = *OneLetter - 'a';
@@ -200,7 +206,8 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 		} else {
 		 	printf("Invalid Coordinate");
 			continue;
-		}		
+		}
+		
 		
 	}
 	EventHandle->Type = SelectCoordinate;
