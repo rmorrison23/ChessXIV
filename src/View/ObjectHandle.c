@@ -42,3 +42,4 @@ ObjectHandle * ObjectHandle_Free(ObjectHandle * object){
 	free(object);
 	return NULL;
 }
+
