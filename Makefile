@@ -21,7 +21,7 @@ endif
 
 ifeq ($(GUI_ENABLE),y)
 	GUI_FLAG=-DGUI_ENABLE $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-	VIEW_LIB+= display ObjectHandleList ObjectHandle render sdlUtilities
+	VIEW_LIB+= display ObjectHandleList ObjectHandle render
 	LDFLAGS+= $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 else
         GUI_FLAG=
@@ -89,8 +89,8 @@ TestDrawingFuncs: build/TestDrawingFuncs.o $(VIEW_LIB_DEPEND)
 TestGUI: build/TestGUI.o $(VIEW_LIB_DEPEND) $(MODEL_LIB_DEPEND)
 	$(CC) build/TestGUI.o -Lbuild $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) $(LDFLAGS) -o bin/$@ $(CFLAGS)
 	
-ViewUnitTest: build/ViewUnitTest.o build/libModel.a build/libView.a
-	$(CC) build/ViewUnitTest.o -Lbuild -lModel -lView -o bin/$@ $(CFLAGS)
+ViewUnitTest: build/ViewUnitTest.o $(VIEW_LIB_DEPEND)
+	$(CC) build/ViewUnitTest.o -Lbuild $(VIEW_LIB_COMPILE) -o bin/$@ $(CFLAGS)
 
 ControlUnitTest: build/ControlUnitTest.o build/libControl.a
 	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o bin/$@ $(CFLAGS)

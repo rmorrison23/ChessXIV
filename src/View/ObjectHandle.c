@@ -136,12 +136,4 @@ ObjectHandle * GetObjectByTag(ViewHandle * MainHandle, ObjectTagEnum Tag){
 	}
 }
 
-void windowRender(ViewHandle * MainHandle){
-
-  SDL_Renderer *renderer = MainHandle->CurrentWindow->WindowRenderer;
-
-
-}
-#endif
-
 

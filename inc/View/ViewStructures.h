@@ -54,7 +54,7 @@ struct ObjectHandleStruct {
 	/*information only apply to certain types*/
 	/*Image*/char  ImageFileName[255];
 	
-	/*Text*/int TextSize; char * FontName; char * String;
+	/*Text*/int TextSize; char FontName[255]; char String[255];
 	
   /*Color*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
 	

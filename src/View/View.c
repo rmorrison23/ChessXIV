@@ -336,6 +336,7 @@ ViewHandle * View_CleanUp(ViewHandle *MainHandle){
 	SDL_DestroyRenderer(MainHandle->CurrentWindow->WindowRenderer);
 	SDL_DestroyWindow(MainHandle->CurrentWindow->Window);
 	
+	ObjectHandleList_ShallowFree(MainHandle->CurrentWindow->ObjectList);
 	free(MainHandle->CurrentWindow);
 	free(MainHandle);
 	return NULL;
