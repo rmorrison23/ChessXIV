@@ -14,6 +14,7 @@ ControlHandle * Control_Initialize(void){
 	
 	/*Initialize view*/
 	ViewHandle * MainViewHandle = View_Initialize();
+	ReturnHandle->MainViewHandle = MainViewHandle;
 	
 	Event * EventReturn =  SetOptions(MainViewHandle, ReturnHandle->MainChessBoard);
 	
@@ -56,12 +57,12 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
 			/*let current user select 1 coordinate*/
-			DisplayChessBoard(MainChessBoard);
+			DisplayChessBoard(Handle->MainViewHandle, MainChessBoard);
 			
 			/*state 1: No coordinates selected*/
 			ExitStateFlag = False;
 			while (!ExitStateFlag){
-				LocalEvent = View_GetEvent(MainChessBoard, LocalEvent);
+				LocalEvent = View_GetEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 				switch (LocalEvent->Type){
 					case SelectCoordinate:
 						Coordinate1 = LocalEvent->Coordinate;
@@ -92,9 +93,9 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			while (!ExitStateFlag){
 			 	/*highlight the legal coordinates of selected piece*/
 				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
-				HighlightCoordinates(MainChessBoard, LegalChessCoordList);
+				HighlightCoordinates(Handle->MainViewHandle, MainChessBoard, LegalChessCoordList);
 				
-				LocalEvent = View_GetEvent(MainChessBoard, LocalEvent);
+				LocalEvent = View_GetEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 				switch (LocalEvent->Type){
 					case SelectCoordinate:
 						Coordinate2 = LocalEvent->Coordinate;
@@ -130,7 +131,16 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalChessMove->StartPosition = Coordinate1;
 			LocalChessMove->NextPosition = Coordinate2;
 			if (ChessMove_IsTransformation(LocalChessMove)){
-				LocalChessMove->Transform_IntoType = View_AskMoveTransform();
+				Event * AskTransformEvent = View_AskMoveTransform(Handle->MainViewHandle);
+				switch (AskTransformEvent->Type){
+					case Exit:
+						exit(0);
+						break;
+					case AskTransform:		
+						LocalChessMove->Transform_IntoType = AskTransformEvent->PieceType;
+						break;
+				}
+				
 			}
 			
 			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);	
@@ -145,24 +155,27 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
 			LocalEvent->Type = Checkmate;
 			LocalEvent->Player = CurrentPlayer;
-			View_DisplayEvent(MainChessBoard, LocalEvent);
+			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 			GameOnFlag = False;
 		/*then check for stalemate*/
 		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer)){
 			LocalEvent->Type = Stalemate;			
-			View_DisplayEvent(MainChessBoard, LocalEvent);
+			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 			GameOnFlag = False;		
 		/*check for checked position */
 		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer)){
-			printf("Player %d is in check\n", CurrentPlayer->PlayerColor);
+			LocalEvent->Type = InCheck;
+			LocalEvent->Player = CurrentPlayer;		
+			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
+			
 		}
 	}
 	
 	/*display chessboard for last time*/
-	DisplayChessBoard(MainChessBoard);
+	DisplayChessBoard(Handle->MainViewHandle, MainChessBoard);
 	
 	/*conclude the game*/
-	View_ConcludeGame(MainChessBoard);
+	View_ConcludeGame(Handle->MainViewHandle, MainChessBoard);
 	free(LocalEvent);
 	
 	return Handle;

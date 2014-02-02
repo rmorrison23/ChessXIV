@@ -19,9 +19,11 @@
 #define BLACK_PLAYER_COLOR 	KCYN
 #define HIGHLIGHT_COLOR 	KGRN_BKG
 
-ChessPieceTypeEnum View_AskMoveTransform(void){
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle){
 	Boolean ValidFlag = False;
 	int UserChoice;
+	Event * ReturnEvent = malloc(sizeof(Event));
+	ReturnEvent->Type = AskTransform;
 	while (!ValidFlag){
 		printf("Please select the type of piece to transform to:\n1. Rook\n2.Knight\n3. Bishop\n4. Queen\nYour choice: ");
 		scanf("%d", &UserChoice);
@@ -30,19 +32,19 @@ ChessPieceTypeEnum View_AskMoveTransform(void){
 		} else {
 			switch (UserChoice){
 				case 1:
-			 		return Rook;
+					ReturnEvent->PieceType = Rook; 		
 				case 2:
-					return Knight;
+					ReturnEvent->PieceType = Knight;
 				case 3:
-					return Bishop;
+					ReturnEvent->PieceType = Bishop;
 				case 4:
-					return Queen;
+					ReturnEvent->PieceType = Queen;
 				default:
-					return Queen;
+					ReturnEvent->PieceType = Queen;
 			}
 		}
 	}
-	return Queen;
+	return ReturnEvent;
 }
 
 static void PrintChessCoordinate(ChessPiece * CurrPiece){
@@ -154,22 +156,12 @@ Event * SetOptions(ViewHandle * MainViewHanlde, ChessBoard * MainBoard){
 	return LocalEvent;
 }
 
-
-/*for displaying*/
-ChessCoordinate * View_GetOneCoordinate(ChessBoard * MainBoard){
-	Event MyEvent;
-	View_GetEvent(MainBoard, &MyEvent);
-	return MyEvent.Coordinate;
-}
-
 /*get event from user*/
-Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
+Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * EventHandle){
 	char UserInput[10];
 	char * OneLetter = UserInput;
 	
-	unsigned char ReturnRank, ReturnFile;
-	
-	
+	unsigned char ReturnRank, ReturnFile;	
 	
 	Boolean ValidOptionFlag = False;
 	while (!ValidOptionFlag){
@@ -211,7 +203,7 @@ Event * View_GetEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	
 }
 
-void View_DisplayEvent(ChessBoard * CurrBoard, Event * EventHandle){
+void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * EventHandle){
 	if (EventHandle->Type == Checkmate){
 		switch (EventHandle->Player->PlayerColor){
 			case White:
@@ -226,7 +218,7 @@ void View_DisplayEvent(ChessBoard * CurrBoard, Event * EventHandle){
 	}
 }
 
-void DisplayChessBoard(ChessBoard * CurrChessBoard){
+void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoard){
 	int i, j;
 	for (i = CHESS_BOARD_MAX_ROW - 1; i >= 0 ; i--){
 		printf("%d  |  ", i + 1);
@@ -252,7 +244,7 @@ void DisplayChessBoard(ChessBoard * CurrChessBoard){
 	printf("\n");
 }
 
-void HighlightCoordinates(ChessBoard * CurrChessBoard, ChessCoordinateList * CoordList){
+void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoard, ChessCoordinateList * CoordList){
 	int i, j;
 	ChessCoordinateNode * CoordListNode = CoordList->FirstNode;
 	Boolean HighlightFlag;
@@ -297,7 +289,7 @@ ViewHandle * View_CleanUp(ViewHandle * handle){
 	return NULL;
 }
 
-void View_ConcludeGame(ChessBoard * MainBoard){
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	printf("Game concluded\n");
 	printf("Goodbye. See you next time\n");
 }
@@ -457,20 +449,19 @@ ChessBoard * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 }
 
 /*for displaying*/
-void DisplayChessBoard(ChessBoard *);
-void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
+void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard);
+void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * MainBoard, ChessCoordinateList * CoordList);
 
 /*get event from user*/
 /*this function is supposed to overwrite the input pointer with new event data*/
-Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
-ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 
 /*DisplayEvent*/
-void View_DisplayEvent(ChessBoard * CurrBoard, Event *);
+void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 
-void View_ConcludeGame(ChessBoard *);
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard *);
 
 /*for transformation: ask user which type to transform to*/
-ChessPieceTypeEnum View_AskMoveTransform(void);
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle);
 
 #endif

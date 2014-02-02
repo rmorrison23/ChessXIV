@@ -3,8 +3,8 @@
 
 
 /*may add more type of event here*/
-typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate,	\
-	ButtonClicked, CoordinateClicked
+typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, AskTransform, Checkmate, Stalemate,	\
+	ButtonClicked, CoordinateClicked, InCheck
 } EventTypeEnum;
 
 #ifdef GUI_ENABLE
@@ -16,6 +16,7 @@ typedef struct {
 	EventTypeEnum Type;
 	ChessCoordinate * Coordinate;
 	ChessPlayer *	Player;
+	ChessPieceTypeEnum	PieceType;
 #ifdef GUI_ENABLE
 	ObjectHandle *	Object;
 #endif

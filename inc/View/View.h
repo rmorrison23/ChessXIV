@@ -56,19 +56,21 @@ ViewHandle * View_CleanUp(ViewHandle *);
 Event * SetOptions(ViewHandle *, ChessBoard *);
 
 /*for displaying*/
-void DisplayChessBoard(ChessBoard *);
-void HighlightCoordinates(ChessBoard *, ChessCoordinateList *);
+void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard);
+void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * MainBoard, ChessCoordinateList * CoordList);
 
 /*get event from user*/
-/*this function is supposed to  overwrite the input pointer with new event data*/
-Event * View_GetEvent(ChessBoard * CurrBoard, Event *);
+/*this function is supposed to overwrite the input pointer with new event data*/
+Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
 
 /*DisplayEvent*/
-void View_DisplayEvent(ChessBoard * CurrBoard, Event *);
+void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 
-void View_ConcludeGame(ChessBoard *);
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard *);
+ChessCoordinate * View_GetOneCoordinate(ChessBoard *);
+
 
 /*for transformation: ask user which type to transform to*/
-ChessPieceTypeEnum View_AskMoveTransform(void);
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle);
 #endif 
