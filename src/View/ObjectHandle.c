@@ -48,6 +48,7 @@ ObjectHandle * ObjectHandle_Free(ObjectHandle * object){
 	return NULL;
 }
 
+
 void windowRender(ViewHandle * MainHandle){
 
   SDL_Renderer *renderer = MainHandle->CurrentWindow->WindowRenderer;
@@ -55,3 +56,74 @@ void windowRender(ViewHandle * MainHandle){
 
 }
 #endif
+Event GetSDLEvent(ViewHandle * MainHandle){
+	SDL_Event event;
+	Event ReturnEvent; ReturnEvent.Type = NoEvent;
+	Object * ObjectSelected;
+	while(SDL_PollEvent(&event)){
+
+		switch(event.type){
+
+			case SDL_QUIT:
+
+
+				break;
+	
+
+			case SDL_MOUSEMOTION:
+				
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				/*find out where it is clicked then*/
+				ObjectHandleList * ObjectSelectedList = GetObjectByCoordinate(MainHandle, event.motion.x, event.motion.y);
+				ObjectHandleNode * Node  = ObjectSelectedList->FirstNode;
+				while (Node){
+					switch (ObjectSelected->Tag){
+						case WhiteColorButton:
+							ReturnEvent.Type = Option_White;
+							break;
+						case BlackColorButton:
+							ReturnEvent.Type = Option_Black;
+							break;
+						case EasyAIButton:
+							ReturnEvent.Type = Option_EasyAI;	
+							break;
+						case MediumAIButton:
+							ReturnEvent.Type = Option_MediumAI;
+							break;
+						case DifficultAIButton:
+							ReturnEvent.Type = Option_DifficultAI;
+							break;
+							
+					}
+				}
+				
+				ObjectHandleList_ShallowFree(ObjectSelectedList);
+				if (ReturnEvent.Type != NoEvent) return ReturnEvent;
+				
+				
+				break;
+
+		}      
+	}    
+ }
+
+ObjectHandleList * GetObjectByCoordinate(ViewHandle * MainHandle, int x, int y){
+	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList;
+	ObjectHandleList * ReturnList = ObjectHandleList_Initialize();
+	while (CurrNode){
+		ObjectHandle * CurrObject;
+		if ((CurrentObject->X) < x && (CurrentObject->X + CurrentObject->Width > x) && (CurrentObject->Y < y) && (CurrentObject->Y + CurrentObject->Height > y))
+			ObjectHandleList_AppendObject(ReturnList, CurrObject);
+		CurrNode = CurrNode->NextNode;
+	}
+}
+
+ObjectHandle * GetObjectByTag(ViewHandle * MainHandle, ObjectTagEnum Tag){
+	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList;
+	while (CurrNode){
+		if (CurrNode->Object->Tag == Tag) return CurrNode->Object;		
+		CurrNode = CurrNode->NextNode;
+	}
+}

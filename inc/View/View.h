@@ -10,8 +10,10 @@
  *****************************************************************/
 
 /*may add more type of event here*/
-typedef enum {SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate,
-	Option_OnePlayer, Option_TwoPlayer, Option_AIvsAI, Option_AIEasy, Option_MediumAI, Option_Difficulty_AI
+typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, SelectTranformation, Checkmate, Stalemate,
+	Option_OnePlayer, Option_TwoPlayer, Option_AIvsAI, 
+	Option_Black, Option_White,
+	Option_EasyAI, Option_MediumAI, Option_DifficultyAI
 } EventTypeEnum;
 
 /*may add more things to hang on to the event here*/

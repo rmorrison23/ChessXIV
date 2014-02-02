@@ -41,5 +41,18 @@ ObjectHandleList * ObjectHandleList_AppendObject(ObjectHandleList * List, Object
 		List->LastNode = NewNode;
 	}
 	return List;
+
 #endif
+
+}
+
+void ObjectHandleList_ShallowFree(ObjectHandleList * List){
+	ObjectHandleNode * CurrNode, * NextNode;
+	CurrNode = List->FirstNode;
+	while (CurrNode){
+		NextNode = CurrNode->NextNode;
+		free(CurrNode);
+		CurrNode = NextNode;
+	}
+
 }
