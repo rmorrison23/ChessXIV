@@ -1272,7 +1272,51 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 			}
 			if (player->PlayerColor == Black)
 			{
-			
+				printf("%d\n", ChessMoveList_Count(history));
+				if (ChessMoveList_Count(history) == 1)
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[6][4]->Piece;
+					newMove->StartPosition = board->Board[6][4];
+					newMove->NextPosition = board->Board[4][4];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}
+				}
+				if (ChessMoveList_Count(history) == 3 )
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[7][5]->Piece;
+					newMove->StartPosition = board->Board[7][5];
+					newMove->NextPosition = board->Board[4][2];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}					
+				}
+				if (ChessMoveList_Count(history) == 5)
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[7][3]->Piece;
+					newMove->StartPosition = board->Board[7][3];
+					newMove->NextPosition = board->Board[3][7];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}											
+				}
+				if (ChessMoveList_Count(history) == 7)
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[3][7]->Piece;
+					newMove->StartPosition = board->Board[3][7];
+					newMove->NextPosition = board->Board[1][5];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}											
+				}	
 			}
 		
 			CurrNode->Move->MoveType = Model_GetMoveType(board, CurrNode->Move);
