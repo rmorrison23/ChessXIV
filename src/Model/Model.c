@@ -96,6 +96,7 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	      move->CaptureFlag = True;
 	    }
 	  /* piece to move, moved to next coordinate */
+	  assert(move->StartPosition);
 	  assert(move->StartPosition->Piece);
 	  move->StartPosition->Piece->Coordinate = move->NextPosition;
 	  move->NextPosition->Piece = move->MovePiece;	
@@ -1044,18 +1045,21 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo, ChessMoveLi
 		
 	/* create a duplicate move */
 
-	ChessMove * tempMove = ChessMove_Initialize();
+	ChessMove * tempMove;
 	int rank, file;
 	int rank2, file2;
 	
 	/*duplicate last move of history*/
 	if (history->LastNode){
-	
+		tempMove = ChessMove_Initialize();
 		rank = history->LastNode->Move->StartPosition->Rank;
 		file = history->LastNode->Move->StartPosition->File;
 		tempMove->StartPosition = tempBoard->Board[rank][file];
 		tempMove->MovePiece = tempMove->StartPosition->Piece;
 	
+		assert(history->LastNode);
+		assert(history->LastNode->Move);
+		assert(history->LastNode->Move->NextPosition);
 		rank2 = history->LastNode->Move->NextPosition->Rank;
 		file2 = history->LastNode->Move->NextPosition->File;
 		tempMove->NextPosition = tempBoard->Board[rank2][file2];
@@ -1243,7 +1247,7 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 			Model_PerformMove(board, history, CurrNode->Move);
 			ChessCoordinateList * newList = Model_GetAllLegalCoordinate( board, player->OtherPlayer, player, history);
 			
-			if(ChessCoordinateList_CheckRedundancy(newList, history->LastNode->Move->MovePiece->Coordinate))
+			if(ChessCoordinateList_CheckRedundancy(newList, history->LastNode->Move->NextPosition))
 			{
 				CurrNode->Move->Rating -= CurrNode->Move->MovePiece->PieceValue;
 			}
@@ -1252,7 +1256,6 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 			{
 				MaxRating = CurrNode->Move->Rating;
 			}
-			
 			Model_Undo1Move(board, history);
 			ChessCoordinateList_Free(newList);
 			CurrNode = CurrNode->NextNode;
