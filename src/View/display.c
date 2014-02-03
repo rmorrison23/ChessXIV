@@ -491,22 +491,22 @@ void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
   NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 405, 285, 75, 75);
   NewObject->PieceType = Knight;
   NewObject->PlayerColor = color;
-  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
 
   NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 510, 285, 75, 75);
   NewObject->PieceType = Bishop;
   NewObject->PlayerColor = color;
-  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
 
   NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 615, 285, 75, 75);
   NewObject->PieceType = Knight;
   NewObject->PlayerColor = Rook;
-  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
 
   NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 720, 285, 75, 75);
   NewObject->PieceType = Queen;
   NewObject->PlayerColor = color;
-  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
 
   windowRender(MainHandle);
 }
