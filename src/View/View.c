@@ -286,9 +286,6 @@ void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoa
 ViewHandle * View_Initialize(void){
 	ViewHandle * ReturnHandle = malloc(sizeof(ViewHandle));
 	ReturnHandle->CurrentPlayer = NULL;
-	ReturnHandle->ViewHandleEvent = malloc(sizeof(Event));
-	assert(ReturnHandle->ViewHandleEvent);
-	ReturnHandle->ViewHandleEvent->Type = NoEvent;
 	return ReturnHandle;
 }
 
@@ -333,6 +330,10 @@ ViewHandle * View_Initialize(void){
 	ReturnViewHandle->CurrentWindow->Window = window;
 	ReturnViewHandle->CurrentWindow->WindowRenderer = renderer;
 	ReturnViewHandle->CurrentWindow->ObjectList = ObjectHandleList_Initialize();
+	
+	ReturnViewHandle->ViewHandleEvent = malloc(sizeof(Event));
+	assert(ReturnViewHandle->ViewHandleEvent);
+	ReturnViewHandle->ViewHandleEvent->Type = NoEvent;
 	
 	return ReturnViewHandle;
 }
@@ -620,7 +621,7 @@ void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Even
 }
 
 void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * PlayerCheckmated){	
-	sleep(5);
+	sleep(3);
 }
 
 /*for transformation: ask user which type to transform to*/

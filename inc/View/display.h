@@ -30,46 +30,10 @@
 #include "constants.h"
 
 
-#ifdef QUAN_VERSION
+
 void drawMainMenu(ViewHandle * MainHandle);
 void drawOnePlayerMenu(ViewHandle * MainHandle);
 void drawChessBoard(ViewHandle * MainHandle);
 void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color);
-#else
-/* function to display the main menu to the screen */
-/* int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode); */
-
-/* function to display the one player menu to the screen */
-int drawOnePlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
-#endif
-
-
-
-/* function to display the one player menu to the screen */
-int drawTwoPlayerMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode);
-
-/* function to display the advanced menu to the screen */
-void drawAdvancedMenu(SDL_Window *window, SDL_Renderer *renderer);
-
-/* function to display the gameplay window to the screen */
-void drawGameplayScreen(SDL_Window *window, SDL_Renderer *renderer);
-
-/* function to display the left player window */
-void drawLeftPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
-
-/* function to display the right player window */
-void drawRightPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
-
-/* function to display the left player window */
-void drawRightPlayerWindow(SDL_Renderer *renderer, int tileSize, int playerMode);
-
-/* function to display a blank chessboard to the screen */
-void drawChessboard(SDL_Renderer *renderer);
-
-/* function to display the pieces in beginning position on the chessboard */
-void drawPieces(SDL_Renderer *renderer);
-
-/* function to uninitialize SDL systems */
-void clean();
 
 #endif
