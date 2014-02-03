@@ -1105,6 +1105,15 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		int i;
 		for (i = 0; i < LegalMoveCount; i++)
 		{
+			CurrNode->Move->MoveType = Model_GetMoveType(board, CurrNode->Move);
+			if (CurrNode->Move->MoveType == Castling)
+			{
+				return CurrNode->Move;
+			}
+			if (CurrNode->Move->MoveType == Transformation)
+			{
+				return CurrNode->Move;
+			}
 			if (CurrNode->Move->NextPosition->Piece)
 			{
 				return CurrNode->Move;
