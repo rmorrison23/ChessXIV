@@ -484,7 +484,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	}
 	
 	/*capture count*/
-	ObjectHandleList * AllCaptureCount = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, CaptureCount);
+	/*ObjectHandleList * AllCaptureCount = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, CaptureCount);
 	
 	ObjectHandleNode * Node = AllCaptureCount->FirstNode;
 	while (Node){
@@ -492,7 +492,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		Node = Node->NextNode;
 	}
 	
-	ObjectHandleList_ShallowFree(AllCaptureCount);
+	ObjectHandleList_ShallowFree(AllCaptureCount);*/
 	
 }
 /*for displaying*/
@@ -557,11 +557,14 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 }
 
 /*DisplayEvent*/
-void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
+void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * Event_in){
+}
 
-void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard *);
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard * CurrBoard){
+}
 
 /*for transformation: ask user which type to transform to*/
-Event * View_AskMoveTransform(ViewHandle * MainViewHandle);
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle){
+}
 
 #endif

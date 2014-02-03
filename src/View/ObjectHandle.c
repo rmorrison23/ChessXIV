@@ -144,6 +144,9 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 		switch(event.type){
 
 			case SDL_QUIT:
+				TTF_Quit();
+				SDL_Quit();
+				exit(1);
 				ReturnEvent.Type = Exit;
 				DoneFlag = True;
 				break;

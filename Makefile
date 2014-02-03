@@ -96,6 +96,6 @@ ControlUnitTest: build/ControlUnitTest.o build/libControl.a
 	$(CC) build/ControlUnitTest.o -Lbuild -lControl -o bin/$@ $(CFLAGS)
 	
 ChessXIV: build/ChessXIV.o $(VIEW_LIB_DEPEND) $(CONTROL_LIB_DEPEND) $(MODEL_LIB_DEPEND)
-	$(CC) build/ChessXIV.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS)
+	$(CC) build/ChessXIV.o -Lbuild $(CONTROL_LIB_COMPILE) $(VIEW_LIB_COMPILE) $(MODEL_LIB_COMPILE) -o bin/$@ $(CFLAGS) $(GUI_FLAG) $(LDFLAGS)
 	
 #This line does nothing

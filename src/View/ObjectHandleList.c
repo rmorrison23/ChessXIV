@@ -115,6 +115,7 @@ ObjectHandleList * GetObjectListByTag(ObjectHandleList * List, ObjectTagEnum Tag
 		if (CurrNode->Object->Tag ==Tag){
 			ObjectHandleList_AppendObject(ReturnList, CurrNode->Object);
 		}
+		CurrNode = CurrNode->NextNode;
 	}
 	return ReturnList;
 }
