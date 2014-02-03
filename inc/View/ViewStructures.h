@@ -40,8 +40,7 @@ typedef enum {
 	Option_EasyAI, Option_MediumAI, Option_DifficultAI,		\
 	Option_PlayButton, \
 	Title, Background, \
-	BPawnPiece, BRookPiece, BKnightPiece, BBishopPiece, BQueenPiece, BKingPiece,	\
-	WPawnPiece, WRookPiece, WKnightPiece, WBishopPiece, WQueenPiece, WKingPiece,	\
+	PieceObject,	\
 	Label_Color, Label_Difficulty,	   \
 	Option_Undo, Option_Quit,
 

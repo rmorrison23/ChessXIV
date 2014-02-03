@@ -11,6 +11,7 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, ObjectTagEnum TagIn, int
 	Handle->Height = height;
 	
 	switch (type){
+		case Piece:
 		case Image:
 			Handle->ImageFileName = (char *) malloc(sizeof(char) * 255);
 			assert(Handle->ImageFileName);
@@ -36,54 +37,52 @@ void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
 	case Piece:
 		switch (Object->PlayerColor){
-			case White:
-				switch (Object->PieceType){
-					case Pawn:
-						strcpy(Object->ImageFileName, "");
-						break;
-					case Rook:
-						strcpy(Object->ImageFileName, "");
-						break;
-					case Knight:
-						strcpy(Object->ImageFileName, "");
-						break;
-					case Bishop:
-						strcpy(Object->ImageFileName, "");
-						break;
-					case Queen:
-						strcpy(Object->ImageFileName, "");
-						break;
-					case King:
-						strcpy(Object->ImageFileName, "");
-						break;
-				}
-				break;
 			case Black:
 				switch (Object->PieceType){
 					case Pawn:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_Pawn.png");
 						break;
 					case Rook:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_Rook.png");
 						break;
 					case Knight:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_Knight.png");
 						break;
 					case Bishop:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_Bishop.png");
 						break;
 					case Queen:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_Queen.png");
 						break;
 					case King:
-						strcpy(Object->ImageFileName, "");
+						strcpy(Object->ImageFileName, "Assets/pieces/B_King.png");
+						break;
+				}
+				break;
+			case White:
+				switch (Object->PieceType){
+					case Pawn:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_Pawn.png");
+						break;
+					case Rook:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_Rook.png");
+						break;
+					case Knight:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_Knight.png");
+						break;
+					case Bishop:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_Bishop.png");
+						break;
+					case Queen:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_Queen.png");
+						break;
+					case King:
+						strcpy(Object->ImageFileName, "Assets/pieces/W_King.png");
 						break;
 				}
 			break;
 		}
-				
-				
-				
+			
 	case Image:
 	  assert(Object->ImageFileName);
 	  Object->Texture =  loadTexture(Object->ImageFileName, MainHandle->CurrentWindow->WindowRenderer);
@@ -125,6 +124,11 @@ void windowRender(ViewHandle * MainHandle){
 
   	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList->FirstNode;
 	while(CurrNode){		
+		
+		if (CurrNode->Object->Type == Coordinate) printf("render coord\n");
+		else if (CurrNode->Object->Type == Piece){
+			printf("render piece\n");
+		}
 		ObjectHandle_Render(MainHandle, CurrNode->Object);
 		CurrNode = CurrNode->NextNode;
 	}

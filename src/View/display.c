@@ -229,24 +229,33 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 
   SDL_Window * window = MainHandle->CurrentWindow->Window;
-  SDL_Color Gray = {0x6D, 0x6D, 0x6D, 0x6D};
-  SDL_Color White = {0xB3, 0xB3, 0xB3, 0xB3};
+ /* SDL_Color Gray = {0x6D, 0x6D, 0x6D};
+  SDL_Color White = {0xB3, 0xB3, 0xB3};*/
 
   int rank, file;
-  int leftOffset = 225;
+  int leftOffset = (SCREEN_WIDTH - BOARD_WIDTH)/2;;
   int topOffset = (SCREEN_HEIGHT - BOARD_HEIGHT)/2;
 
   for(rank=7; rank>=0; rank--){
     for(file=0; file<8; file++){
 
-      Objecthandle *Box = ObjectHandle_Initialize(Coordinate, Square, leftOffset + file*75, topOffset + (rank-7)*75, 75, 75);
-      if((rank+file)%2 == 0)
-	Box->Color = Gray;
-      else
-	Box->Color = White;
-
+      ObjectHandle *Box = ObjectHandle_Initialize(Coordinate, Square, leftOffset + file*75, topOffset + (7-rank)*75, 75, 75);
+      if((rank+file)%2 == 0){
+	/*Box->Color = Gray;*/
+	Box->hexR = 0x6d;
+	Box->hexG = 0x6d;
+	Box->hexB = 0x6d;
+	Box->hexA = 0x6d;
+	}else{
+	/*Box->Color = White;*/
+	Box->hexR = 0xb3;
+	Box->hexG = 0xb3;
+	Box->hexB = 0xb3;
+	Box->hexA = 0xb3;
+	}
       Box->Rank = rank;
       Box->File = file;
+	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, Box);
     }
   }
   windowRender(MainHandle);
