@@ -226,6 +226,9 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
 
 void drawChessBoard(ViewHandle * MainHandle){
 
+  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
+  SDL_RenderClear(MainHandle->CurrentWindow->WindowRenderer);
+
   ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 
   SDL_Window * window = MainHandle->CurrentWindow->Window;
@@ -265,6 +268,7 @@ void drawChessBoard(ViewHandle * MainHandle){
   playerBoxLeft->hexB = 0xDB;
   playerBoxLeft->hexA = 0xDB;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerBoxLeft);
+
   ObjectHandle *graveyardBoxLeft = ObjectHandle_Initialize(Color, Box, 30, SCREEN_HEIGHT/2 - 225, 225, 150);
   graveyardBoxLeft->hexR = 0x7B;
   graveyardBoxLeft->hexG = 0xAD;
@@ -272,63 +276,103 @@ void drawChessBoard(ViewHandle * MainHandle){
   graveyardBoxLeft->hexA = 0xDB;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, graveyardBoxLeft);
 
+  ObjectHandle *blackPlayer = ObjectHandle_Initialize(Text, Player_Label, 70, 37, 0, 0);
+  strcpy(blackPlayer->String, "");
+  strcpy(blackPlayer->FontName, "Assets/fonts/Calibri.ttf");
+  blackPlayer->Color = SDL_COLOR_BLACK;
+  blackPlayer->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, blackPlayer);
+
+  ObjectHandle *blackTimer = ObjectHandle_Initialize(Text, Timer, 115, 75, 0, 0);
+  blackTimer->PlayerColor = Black;
+  strcpy(blackTimer->String, "0:00");
+  strcpy(blackTimer->FontName, "Assets/fonts/Calibri.ttf");
+  blackTimer->Color = SDL_COLOR_BLACK;
+  blackTimer->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, blackTimer);    
+
+  ObjectHandle *quitButton = ObjectHandle_Initialize(Text, Button, 30, SCREEN_HEIGHT - 75, 0, 0);
+  strcpy(quitButton->String, "Quit");
+  strcpy(quitButton->FontName, "Assets/fonts/Calibri.ttf");
+  quitButton->Color = SDL_COLOR_NORMAL_BUTTON;
+  quitButton->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, quitButton);
+
+  ObjectHandle *undoButton = ObjectHandle_Initialize(Text, Button, 950, 40, 0, 0);
+  strcpy(undoButton->String, "Undo Move");
+  strcpy(undoButton->FontName, "Assets/fonts/Calibri.ttf");
+  undoButton->Color = SDL_COLOR_NORMAL_BUTTON;
+  undoButton->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, undoButton);
+
+  ObjectHandle *statusString = ObjectHandle_Initialize(Text, StatusText, 410, 0, 0, 0);
+  strcpy(statusString->String, "");
+  strcpy(statusString->FontName, "Assets/fonts/Calibri.ttf");
+  statusString->Color = SDL_COLOR_RED;
+  statusString->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, statusString);
+
   ObjectHandle *capturedPawnLeft = ObjectHandle_Initialize(Image, Box, 30, SCREEN_HEIGHT/2 - 225, 75, 75);
-  capturedPawnLeft->PieceType = Pawn;
-  capturedPawnLeft->PlayerColor = White;
   strcpy(capturedPawnLeft->ImageFileName, "Assets/pieces/W_Pawn.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnLeft);
 
   ObjectHandle *capturedPawnCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedPawnCountWhite->TextSize = 30;
   capturedPawnCountWhite->Color = SDL_COLOR_BLACK;
+  capturedPawnCountWhite->PieceType = Pawn;
+  capturedPawnCountWhite->PlayerColor = White;
   strcpy(capturedPawnCountWhite->String, "0");
   strcpy(capturedPawnCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountWhite);
 
   ObjectHandle *capturedRookLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
-  capturedRookLeft->PieceType = Rook;
-  capturedRookLeft->PlayerColor = White;
   strcpy(capturedRookLeft->ImageFileName, "Assets/pieces/W_Rook.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookLeft);
+
   ObjectHandle *capturedRookCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedRookCountWhite->TextSize = 30;
   capturedRookCountWhite->Color = SDL_COLOR_BLACK;
+  capturedRookCountWhite->PieceType = Rook;
+  capturedRookCountWhite->PlayerColor = White;
   strcpy(capturedRookCountWhite->String, "0");
   strcpy(capturedRookCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountWhite);
 
   ObjectHandle *capturedKnightLeft = ObjectHandle_Initialize(Image, Box, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
-  capturedKnightLeft->PieceType = Knight;
-  capturedKnightLeft->PlayerColor = White;
   strcpy(capturedKnightLeft->ImageFileName, "Assets/pieces/W_Knight.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightLeft);
+
  ObjectHandle *capturedKnightCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedKnightCountWhite->TextSize = 30;
   capturedKnightCountWhite->Color = SDL_COLOR_BLACK;
+  capturedKnightCountWhite->PieceType = Knight;
+  capturedKnightCountWhite->PlayerColor = White;
   strcpy(capturedKnightCountWhite->String, "0");
   strcpy(capturedKnightCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountWhite);
 
   ObjectHandle *capturedBishopLeft = ObjectHandle_Initialize(Image, Box, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
-  capturedBishopLeft->PieceType = Bishop;
-  capturedBishopLeft->PlayerColor = White;
   strcpy(capturedBishopLeft->ImageFileName, "Assets/pieces/W_Bishop.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopLeft);
+
  ObjectHandle *capturedBishopCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedBishopCountWhite->TextSize = 30;
   capturedBishopCountWhite->Color = SDL_COLOR_BLACK;
+  capturedBishopCountWhite->PieceType = Bishop;
+  capturedBishopCountWhite->PlayerColor = White;
   strcpy(capturedBishopCountWhite->String, "0");
   strcpy(capturedBishopCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountWhite);
 
   ObjectHandle *capturedQueenLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
-  capturedQueenLeft->PieceType = Queen;
-  capturedQueenLeft->PlayerColor = White;
   strcpy(capturedQueenLeft->ImageFileName, "Assets/pieces/W_Queen.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenLeft);
+
  ObjectHandle *capturedQueenCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedQueenCountWhite->TextSize = 30;
   capturedQueenCountWhite->Color = SDL_COLOR_BLACK;
+  capturedQueenCountWhite->PieceType = Queen;
+  capturedQueenCountWhite->PlayerColor = White;
   strcpy(capturedQueenCountWhite->String, "0");
   strcpy(capturedQueenCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountWhite);
@@ -339,69 +383,90 @@ void drawChessBoard(ViewHandle * MainHandle){
   playerBoxRight->hexB = 0xDB;
   playerBoxRight->hexA = 0xDB;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerBoxRight);
+
   ObjectHandle *graveyardBoxRight = ObjectHandle_Initialize(Color, Box, 945, 488, 225, 150);
-  graveyardBoxLeft->hexR = 0x7B;
-  graveyardBoxLeft->hexG = 0xAD;
-  graveyardBoxLeft->hexB = 0xDB;
-  graveyardBoxLeft->hexA = 0xDB;
+  graveyardBoxRight->hexR = 0x7B;
+  graveyardBoxRight->hexG = 0xAD;
+  graveyardBoxRight->hexB = 0xDB;
+  graveyardBoxRight->hexA = 0xDB;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, graveyardBoxRight);
 
+  ObjectHandle *whitePlayer = ObjectHandle_Initialize(Text, Player_Label, 985, 413, 0, 0);
+  strcpy(whitePlayer->String, "");
+  strcpy(whitePlayer->FontName, "Assets/fonts/Calibri.ttf");
+  whitePlayer->Color = SDL_COLOR_BLACK;
+  whitePlayer->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, whitePlayer);
+
+  ObjectHandle *whiteTimer = ObjectHandle_Initialize(Text, Timer, 1030, 451, 0, 0);
+  whiteTimer->PlayerColor = White;
+  strcpy(whiteTimer->String, "0:00");
+  strcpy(whiteTimer->FontName, "Assets/fonts/Calibri.ttf");
+  whiteTimer->Color = SDL_COLOR_BLACK;
+  whiteTimer->TextSize = 30;  
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, whiteTimer);    
+
   ObjectHandle *capturedPawnRight = ObjectHandle_Initialize(Image, Box, 945, 488, 75, 75);
-  capturedPawnRight->PieceType = Pawn;
-  capturedPawnRight->PlayerColor = Black;
-  strcpy(capturedPawnRight->ImageFileName, "Assets/pieces/W_Pawn.png");
+  strcpy(capturedPawnRight->ImageFileName, "Assets/pieces/B_Pawn.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnRight);
+
   ObjectHandle *capturedPawnCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488, 75, 75);
   capturedPawnCountBlack->TextSize = 30;
   capturedPawnCountBlack->Color = SDL_COLOR_BLACK;
+  capturedPawnCountBlack->PieceType = Pawn;
+  capturedPawnCountBlack->PlayerColor = Black;
   strcpy(capturedPawnCountBlack->String, "0");
   strcpy(capturedPawnCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountBlack);
 
   ObjectHandle *capturedRookRight = ObjectHandle_Initialize(Image, Box, 945+75, 488, 75, 75);
-  capturedRookRight->PieceType = Rook;
-  capturedRookRight->PlayerColor = Black;
-  strcpy(capturedRookRight->ImageFileName, "Assets/pieces/W_Rook.png");
+  strcpy(capturedRookRight->ImageFileName, "Assets/pieces/B_Rook.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookRight);
+
   ObjectHandle *capturedRookCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488, 75, 75);
   capturedRookCountBlack->TextSize = 30;
   capturedRookCountBlack->Color = SDL_COLOR_BLACK;
+  capturedRookCountBlack->PieceType = Rook;
+  capturedRookCountBlack->PlayerColor = Black;
   strcpy(capturedRookCountBlack->String, "0");
   strcpy(capturedRookCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountBlack);
 
   ObjectHandle *capturedKnightRight = ObjectHandle_Initialize(Image, Box, 945+150, 488, 75, 75);
-  capturedKnightRight->PieceType = Knight;
-  capturedKnightRight->PlayerColor = Black;
-  strcpy(capturedKnightRight->ImageFileName, "Assets/pieces/W_Knight.png");
+  strcpy(capturedKnightRight->ImageFileName, "Assets/pieces/B_Knight.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightRight);
+
   ObjectHandle *capturedKnightCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+150, 488, 75, 75);
   capturedKnightCountBlack->TextSize = 30;
   capturedKnightCountBlack->Color = SDL_COLOR_BLACK;
+  capturedKnightCountBlack->PieceType = Knight;
+  capturedKnightCountBlack->PlayerColor = Black;
   strcpy(capturedKnightCountBlack->String, "0");
   strcpy(capturedKnightCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountBlack);
 
   ObjectHandle *capturedBishopRight = ObjectHandle_Initialize(Image, Box, 945, 488+75, 75, 75);
-  capturedBishopRight->PieceType = Bishop;
-  capturedBishopRight->PlayerColor = Black;
-  strcpy(capturedBishopRight->ImageFileName, "Assets/pieces/W_Bishop.png");
+  strcpy(capturedBishopRight->ImageFileName, "Assets/pieces/B_Bishop.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopRight);
+
   ObjectHandle *capturedBishopCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488+75, 75, 75);
   capturedBishopCountBlack->TextSize = 30;
   capturedBishopCountBlack->Color = SDL_COLOR_BLACK;
+  capturedBishopCountBlack->PieceType = Bishop;
+  capturedBishopCountBlack->PlayerColor = Black;
   strcpy(capturedBishopCountBlack->String, "0");
   strcpy(capturedBishopCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountBlack);
 
   ObjectHandle *capturedQueenRight = ObjectHandle_Initialize(Image, Box, 945+75, 488+75, 75, 75);
-  capturedQueenRight->PieceType = Queen;
-  capturedQueenRight->PlayerColor = Black;
-  strcpy(capturedQueenRight->ImageFileName, "Assets/pieces/W_Queen.png");
+  strcpy(capturedQueenRight->ImageFileName, "Assets/pieces/B_Queen.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenRight);
+
   ObjectHandle *capturedQueenCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488+75, 75, 75);
   capturedQueenCountBlack->TextSize = 30;
   capturedQueenCountBlack->Color = SDL_COLOR_BLACK;
+  capturedQueenCountBlack->PieceType = Queen;
+  capturedQueenCountBlack->PlayerColor = Black;
   strcpy(capturedQueenCountBlack->String, "0");
   strcpy(capturedQueenCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountBlack);
