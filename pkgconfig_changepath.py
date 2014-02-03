@@ -31,4 +31,3 @@ for file in os.listdir(PkgConfigDir):
 	if file.endswith(".pc"):
 		FixAbsolutePath (PkgConfigDir + "/" + file)
         
-

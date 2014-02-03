@@ -1,6 +1,6 @@
 # sdl pkg-config source file
 
-prefix=/users/ugrad2/2013/spring/mqchau/SDL_lib_at_school/SDL2_Library
+prefix=/home/group1/Programming/EECS22L_Group1_ChessProgram/SDL2_Library
 #prefix=~/SDL_lib_at_school/SDL2
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib

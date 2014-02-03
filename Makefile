@@ -48,6 +48,8 @@ INCLUDES  := $(addprefix -Iinc/,$(MODULES))
 
 VPATH = $(SRC_DIR) src
 
+PKG_CONFIG_PATH =$(PWD)/SDL2_Library/lib/pkgconfig
+
 .PHONY: all clean test
 
 all: ChessXIV
