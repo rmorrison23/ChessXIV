@@ -117,7 +117,7 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
 {
 
 	/*COUNT NUMBER OF MOVE DONE B4 doing this: IN CASE GAME JUST  STARTED*/
-	if (ChessMoveList_Count(moveList) < 3) return board;
+	 return board;
       int i = 0;
       /* move to delete */
       ChessMoveNode * tempNode;
@@ -1220,17 +1220,61 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		int MaxRating = 0;
 		for (i = 0; i < LegalMoveCount; i++)
 		{
-			if (history->FirstNode == NULL)
+
+			if (player->PlayerColor == White)
 			{
-				if (player->PlayerColor == White)
+				printf("%d\n", ChessMoveList_Count(history));
+				if (ChessMoveList_Count(history) == 0)
 				{
-					
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[1][4]->Piece;
+					newMove->StartPosition = board->Board[1][4];
+					newMove->NextPosition = board->Board[3][4];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}
 				}
-				if (player->PlayerColor == Black)
+				if (ChessMoveList_Count(history) == 2 )
 				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[0][5]->Piece;
+					newMove->StartPosition = board->Board[0][5];
+					newMove->NextPosition = board->Board[3][2];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}					
+				}
+				if (ChessMoveList_Count(history) == 4)
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[0][3]->Piece;
+					newMove->StartPosition = board->Board[0][3];
+					newMove->NextPosition = board->Board[4][7];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}											
+				}
+				if (ChessMoveList_Count(history) == 6)
+				{
+					ChessMove * newMove = ChessMove_Initialize();
+					newMove->MovePiece = board->Board[4][7]->Piece;
+					newMove->StartPosition = board->Board[4][7];
+					newMove->NextPosition = board->Board[6][5];
+					if (Model_CheckLegalMove(board, newMove, history))
+					{
+						return newMove;
+					}											
+				}					
 				
-				}
 			}
+			if (player->PlayerColor == Black)
+			{
+			
+			}
+		
 			CurrNode->Move->MoveType = Model_GetMoveType(board, CurrNode->Move);
 			if (CurrNode->Move->MoveType == Castling)
 			{
@@ -1244,20 +1288,20 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 			{
 				CurrNode->Move->Rating += CurrNode->Move->NextPosition->Piece->PieceValue;
 			}
-			Model_PerformMove(board, history, CurrNode->Move);
+			/*Model_PerformMove(board, history, CurrNode->Move);
 			ChessCoordinateList * newList = Model_GetAllLegalCoordinate( board, player->OtherPlayer, player, history);
 			
 			if(ChessCoordinateList_CheckRedundancy(newList, history->LastNode->Move->NextPosition))
 			{
 				CurrNode->Move->Rating -= CurrNode->Move->MovePiece->PieceValue;
-			}
+			}*/
 			
 			if(MaxRating < CurrNode->Move->Rating)
 			{
 				MaxRating = CurrNode->Move->Rating;
 			}
-			Model_Undo1Move(board, history);
-			ChessCoordinateList_Free(newList);
+			/*Model_Undo1Move(board, history);
+			ChessCoordinateList_Free(newList);*/
 			CurrNode = CurrNode->NextNode;
 		}
 		CurrNode = LegalMoveList->FirstNode;
