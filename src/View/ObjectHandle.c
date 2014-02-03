@@ -35,7 +35,52 @@ ObjectHandle * ObjectHandle_Initialize(ObjectType type, ObjectTagEnum TagIn, int
 void ObjectHandle_Render(ViewHandle * MainHandle, ObjectHandle * Object){
 	switch (Object->Type){
 	case Piece:
-			/*switch(*/
+		switch (Object->PlayerColor){
+			case White:
+				switch (Object->PieceType){
+					case Pawn:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Rook:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Knight:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Bishop:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Queen:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case King:
+						strcpy(Object->ImageFileName, "");
+						break;
+				}
+				break;
+			case Black:
+				switch (Object->PieceType){
+					case Pawn:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Rook:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Knight:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Bishop:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case Queen:
+						strcpy(Object->ImageFileName, "");
+						break;
+					case King:
+						strcpy(Object->ImageFileName, "");
+						break;
+				}
+			break;
+		}
 				
 				
 				
@@ -194,6 +239,17 @@ ObjectHandle * GetObjectByTag(ViewHandle * MainHandle, ObjectTagEnum Tag){
 	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList->FirstNode;
 	while (CurrNode){
 		if (CurrNode->Object->Tag == Tag) return CurrNode->Object;		
+		CurrNode = CurrNode->NextNode;
+	}
+	return NULL;
+}
+
+ObjectHandle * GetGUICoordinate(ViewHandle *MainViewHandle, int rank, int file){
+	ObjectHandleNode * CurrNode = MainViewHandle->CurrentWindow->ObjectList->FirstNode;
+	while (CurrNode){
+		if (CurrNode->Object->Type == Coordinate)
+			if (CurrNode->Object->Rank == rank && CurrNode->Object->File == file)
+				return CurrNode->Object;
 		CurrNode = CurrNode->NextNode;
 	}
 	return NULL;

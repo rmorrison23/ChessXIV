@@ -346,7 +346,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 
 	drawMainMenu(MainHandle);
 	Event LocalEvent = GetSDLEvent(MainHandle);	
-	ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+	
 	ObjectHandle * Object;
 	PlayerColorEnum PlayerColorSelected;
 	AIDifficultyLevel AISelected;
@@ -355,6 +355,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 		switch(LocalEvent.Object->Tag){
 			case Option_OnePlayer:
 				printf("One player clicked\n");
+				ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 				drawOnePlayerMenu(MainHandle);
 				Boolean AISelectedFlag = False, PlayerSelectedFlag = False, OptionsDoneFlag = False;
 				while (!AISelectedFlag || !PlayerSelectedFlag || !OptionsDoneFlag){			
@@ -363,6 +364,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 					assert(LocalEvent.Type == ButtonClicked);
 					switch(LocalEvent.Object->Tag){
 						case Option_Black:
+							printf("Black selected\n");
 							Object = GetObjectByTag(MainHandle, Option_Black);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;
 							Object = GetObjectByTag(MainHandle, Option_White);
@@ -371,6 +373,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							PlayerColorSelected = Black;
 							break;
 						case Option_White:
+							printf("W selected\n");
 							Object = GetObjectByTag(MainHandle, Option_White);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_Black);
@@ -379,6 +382,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							PlayerColorSelected = White;
 							break;
 						case Option_EasyAI:
+							printf("ES selected\n");
 							Object = GetObjectByTag(MainHandle, Option_EasyAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_MediumAI);
@@ -389,6 +393,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							AISelected = Easy;
 							break;
 						case Option_MediumAI:
+							printf("Me selected\n");
 							Object = GetObjectByTag(MainHandle, Option_MediumAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_EasyAI);
@@ -399,6 +404,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							AISelected = Medium;
 							break;
 						case Option_DifficultAI:
+							printf("Dif selected\n");
 							Object = GetObjectByTag(MainHandle, Option_DifficultAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle,Option_MediumAI);
@@ -409,6 +415,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							AISelected = Difficult;
 							break;
 						case Option_PlayButton:
+							if (AISelectedFlag && PlayerSelectedFlag)
 							OptionsDoneFlag = True;
 							break;
 							
@@ -458,33 +465,82 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 /*for displaying*/
 void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
 {	
-	/*int XMargin = 225, YMargin = 50;
+	int XMargin = 225, YMargin = 50;
 	
 	drawChessBoard(MainViewHandle);
 	ObjectHandleList_KillAllPieces(MainViewHandle);
 	int rank, file;
-	ObjectHandle * NewObject;
+	ObjectHandle * NewObject, * CoordObject;
+	/*update pieces*/
 	for (rank = 0; rank < 8; rank ++){
 		for (file = 0; file < 8; file++){
 			if (MainBoard->Board[rank][file]->Piece){
 				CoordObject = GetGUICoordinate(MainViewHandle, rank, file);
-				NewObject = ObjectHandle_Initialize(Piece, PawnPiece, Object);
-				NewObject->X = CoordObject->X;
-				NewObject->Y = CoordObject->X;
-				NewObject->Width = CoordObject->Width;
-				NewObject->Height = CoordObject->Height;
+				NewObject = ObjectHandle_Initialize(Piece, Piece, CoordObject->X + XMargin,CoordObject->Y + YMargin, CoordObject->Width - 2 * XMargin, CoordObject->Height - 2 * YMargin);
+				NewObject->PieceType = MainBoard->Board[rank][file]->Piece->Type;
+				ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
 			}
 			
 		}		
-	}*/
+	}
 	
+	windowRender(MainViewHandle);
 	
 }
-void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * MainBoard, ChessCoordinateList * CoordList);
+
+void HighlightCoordinates(ViewHandle * MainViewHandle, 
+ChessBoard * MainBoard, ChessCoordinateList * CoordList){
+	
+	int XMargin = 225, YMargin = 50;
+	
+	drawChessBoard(MainViewHandle);
+	ObjectHandleList_KillAllPieces(MainViewHandle);
+	int rank, file;
+	ObjectHandle * NewObject, *CoordObject;
+	/*update pieces*/
+	for (rank = 0; rank < 8; rank ++){
+		for (file = 0; file < 8; file++){
+			CoordObject = GetGUICoordinate(MainViewHandle, rank, file);
+			/*highlight the board if necessary*/
+			if (ChessCoordinateList_CheckRedundancy(CoordList, MainBoard->Board[rank][file])){
+				CoordObject->Color = SDL_COLOR_HIGHLIGHT_COORDINATE;
+			}
+			
+			if (MainBoard->Board[rank][file]->Piece){
+				
+				NewObject = ObjectHandle_Initialize(Piece, Piece, CoordObject->X + XMargin,CoordObject->Y + YMargin, CoordObject->Width - 2 * XMargin, CoordObject->Height - 2 * YMargin);
+				NewObject->PieceType = MainBoard->Board[rank][file]->Piece->Type;
+				ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+			}
+			
+		}		
+	}
+	
+	windowRender(MainViewHandle);
+	
+}
 
 /*get event from user*/
-/*this function is supposed to overwrite the input pointer with new event data*/
-Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
+Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * LocalEvent){	
+	*LocalEvent = GetSDLEvent(MainViewHandle);	
+	switch (LocalEvent->Type){
+		case Button:
+			switch (LocalEvent->Object->Tag){
+				case Option_Undo:
+					LocalEvent->Type = UndoMove;
+					break;
+				case Option_Quit:
+					LocalEvent->Type = Exit;
+					break;
+			}
+		case Coordinate:
+			LocalEvent->Type = SelectCoordinate;
+			ObjectHandle * CoordObject = LocalEvent->Object;
+			LocalEvent->Coordinate = CurrBoard->Board[CoordObject->Rank][CoordObject->File];
+			break;
+	}
+	return LocalEvent;
+}
 
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);

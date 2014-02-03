@@ -28,7 +28,7 @@ typedef struct {
 #define SDL_COLOR_SCREEN_TITLE          (SDL_Color) {0xA8, 0xC6, 0xDB}
 #define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {0x29, 0xEF, 0x48}
 #define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {255, 255, 255}
-
+#define SDL_COLOR_HIGHLIGHT_COORDINATE	(SDL_Color) {100, 100, 100}
 
 #define SDL_INT_TEXT_SIZE               50
 
@@ -41,7 +41,9 @@ typedef enum {
 	Title, Background, \
 	BPawnPiece, BRookPiece, BKnightPiece, BBishopPiece, BQueenPiece, BKingPiece,	\
 	WPawnPiece, WRookPiece, WKnightPiece, WBishopPiece, WQueenPiece, WKingPiece,	\
-	Label_Color, Label_Difficulty	   \
+	Label_Color, Label_Difficulty,	   \
+	Option_Undo, Option_Quit,
+	Square
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {
@@ -63,13 +65,19 @@ struct ObjectHandleStruct {
 	/*Text and button*/int TextSize; char * FontName; char * String;
 	
   /*color, coordinate or outline*/SDL_Color Color; int hexR; int hexG; int hexB; int hexA;
+  
+	/*coordinate*/int Rank, File;
+	
+	/*piece type*/
+	ChessPieceTypeEnum PieceType;
+	PlayerColorEnum	PlayerColor;
+	
 	
 };
 
 typedef struct ObjectHandleNodeStruct ObjectHandleNode;
 struct ObjectHandleNodeStruct {
 	ObjectHandleNode * PrevNode, * NextNode;
-	
 	ObjectHandle * Object;
 };
 

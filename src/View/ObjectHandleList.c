@@ -81,3 +81,29 @@ void ObjectHandleList_DeepFree(ObjectHandleList * List){
 	List->LastNode = NULL;
 
 }
+
+void ObjectHandleList_KillAllPieces(ViewHandle * MainViewHandle){
+	ObjectHandleList * List = MainViewHandle->CurrentWindow->ObjectList;
+	
+	ObjectHandleNode * Node1 = List->FirstNode, * Node2;
+	while (Node1){
+		Node2 = Node1->NextNode;
+		if (Node1->Object->Type == Piece){
+			/*free it*/
+			free(Node1->Object->ImageFileName);
+			free(Node1->Object);
+			
+			/*bind the nodes*/
+			if (Node1->NextNode)
+			Node1->NextNode->PrevNode = Node1->PrevNode;
+			if (Node1->PrevNode)
+			Node1->PrevNode->NextNode = Node1->NextNode;
+			
+			/*free the node*/
+			free(Node1);
+		}
+		
+		
+		Node1 = Node2;
+	}
+}
