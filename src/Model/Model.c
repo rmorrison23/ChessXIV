@@ -1074,5 +1074,224 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		}
 		return CurrNode->Move;
 	}
+	if (player->AIDifficulty == Medium)
+	{
+		ChessMoveList * LegalMoveList = ChessPlayer_GetAllLegalMoves(board, player, history);
+		ChessMoveNode * LeafNode = LegalMoveList->FirstNode;
+		ChessMoveNode * CurrNode = LegalMoveList->FirstNode;
+		int i;
+		int LeafMax = 0;
+		int CurrLeafValue = 0;
+		int OppCurrLeafValue = 0;
+		
+		/*for ( i = 0; i < 16; i++ ) 
+		{
+			if (player->Pieces[i]->AliveFlag)
+			{
+				if (player->Pieces[i]->Type == Pawn)
+				{
+					CurrLeafValue += 1;
+				}
+				if (player->Pieces[i]->Type == Knight)
+				{
+					CurrLeafValue += 3;
+				}
+				if (player->Pieces[i]->Type == Bishop)
+				{
+					CurrLeafValue += 3;
+				}
+				if (player->Pieces[i]->Type == Rook)
+				{
+					CurrLeafValue += 5;
+				}
+				if (player->Pieces[i]->Type == Queen)
+				{
+					CurrLeafValue += 9;
+				}
+				else 
+				{
+					CurrLeafValue += 0;
+				}
+			}
+		}*/
+		for ( i = 0; i < 16; i++ ) 
+		{
+			if (player->OtherPlayer->Pieces[i]->AliveFlag)
+			{
+				if (player->OtherPlayer->Pieces[i]->Type == Pawn)
+				{
+					OppCurrLeafValue += 1;
+				}
+				if (player->OtherPlayer->Pieces[i]->Type == Knight)
+				{
+					OppCurrLeafValue += 3;
+				}
+				if (player->OtherPlayer->Pieces[i]->Type == Bishop)
+				{
+					OppCurrLeafValue += 3;
+				}
+				if (player->OtherPlayer->Pieces[i]->Type == Rook)
+				{
+					OppCurrLeafValue += 5;
+				}
+				if (player->OtherPlayer->Pieces[i]->Type == Queen)
+				{
+					OppCurrLeafValue += 9;
+				}
+				else 
+				{
+					OppCurrLeafValue += 0;
+				}
+			}
+		
+		}
+		while(LeafNode)
+		{
+			ChessBoard * tempBoard =  ChessBoard_InitializeEmpty();
+			tempBoard = Model_duplicateChessBoard(tempBoard, board);
+			ChessMoveList * moveList = ChessMoveList_Initialize();
+
+			int NextLeafValue = 0;
+			int OppNextLeafValue = 0;
+			int LeafTotal = 0;
+
+			/* perform the move */
+			tempBoard = Model_PerformMove(tempBoard, moveList, LeafNode->Move);
+			if (player->PlayerColor == White)
+			{
+				/*	for ( i = 0; i < 16; i++ ) 
+					{
+						if (tempBoard->Whiteplayer->Pieces[i]->AliveFlag)
+						{
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Pawn)
+							{
+								NextLeafValue += 1;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Knight)
+							{
+								NextLeafValue += 3;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Bishop)
+							{
+								NextLeafValue += 3;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Rook)
+							{
+								NextLeafValue += 5;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Queen)
+							{
+								NextLeafValue += 9;
+							}
+							else 
+							{
+								NextLeafValue += 0;
+							}
+						}
+					}*/
+					for ( i = 0; i < 16; i++ ) 
+					{
+						if (tempBoard->BlackPlayer->Pieces[i]->AliveFlag)
+						{
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Pawn)
+							{
+								OppNextLeafValue += 1;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Knight)
+							{
+								OppNextLeafValue += 3;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Bishop)
+							{
+								OppNextLeafValue += 3;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Rook)
+							{
+								OppNextLeafValue += 5;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Queen)
+							{
+								OppNextLeafValue += 9;
+							}
+							else 
+							{
+								OppNextLeafValue += 0;
+							}
+						}
+					}
+			}
+			if (player->PlayerColor == Black)
+			{
+					/*for ( i = 0; i < 16; i++ ) 
+					{
+						if (tempBoard->Blackplayer->Pieces[i]->AliveFlag)
+						{
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Pawn)
+							{
+								NextLeafValue += 1;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Knight)
+							{
+								NextLeafValue += 3;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Bishop)
+							{
+								NextLeafValue += 3;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Rook)
+							{
+								NextLeafValue += 5;
+							}
+							if (tempBoard->BlackPlayer->Pieces[i]->Type == Queen)
+							{
+								NextLeafValue += 9;
+							}
+							else 
+							{
+								NextLeafValue += 0;
+							}
+						}
+					}*/
+					for ( i = 0; i < 16; i++ ) 
+					{
+						if (tempBoard->WhitePlayer->Pieces[i]->AliveFlag)
+						{
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Pawn)
+							{
+								OppNextLeafValue += 1;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Knight)
+							{
+								OppNextLeafValue += 3;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Bishop)
+							{
+								OppNextLeafValue += 3;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Rook)
+							{
+								OppNextLeafValue += 5;
+							}
+							if (tempBoard->WhitePlayer->Pieces[i]->Type == Queen)
+							{
+								OppNextLeafValue += 9;
+							}
+							else 
+							{
+								OppNextLeafValue += 0;
+							}
+						}
+					}			
+			}
+			
+			LeafTotal = OppCurrLeafValue - OppNextLeafValue;
+
+			/* free everything */
+			ChessMoveList_Free(moveList);
+			ChessBoard_Free(tempBoard);
+			
+		LeafNode = LeafNode->NextNode;
+		}
+	}
 	return NULL;
 }

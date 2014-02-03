@@ -98,6 +98,19 @@ struct ChessMoveListStruct{
 	ChessMoveNode * FirstNode, * LastNode;
 };
 
+/*struct ChessLeafStruct{
+	int value;
+};
+struct ChessLeafNodeStruct{
+	ChessLeaf * Leaf;
+	ChessLeafNode * PrevNode;
+	ChessLeafNode * NextNode;
+	ChessLeafList * List;
+};
+struct ChessLeafListStruct{
+	ChessLeafNode * FirstNode, * LastNode;
+};*/
+
 
 
 #endif
