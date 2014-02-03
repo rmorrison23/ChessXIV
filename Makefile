@@ -15,6 +15,10 @@ ifeq ($(SESSION),ubuntu)
 	CFLAGS +=-DLINUX_OS
 endif
 
+ifeq ($(OSTYPE),linux)
+	CFLAGS +=-DLINUX_OS
+endif
+
 ifeq ($(QUAN_VERSION), y)
 	CFLAGS +=-DQUAN_VERSION
 endif
