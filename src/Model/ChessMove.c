@@ -9,6 +9,7 @@ ChessMove * ChessMove_Initialize(void){
 	NewMove->CapturePiece = NULL;
 	NewMove->CaptureFlag = False;
 	NewMove->MoveType = Normal;
+	NewMove->check = False;
 	return NewMove;
 }
 

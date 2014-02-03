@@ -156,6 +156,8 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		/*check for checked position */
 		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer, MainMoveList)){
 			printf("Player %d is in check\n", CurrentPlayer->PlayerColor);
+			LocalChessMove->check = True;
+			
 		}
 	}
 	

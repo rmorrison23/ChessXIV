@@ -81,6 +81,7 @@ struct ChessMoveStruct{
 	ChessCoordinate * NextPosition;
 	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
+	Boolean check;
 	ChessMoveTypeEnum	MoveType;
 	
 	/*for transformation*/

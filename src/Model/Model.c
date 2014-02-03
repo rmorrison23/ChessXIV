@@ -783,8 +783,8 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 	char transformType[2] = "";
 	char pawnStartingFile[2] = "";
 	char rank1[2] ="";
+	char lastPlayer[6] = "";
 	int castlingFlag = 0;
-	Boolean check = False;
 	int turnNumber = 1;
 	
 	char CastlingText[6] = "";
@@ -1007,11 +1007,16 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		  }
 		  
 		  /* white put black king in check */
-		  check = Model_CheckCheckedPosition(temp->Move->StartPosition->MainBoard, temp->Move->MovePiece->Player, moveList);
-		  if (check == True)
+		  if (temp->Move->check == True)
 		  {
-			check = False;
-			strcat(whiteMove, "+");
+		    strcat(whiteMove, "+");
+		  }
+		  if (temp->NextNode == NULL)
+		  {
+		    strcat(whiteMove, "#");
+		    fprintf(File, "%d. %s \n", turnNumber, whiteMove);
+		    fprintf(File, "1-0");
+		    break;
 		  }
 		}
 		
@@ -1034,11 +1039,17 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		  }
 		  
 		  /*black put white king in check */
-		  check = Model_CheckCheckedPosition(temp->Move->StartPosition->MainBoard, temp->Move->MovePiece->Player, moveList);
-		  if (check == True)
+		  if (temp->Move->check == True)
 		  {
-			check = False;
 			strcat(blackMove, "+");
+		  }
+		  
+		  if (temp->NextNode == NULL)
+		  {
+		    strcat(blackMove, "#");
+		    fprintf(File, "%d. %s %s\n", turnNumber, whiteMove, blackMove);
+		    fprintf(File, "0-1");
+		    break;
 		  }
 		  
 		  /* print the move only when the castlingFlag is 0 because we do not want to print duplicate black's castling move */
@@ -1050,9 +1061,18 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 		  }
 		}
 		
+		if (temp->Move->MovePiece->Player->PlayerColor == White)
+		{
+		  strcpy(lastPlayer, "White");
+		}
+		else
+		{
+		  strcpy(lastPlayer, "Black");
+		}
+		
 		/* advance the node */
 		temp = temp->NextNode;
-	}
+	}	
 	
 /*==================================Closing the file==================================*/	
 	/* un able to open or an error */
@@ -1070,7 +1090,6 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 
 	return (0);
 }
-
 
 /* uses GetLegalCoordinates */
 /* see if move is legal */
