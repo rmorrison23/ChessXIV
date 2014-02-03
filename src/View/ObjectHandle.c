@@ -167,42 +167,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 							DoneFlag = True;
 							break;
 					}
-					
-					/*switch (ObjectSelected->Tag){
-						case Option_OnePlayer:
-							ReturnEvent.Type = Option_OnePlayer_Clicked;
-							DoneFlag = True;
-							break;
-						case Option_TwoPlayer:
-							ReturnEvent.Type = Option_TwoPlayer_Clicked;
-							DoneFlag = True;
-							break;
-						case Option_AIvsAI:
-							ReturnEvent.Type = Option_AIvsAI_Clicked;
-							DoneFlag = True;
-							break;			
-						case Option_White:
-							ReturnEvent.Type = Option_White_Clicked;
-							DoneFlag = True;
-							break;
-						case Option_Black:
-							ReturnEvent.Type = Option_Black_Clicked;
-							DoneFlag = True;
-							break;
-						case Option_EasyAI:
-							ReturnEvent.Type = Option_EasyAI_Clicked;	
-							DoneFlag = True;
-							break;
-						case Option_MediumAI:
-							ReturnEvent.Type = Option_MediumAI_Clicked;
-							DoneFlag = True;
-							break;
-						case Option_DifficultAI:
-							ReturnEvent.Type = Option_DifficultAI_Clicked;
-							DoneFlag = True;
-							break;
-							
-					}*/
+										
 					Node = Node->NextNode;
 				}
 				

@@ -9,6 +9,17 @@ int main(void){
 	DisplayChessBoard(MainViewHandle, MainChessBoard);
 	Event * LocalEvent = View_GetEvent(MainViewHandle, MainChessBoard, LocalEvent);
 	
+	/*print rank and file of the selected coordinate*/
+	if (LocalEvent->Type == SelectCoordinate){
+		printf("Rank %d, File %d\n", LocalEvent->Coordinate->Rank, LocalEvent->Coordinate->File);
+	}
+	
+	/*get some coordinate list*/
+	ChessCoordinateList * TempList = ChessCoordinateList_Initialize();
+	ChessCoordinateList_AppendCoord(MainChessBoard->Board[0][0]);
+	ChessCoordinateList_AppendCoord(MainChessBoard->Board[1][0]);
+	ChessCoordinateList_AppendCoord(MainChessBoard->Board[2][0]);
+	
 	MainViewHandle = View_CleanUp(MainViewHandle);
 	
 	  
