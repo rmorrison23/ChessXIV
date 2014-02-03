@@ -28,10 +28,10 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	  rookMove = malloc(sizeof(ChessMove));
 	  
 	  /* since castling requires two moves, we create 'rookMove' based on king/queen-side */
-	  if(move->NextPosition->File == 1) {
+	  if(move->NextPosition->File == 2) {
 	    rookMove->MovePiece = board->Board[move->NextPosition->Rank][0]->Piece;
 	    rookMove->StartPosition = board->Board[move->NextPosition->Rank][0];
-	    rookMove->NextPosition = board->Board[move->NextPosition->Rank][2];
+	    rookMove->NextPosition = board->Board[move->NextPosition->Rank][3];
 	    rookMove->MoveType = Castling;
 
 	    rookMove->StartPosition->Piece->Coordinate = rookMove->NextPosition;
@@ -221,7 +221,7 @@ ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
   /* for castling, check if king is moving more than one space over */
   if(move->MovePiece->Type == King) {
     if(move->StartPosition->File == 4) {
-      if(move->NextPosition->File == 6 || move->NextPosition->File == 1) {
+      if(move->NextPosition->File == 6 || move->NextPosition->File == 2) {
 	return Castling;
       }
     }
@@ -732,7 +732,7 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 		    targetRank = piece->Coordinate->Rank;
 		    if(!(chessboard->Board[targetRank][0]->Piece->MoveFirstFlag)) {
 		      if(chessboard->Board[targetRank][1]->Piece == NULL && chessboard->Board[targetRank][2]->Piece == NULL && chessboard->Board[targetRank][3]->Piece == NULL) {
-			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][1]);
+			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][2]);
 		      }
 		    }
 		  }
