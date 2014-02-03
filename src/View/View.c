@@ -3,13 +3,13 @@
 #ifndef GUI_ENABLE
 
 /*define basic colors*/
-#define KNRM  "\x1B[31m"
-#define KGRN  "\x1B[32m"
-#define KYEL  "\x1B[33m"
+#define KNRM  "\x1B[37;0m"
+#define KGRN  "\x1B[32;0m"
+#define KYEL  "\x1B[33;0m"
 #define KBLU  "\x1B[34m"
-#define KMAG  "\x1B[35m"
+#define KMAG  "\x1B[35;0m"
 #define KCYN  "\x1B[36m"
-#define KWHT  "\x1B[37m"
+#define KWHT  "\x1B[37;0m"
 
 #define KGRN_BKG	"\x1B[0;31;42m"
 

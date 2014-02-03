@@ -29,7 +29,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	SDL_Color greenText = {0x29, 0xEF, 0x48};
 
 	/* rename window title */
-	SDL_SetWindowTitle(window, "quan's title");
+	SDL_SetWindowTitle(window, "C h e s s  X I V");
 	/* create main menu background image */
 	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, Background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
@@ -226,6 +226,8 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
 
 void drawChessBoard(ViewHandle * MainHandle){
 
+  SDL_SetWindowTitle(MainHandle->CurrentWindow->Window, "C h e s s  X I V");
+	
   SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
   SDL_RenderClear(MainHandle->CurrentWindow->WindowRenderer);
 
@@ -276,7 +278,7 @@ void drawChessBoard(ViewHandle * MainHandle){
   for(file=1; file<=8; file++){
     
     coordinateLabel = ObjectHandle_Initialize(Text, CoordLabel, 280, 675-(file*75)-20, 0, 0);
-    sprintf(coordinateLabel->String, "%d", 1 + file);
+    sprintf(coordinateLabel->String, "%d", 0 + file);
     strcpy(coordinateLabel->FontName, "Assets/fonts/Calibri.ttf");
     coordinateLabel->Color = SDL_COLOR_NORMAL_BUTTON;
     coordinateLabel->TextSize = 22;
