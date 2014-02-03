@@ -1166,6 +1166,7 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		srand(time(NULL));
 		int SelectedLegalMove = (rand()%LegalMoveCount);
 		int i;
+		
 		for (i = 0; i < SelectedLegalMove; i++)
 		{
 			CurrNode = CurrNode->NextNode;
@@ -1212,12 +1213,70 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		srand(time(NULL));
 		int TieBreakMove = (rand()%LegalMoveCount);
 		int i;
+		int MaxRating = 0;
 		for (i = 0; i < LegalMoveCount; i++)
 		{
-		
+			if (history->FirstNode == NULL)
+			{
+				if (player->PlayerColor == White)
+				{
+					
+				}
+				if (player->PlayerColor == Black)
+				{
+				
+				}
+			}
+			CurrNode->Move->MoveType = Model_GetMoveType(board, CurrNode->Move);
+			if (CurrNode->Move->MoveType == Castling)
+			{
+				return CurrNode->Move;
+			}
+			if (CurrNode->Move->MoveType == Transformation)
+			{
+				return CurrNode->Move;
+			}
+			if (CurrNode->Move->NextPosition->Piece)
+			{
+				CurrNode->Move->Rating += CurrNode->Move->NextPosition->Piece->PieceValue;
+			}
+			Model_PerformMove(board, history, CurrNode->Move);
+			ChessCoordinateList * newList = Model_GetAllLegalCoordinate( board, player->OtherPlayer, player, history);
+			
+			if(ChessCoordinateList_CheckRedundancy(newList, history->LastNode->Move->MovePiece->Coordinate))
+			{
+				CurrNode->Move->Rating -= CurrNode->Move->MovePiece->PieceValue;
+			}
+			
+			if(MaxRating < CurrNode->Move->Rating)
+			{
+				MaxRating = CurrNode->Move->Rating;
+			}
+			
 			Model_Undo1Move(board, history);
+			ChessCoordinateList_Free(newList);
 			CurrNode = CurrNode->NextNode;
 		}
-	}
+		CurrNode = LegalMoveList->FirstNode;
+		if (MaxRating != 0)
+		{
+			for (i = 0; i < LegalMoveCount; i++)
+			{
+				if (CurrNode->Move->Rating == MaxRating)
+				{
+					return CurrNode->Move;
+				}
+				CurrNode = CurrNode->NextNode;
+			}
+		}
+			
+			CurrNode = LegalMoveList->FirstNode;
+			for (i = 0; i < TieBreakMove; i++)
+			{
+				CurrNode = CurrNode->NextNode;
+			}
+			return CurrNode->Move;
+		}
+	
 	return NULL;
 }
