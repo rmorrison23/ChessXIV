@@ -34,6 +34,7 @@
 void drawMainMenu(ViewHandle * MainHandle);
 void drawOnePlayerMenu(ViewHandle * MainHandle);
 void drawChessBoard(ViewHandle * MainHandle);
+void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color);
 #else
 /* function to display the main menu to the screen */
 /* int drawMainMenu(SDL_Window *window, SDL_Renderer *renderer, int *screenMode); */

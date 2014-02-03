@@ -355,7 +355,7 @@ void drawChessBoard(ViewHandle * MainHandle){
   strcpy(capturedBishopLeft->ImageFileName, "Assets/pieces/W_Bishop.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopLeft);
 
- ObjectHandle *capturedBishopCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
+  ObjectHandle *capturedBishopCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedBishopCountWhite->TextSize = 30;
   capturedBishopCountWhite->Color = SDL_COLOR_BLACK;
   capturedBishopCountWhite->PieceType = Bishop;
@@ -368,7 +368,7 @@ void drawChessBoard(ViewHandle * MainHandle){
   strcpy(capturedQueenLeft->ImageFileName, "Assets/pieces/W_Queen.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenLeft);
 
- ObjectHandle *capturedQueenCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
+  ObjectHandle *capturedQueenCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedQueenCountWhite->TextSize = 30;
   capturedQueenCountWhite->Color = SDL_COLOR_BLACK;
   capturedQueenCountWhite->PieceType = Queen;
@@ -470,6 +470,43 @@ void drawChessBoard(ViewHandle * MainHandle){
   strcpy(capturedQueenCountBlack->String, "0");
   strcpy(capturedQueenCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountBlack);
+
+  windowRender(MainHandle);
+}
+
+void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
+
+  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
+  SDL_RenderClear(MainHandle->CurrentWindow->WindowRenderer);
+  ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+
+  ObjectHandle *transformBox = ObjectHandle_Initialize(Color, Box, 375, 225, 450, 165);
+  transformBox->hexR = 0x32;
+  transformBox->hexG = 0x00;
+  transformBox->hexB = 0xE8;
+  transformBox->hexA = 0xE8;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, transformBox);
+
+  ObjectHandle *NewObject;
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 405, 285, 75, 75);
+  NewObject->PieceType = Knight;
+  NewObject->PlayerColor = color;
+  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 510, 285, 75, 75);
+  NewObject->PieceType = Bishop;
+  NewObject->PlayerColor = color;
+  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 615, 285, 75, 75);
+  NewObject->PieceType = Knight;
+  NewObject->PlayerColor = Rook;
+  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
+
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 720, 285, 75, 75);
+  NewObject->PieceType = Queen;
+  NewObject->PlayerColor = color;
+  ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
 
   windowRender(MainHandle);
 }
