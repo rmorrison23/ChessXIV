@@ -286,6 +286,8 @@ void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoa
 ViewHandle * View_Initialize(void){
 	ViewHandle * ReturnHandle = malloc(sizeof(ViewHandle));
 	ReturnHandle->CurrentPlayer = NULL;
+	ReturnHandle->ViewHandleEvent = malloc(sizeof(ViewHandle));
+	assert(ReturnHandle->ViewHandleEvent);
 	return ReturnHandle;
 }
 

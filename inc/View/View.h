@@ -40,6 +40,7 @@
 #else
 typedef struct {
 	ChessPlayer * CurrentPlayer;		/*just dummy variable for ViewHandle of commandline display*/
+	Event * ViewHandleEvent;
 } ViewHandle;
 #endif
 
