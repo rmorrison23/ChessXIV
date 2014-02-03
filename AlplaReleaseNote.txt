@@ -1,4 +1,0 @@
-This release is incomplete in features. To compile Alpha release please do:
-make ChessXIV
-To run please do
-./ChessXIV

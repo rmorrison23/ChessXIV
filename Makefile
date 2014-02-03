@@ -1,3 +1,6 @@
+#get lib sdl ready to compile
+$(shell python pkgconfig_changepath.py)	
+
 CC	:= gcc
 CFLAGS	:= -g
 LDFLAGS := -lm
@@ -24,6 +27,7 @@ ifeq ($(QUAN_VERSION), y)
 endif
 
 ifeq ($(GUI_ENABLE),y)
+
 	GUI_FLAG=-DGUI_ENABLE $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
 	VIEW_LIB+= display ObjectHandleList ObjectHandle render
 	LDFLAGS+= $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
@@ -48,7 +52,7 @@ INCLUDES  := $(addprefix -Iinc/,$(MODULES))
 
 VPATH = $(SRC_DIR) src
 
-PKG_CONFIG_PATH =$(PWD)/SDL2_Library/lib/pkgconfig
+
 
 .PHONY: all clean test
 
@@ -61,6 +65,7 @@ clean:
 	rm bin/*
 
 build/%.o: %.c
+	
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(GUI_FLAG)
 
 build/lib%.a: build/%.o

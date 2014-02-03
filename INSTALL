@@ -1,5 +1,8 @@
-To install this program, please do the following:
+#To install this program in commandline:
+make clean
 make
 
-To remove the program, please do the following:
+#To install this program in GUI:
+setenv PKG_CONFIG_PATH $PWD/SDL2_Library/lib/pkgconfig
 make clean
+make GUI_ENABLE=y
