@@ -50,16 +50,23 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	/*main loop*/
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
+	  ChessPlayer_UpdateTime(CurrentPlayer);
+	  if (CurrentPlayer->OtherPlayer->PlayerColor == 1)
+	  printf("Elapsed time of black player is %lf seconds.\n", CurrentPlayer->OtherPlayer->ElapsedTime);
+	  else if (CurrentPlayer->OtherPlayer->PlayerColor == 0)
+	  printf("Elapsed time of white player is %lf seconds.\n", CurrentPlayer->OtherPlayer->ElapsedTime);
 	 	 UndoMoveFlag = False;
+
 		MainViewHandle->CurrentPlayer = CurrentPlayer;
+
+	 	DisplayChessBoard(MainViewHandle, MainChessBoard);
+
 		if (CurrentPlayer->PlayerControl == Human){
 			Coordinate1 = NULL;
 			Coordinate2 = NULL;
 
 			/*NEED TO TAKE CARE OF SITUATION OF NO POSSIBLE LEGAL MOVES FOR A PIECE*/
-			/*let current user select 1 coordinate*/
-			DisplayChessBoard(Handle->MainViewHandle, MainChessBoard);
-			
+			/*let current user select 1 coordinate*/		
 			/*state 1: No coordinates selected*/
 			ExitStateFlag = False;
 			while (!ExitStateFlag){
@@ -93,8 +100,10 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			ExitStateFlag = False;
 			while (!ExitStateFlag){
 			 	/*highlight the legal coordinates of selected piece*/
-				LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer);
-				HighlightCoordinates(Handle->MainViewHandle, MainChessBoard, LegalChessCoordList);
+
+			  LegalChessCoordList = Model_GetLegalCoordinates(MainChessBoard, Coordinate1->Piece, CurrentPlayer,MainMoveList);
+				HighlightCoordinates(MainViewHandle, MainChessBoard, LegalChessCoordList);
+
 				
 				LocalEvent = View_GetEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 				switch (LocalEvent->Type){
@@ -131,7 +140,8 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalChessMove->MovePiece = Coordinate1->Piece;
 			LocalChessMove->StartPosition = Coordinate1;
 			LocalChessMove->NextPosition = Coordinate2;
-			if (ChessMove_IsTransformation(LocalChessMove)){
+
+			if (Model_GetMoveType(MainChessBoard, LocalChessMove) == Transformation){
 				Event * AskTransformEvent = View_AskMoveTransform(Handle->MainViewHandle, CurrentPlayer);
 				switch (AskTransformEvent->Type){
 					case Exit:
@@ -141,33 +151,44 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 						LocalChessMove->Transform_IntoType = AskTransformEvent->PieceType;
 						break;
 				}
-				
 			}
 			
-			MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);	
+			
 			
 		} else {
-			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer);
+			LocalChessMove = Model_GetBestMove(MainChessBoard, CurrentPlayer, MainMoveList);
+			getchar();
+			if (Model_GetMoveType(MainChessBoard, LocalChessMove) == Transformation){
+				LocalChessMove->Transform_IntoType = Rook;
+			}
 		}
+		
+		MainChessBoard = Model_PerformMove(MainChessBoard, MainMoveList, LocalChessMove);	
 		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
 		/*check for checkmate first*/
-		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer)){
+		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Checkmate;
 			LocalEvent->Player = CurrentPlayer;
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 			GameOnFlag = False;
+/*==================================================CHECKING LOG FILE==========================*/
+			writeToLogFile("log", MainMoveList);
+/*==================================================CHECKING LOG FILE==========================*/
 		/*then check for stalemate*/
-		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer)){
+		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Stalemate;			
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 			GameOnFlag = False;		
 		/*check for checked position */
-		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer)){
+
+		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = InCheck;
 			LocalEvent->Player = CurrentPlayer;		
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
+			LocalChessMove->check = True;
+
 			
 		}
 	}

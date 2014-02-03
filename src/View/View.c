@@ -145,7 +145,7 @@ Event * SetOptions(ViewHandle * MainViewHanlde, ChessBoard * MainBoard){
 		MainBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
 	}
 	
-	AskPlayerControl(MainBoard->BlackPlayer);
+	MainBoard->BlackPlayer->PlayerControl = AskPlayerControl(MainBoard->BlackPlayer);
 	if (MainBoard->BlackPlayer->PlayerControl == AI){
 		MainBoard->BlackPlayer->AIDifficulty = AskAIDifficultyLevel();
 	} 
@@ -169,7 +169,13 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 		scanf("%s", UserInput);
 		
 		/*get first non space character*/
-		while ((*OneLetter) == ' ') OneLetter++;
+		OneLetter = UserInput;
+		while ((*OneLetter) == ' ' && (OneLetter - UserInput) < 10) OneLetter++;
+		
+		if (OneLetter - UserInput == 10){
+			printf("Invalid choice\n");
+			continue;
+		}
 		
 		if (*OneLetter >= 'a' && *OneLetter <= 'h'){
 			ReturnFile = *OneLetter - 'a';
@@ -193,7 +199,8 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 		} else {
 		 	printf("Invalid Coordinate");
 			continue;
-		}		
+		}
+		
 		
 	}
 	EventHandle->Type = SelectCoordinate;

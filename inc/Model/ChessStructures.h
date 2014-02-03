@@ -4,6 +4,8 @@
 #define CHESS_BOARD_MAX_ROW 8
 #define CHESS_BOARD_MAX_COL 8
 
+#include <time.h>
+
 
 typedef struct ChessCoordinateStruct ChessCoordinate;
 typedef struct ChessCoordinateListStruct ChessCoordinateList;
@@ -52,7 +54,9 @@ struct ChessCoordinateNodeStruct{
 struct ChessPlayerStruct{
 	PlayerColorEnum 	PlayerColor;
 	AIDifficultyLevel	AIDifficulty;
-	PlayerControlEnum	PlayerControl;
+  	PlayerControlEnum	PlayerControl;
+  time_t StartTime;
+  double ElapsedTime;
 
 	/*pointer to other player*/
 	ChessPlayer *	OtherPlayer;
@@ -68,7 +72,9 @@ struct ChessPieceStruct{
 	ChessPlayer *		Player;
 	ChessCoordinate *	Coordinate;
 	Boolean			AliveFlag;
-	Boolean			PawnMoveFirstFlag;
+	int			MoveFirstFlag;
+	/* for ai */
+	int			PieceValue;
 };
 
 struct ChessMoveStruct{
@@ -77,10 +83,13 @@ struct ChessMoveStruct{
 	ChessCoordinate * NextPosition;
 	ChessPiece *	CapturePiece;
 	Boolean CaptureFlag;
+	Boolean check;
 	ChessMoveTypeEnum	MoveType;
 	
 	/*for transformation*/
 	ChessPieceTypeEnum Transform_IntoType;
+	/* for ai */
+	int Rating;
 };
 
 struct ChessMoveNodeStruct{
@@ -93,6 +102,7 @@ struct ChessMoveNodeStruct{
 struct ChessMoveListStruct{
 	ChessMoveNode * FirstNode, * LastNode;
 };
+
 
 
 
