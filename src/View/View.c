@@ -140,7 +140,7 @@ AIDifficultyLevel AskAIDifficultyLevel(void){
 }
 
 Event * SetOptions(ViewHandle * MainViewHanlde, ChessBoard * MainBoard){
-	AskPlayerControl(MainBoard->WhitePlayer);
+	MainBoard->WhitePlayer->PlayerControl = AskPlayerControl(MainBoard->WhitePlayer);
 	if (MainBoard->WhitePlayer->PlayerControl == AI){
 		MainBoard->WhitePlayer->AIDifficulty = AskAIDifficultyLevel();
 	}
