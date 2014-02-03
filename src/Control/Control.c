@@ -147,6 +147,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 					case Exit:
 						exit(0);
 						break;
+					case PieceClicked:
 					case AskTransform:		
 						LocalChessMove->Transform_IntoType = AskTransformEvent->PieceType;
 						break;

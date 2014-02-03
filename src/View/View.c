@@ -636,8 +636,9 @@ Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * PlayerA
 	Event * LocalEvent = malloc(sizeof(Event));
 	* LocalEvent = GetSDLEvent(MainViewHandle);	
 	switch (LocalEvent->Type){
-		case Piece:
-			LocalEvent->PieceType = LocalEvent->Object->PieceType;			
+		case PieceClicked:
+			LocalEvent->Type = AskTransform;
+			/*LocalEvent->PieceType = LocalEvent->Object->PieceType;			*/
 			break;		
 	}
 	return LocalEvent;
