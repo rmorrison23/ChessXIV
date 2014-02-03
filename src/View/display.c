@@ -258,6 +258,143 @@ void drawChessBoard(ViewHandle * MainHandle){
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, Box);
     }
   }
+
+  ObjectHandle *playerBoxLeft = ObjectHandle_Initialize(Color, Box, 30, SCREEN_HEIGHT/2 - 300, 225, 75);
+  playerBoxLeft->hexR = 0xA8;
+  playerBoxLeft->hexG = 0xC6;
+  playerBoxLeft->hexB = 0xDB;
+  playerBoxLeft->hexA = 0xDB;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerBoxLeft);
+  ObjectHandle *graveyardBoxLeft = ObjectHandle_Initialize(Color, Box, 30, SCREEN_HEIGHT/2 - 225, 225, 150);
+  graveyardBoxLeft->hexR = 0x7B;
+  graveyardBoxLeft->hexG = 0xAD;
+  graveyardBoxLeft->hexB = 0xDB;
+  graveyardBoxLeft->hexA = 0xDB;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, graveyardBoxLeft);
+
+  ObjectHandle *capturedPawnLeft = ObjectHandle_Initialize(Image, Box, 30, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedPawnLeft->PieceType = Pawn;
+  capturedPawnLeft->PlayerColor = White;
+  strcpy(capturedPawnLeft->ImageFileName, "Assets/pieces/W_Pawn.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnLeft);
+  ObjectHandle *capturedPawnCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedPawnCountWhite->TextSize = 30;
+  capturedPawnCountWhite->Color = SDL_COLOR_BLACK;
+  strcpy(capturedPawnCountWhite->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountWhite);
+
+  ObjectHandle *capturedRookLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedRookLeft->PieceType = Rook;
+  capturedRookLeft->PlayerColor = White;
+  strcpy(capturedRookLeft->ImageFileName, "Assets/pieces/W_Rook.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookLeft);
+  ObjectHandle *capturedRookCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedRookCountWhite->TextSize = 30;
+  capturedRookCountWhite->Color = SDL_COLOR_BLACK;
+  strcpy(capturedRookCountWhite->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountWhite);
+
+  ObjectHandle *capturedKnightLeft = ObjectHandle_Initialize(Image, Box, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedKnightLeft->PieceType = Knight;
+  capturedKnightLeft->PlayerColor = White;
+  strcpy(capturedKnightLeft->ImageFileName, "Assets/pieces/W_Knight.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightLeft);
+ ObjectHandle *capturedKnightCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
+  capturedKnightCountWhite->TextSize = 30;
+  capturedKnightCountWhite->Color = SDL_COLOR_BLACK;
+  strcpy(capturedKnightCountWhite->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountWhite);
+
+  ObjectHandle *capturedBishopLeft = ObjectHandle_Initialize(Image, Box, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
+  capturedBishopLeft->PieceType = Bishop;
+  capturedBishopLeft->PlayerColor = White;
+  strcpy(capturedBishopLeft->ImageFileName, "Assets/pieces/W_Bishop.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopLeft);
+ ObjectHandle *capturedBishopCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
+  capturedBishopCountWhite->TextSize = 30;
+  capturedBishopCountWhite->Color = SDL_COLOR_BLACK;
+  strcpy(capturedBishopCountWhite->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountWhite);
+
+  ObjectHandle *capturedQueenLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
+  capturedQueenLeft->PieceType = Queen;
+  capturedQueenLeft->PlayerColor = White;
+  strcpy(capturedQueenLeft->ImageFileName, "Assets/pieces/W_Queen.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenLeft);
+ ObjectHandle *capturedQueenCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
+  capturedQueenCountWhite->TextSize = 30;
+  capturedQueenCountWhite->Color = SDL_COLOR_BLACK;
+  strcpy(capturedQueenCountWhite->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountWhite);
+
+  ObjectHandle *playerBoxRight = ObjectHandle_Initialize(Color, Box, 945, 413, 225, 75);
+  playerBoxRight->hexR = 0xA8;
+  playerBoxRight->hexG = 0xC6;
+  playerBoxRight->hexB = 0xDB;
+  playerBoxRight->hexA = 0xDB;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerBoxRight);
+  ObjectHandle *graveyardBoxRight = ObjectHandle_Initialize(Color, Box, 945, 488, 225, 150);
+  graveyardBoxLeft->hexR = 0x7B;
+  graveyardBoxLeft->hexG = 0xAD;
+  graveyardBoxLeft->hexB = 0xDB;
+  graveyardBoxLeft->hexA = 0xDB;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, graveyardBoxRight);
+
+  ObjectHandle *capturedPawnRight = ObjectHandle_Initialize(Image, Box, 945, 488, 75, 75);
+  capturedPawnRight->PieceType = Pawn;
+  capturedPawnRight->PlayerColor = Black;
+  strcpy(capturedPawnRight->ImageFileName, "Assets/pieces/W_Pawn.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnRight);
+  ObjectHandle *capturedPawnCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488, 75, 75);
+  capturedPawnCountBlack->TextSize = 30;
+  capturedPawnCountBlack->Color = SDL_COLOR_BLACK;
+  strcpy(capturedPawnCountBlack->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountBlack);
+
+  ObjectHandle *capturedRookRight = ObjectHandle_Initialize(Image, Box, 945+75, 488, 75, 75);
+  capturedRookRight->PieceType = Rook;
+  capturedRookRight->PlayerColor = Black;
+  strcpy(capturedRookRight->ImageFileName, "Assets/pieces/W_Rook.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookRight);
+  ObjectHandle *capturedRookCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488, 75, 75);
+  capturedRookCountBlack->TextSize = 30;
+  capturedRookCountBlack->Color = SDL_COLOR_BLACK;
+  strcpy(capturedRookCountBlack->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountBlack);
+
+  ObjectHandle *capturedKnightRight = ObjectHandle_Initialize(Image, Box, 945+150, 488, 75, 75);
+  capturedKnightRight->PieceType = Knight;
+  capturedKnightRight->PlayerColor = Black;
+  strcpy(capturedKnightRight->ImageFileName, "Assets/pieces/W_Knight.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightRight);
+  ObjectHandle *capturedKnightCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+150, 488, 75, 75);
+  capturedKnightCountBlack->TextSize = 30;
+  capturedKnightCountBlack->Color = SDL_COLOR_BLACK;
+  strcpy(capturedKnightCountBlack->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountBlack);
+
+  ObjectHandle *capturedBishopRight = ObjectHandle_Initialize(Image, Box, 945, 488+75, 75, 75);
+  capturedBishopRight->PieceType = Bishop;
+  capturedBishopRight->PlayerColor = Black;
+  strcpy(capturedBishopRight->ImageFileName, "Assets/pieces/W_Bishop.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopRight);
+  ObjectHandle *capturedBishopCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488+75, 75, 75);
+  capturedBishopCountBlack->TextSize = 30;
+  capturedBishopCountBlack->Color = SDL_COLOR_BLACK;
+  strcpy(capturedBishopCountBlack->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountBlack);
+
+  ObjectHandle *capturedQueenRight = ObjectHandle_Initialize(Image, Box, 945+75, 488+75, 75, 75);
+  capturedQueenRight->PieceType = Queen;
+  capturedQueenRight->PlayerColor = Black;
+  strcpy(capturedQueenRight->ImageFileName, "Assets/pieces/W_Queen.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenRight);
+  ObjectHandle *capturedQueenCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488+75, 75, 75);
+  capturedQueenCountBlack->TextSize = 30;
+  capturedQueenCountBlack->Color = SDL_COLOR_BLACK;
+  strcpy(capturedQueenCountBlack->ImageFileName, "0");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountBlack);
+
   windowRender(MainHandle);
 }
 
