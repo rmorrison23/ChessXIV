@@ -347,7 +347,7 @@ ViewHandle * View_CleanUp(ViewHandle *MainHandle){
 	
 	ObjectHandleList_ShallowFree(MainHandle->CurrentWindow->ObjectList);
 	free(MainHandle->CurrentWindow);
-	free(MainHandle->ViewHandldeEvent);
+	free(MainHandle->ViewHandleEvent);
 	free(MainHandle);
 	return NULL;
 	
