@@ -96,6 +96,7 @@ ChessBoard * Model_PerformMove(ChessBoard * board, ChessMoveList * moveList, Che
 	      move->CaptureFlag = True;
 	    }
 	  /* piece to move, moved to next coordinate */
+	  assert(move->StartPosition->Piece);
 	  move->StartPosition->Piece->Coordinate = move->NextPosition;
 	  move->NextPosition->Piece = move->MovePiece;	
 	  if(move->MoveType == Transformation) {
@@ -753,9 +754,10 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			moveTo->MovePiece = piece;
 			moveTo->StartPosition = piece->Coordinate;
 			moveTo->NextPosition = node1->Coordinate;
-			if (Model_CheckLegalMove(chessboard, moveTo) == False){
+			if (Model_CheckLegalMove(chessboard, moveTo, moveList) == False){
 				output = ChessCoordinateList_RemoveAtNode(output, node1);
 			}
+			free(moveTo);
 			node1 = node2;
 		}
 	}
@@ -954,7 +956,7 @@ int writeToLogFile(char fname[100], ChessMoveList * moveList)
 
 /* uses GetLegalCoordinates */
 /* see if move is legal */
-Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
+Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo, ChessMoveList * history)
 {
 	Boolean checkKing = False;
 	ChessMoveList * moveList = ChessMoveList_Initialize();
@@ -962,12 +964,31 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo)
 	/* create a temporary board */
 	ChessBoard * tempBoard =  ChessBoard_InitializeEmpty();
 	
+		
 	/* create a duplicate move */
+
 	ChessMove * tempMove = ChessMove_Initialize();
 	int rank, file;
 	int rank2, file2;
 	
-	/* duplicate chess buard */
+	/*duplicate last move of history*/
+	if (history->LastNode){
+	
+		rank = history->LastNode->Move->StartPosition->Rank;
+		file = history->LastNode->Move->StartPosition->File;
+		tempMove->StartPosition = tempBoard->Board[rank][file];
+		tempMove->MovePiece = tempMove->StartPosition->Piece;
+	
+		rank2 = history->LastNode->Move->NextPosition->Rank;
+		file2 = history->LastNode->Move->NextPosition->File;
+		tempMove->NextPosition = tempBoard->Board[rank2][file2];
+		
+		moveList->FirstNode = tempMove;
+		moveList->LastNode = tempMove;
+	}
+	tempMove = ChessMove_Initialize();
+	
+	/* duplicate chess board */
 	tempBoard = Model_duplicateChessBoard(tempBoard, board);
 	
 	/* populate the temp move */
@@ -1077,221 +1098,25 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 	if (player->AIDifficulty == Medium)
 	{
 		ChessMoveList * LegalMoveList = ChessPlayer_GetAllLegalMoves(board, player, history);
-		ChessMoveNode * LeafNode = LegalMoveList->FirstNode;
 		ChessMoveNode * CurrNode = LegalMoveList->FirstNode;
+		int LegalMoveCount = ChessMoveList_Count(LegalMoveList);
+		srand(time(NULL));
+		int TieBreakMove = (rand()%LegalMoveCount);
 		int i;
-		int LeafMax = 0;
-		int CurrLeafValue = 0;
-		int OppCurrLeafValue = 0;
-		
-		/*for ( i = 0; i < 16; i++ ) 
+		for (i = 0; i < LegalMoveCount; i++)
 		{
-			if (player->Pieces[i]->AliveFlag)
+			if (CurrNode->Move->NextPosition->Piece)
 			{
-				if (player->Pieces[i]->Type == Pawn)
-				{
-					CurrLeafValue += 1;
-				}
-				if (player->Pieces[i]->Type == Knight)
-				{
-					CurrLeafValue += 3;
-				}
-				if (player->Pieces[i]->Type == Bishop)
-				{
-					CurrLeafValue += 3;
-				}
-				if (player->Pieces[i]->Type == Rook)
-				{
-					CurrLeafValue += 5;
-				}
-				if (player->Pieces[i]->Type == Queen)
-				{
-					CurrLeafValue += 9;
-				}
-				else 
-				{
-					CurrLeafValue += 0;
-				}
+				return CurrNode->Move;
 			}
-		}*/
-		for ( i = 0; i < 16; i++ ) 
-		{
-			if (player->OtherPlayer->Pieces[i]->AliveFlag)
-			{
-				if (player->OtherPlayer->Pieces[i]->Type == Pawn)
-				{
-					OppCurrLeafValue += 1;
-				}
-				if (player->OtherPlayer->Pieces[i]->Type == Knight)
-				{
-					OppCurrLeafValue += 3;
-				}
-				if (player->OtherPlayer->Pieces[i]->Type == Bishop)
-				{
-					OppCurrLeafValue += 3;
-				}
-				if (player->OtherPlayer->Pieces[i]->Type == Rook)
-				{
-					OppCurrLeafValue += 5;
-				}
-				if (player->OtherPlayer->Pieces[i]->Type == Queen)
-				{
-					OppCurrLeafValue += 9;
-				}
-				else 
-				{
-					OppCurrLeafValue += 0;
-				}
-			}
-		
+			CurrNode = CurrNode->NextNode;
 		}
-		while(LeafNode)
+		CurrNode = LegalMoveList->FirstNode;
+		for (i = 0; i < TieBreakMove; i++)
 		{
-			ChessBoard * tempBoard =  ChessBoard_InitializeEmpty();
-			tempBoard = Model_duplicateChessBoard(tempBoard, board);
-			ChessMoveList * moveList = ChessMoveList_Initialize();
-
-			int NextLeafValue = 0;
-			int OppNextLeafValue = 0;
-			int LeafTotal = 0;
-
-			/* perform the move */
-			tempBoard = Model_PerformMove(tempBoard, moveList, LeafNode->Move);
-			if (player->PlayerColor == White)
-			{
-				/*	for ( i = 0; i < 16; i++ ) 
-					{
-						if (tempBoard->Whiteplayer->Pieces[i]->AliveFlag)
-						{
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Pawn)
-							{
-								NextLeafValue += 1;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Knight)
-							{
-								NextLeafValue += 3;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Bishop)
-							{
-								NextLeafValue += 3;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Rook)
-							{
-								NextLeafValue += 5;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Queen)
-							{
-								NextLeafValue += 9;
-							}
-							else 
-							{
-								NextLeafValue += 0;
-							}
-						}
-					}*/
-					for ( i = 0; i < 16; i++ ) 
-					{
-						if (tempBoard->BlackPlayer->Pieces[i]->AliveFlag)
-						{
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Pawn)
-							{
-								OppNextLeafValue += 1;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Knight)
-							{
-								OppNextLeafValue += 3;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Bishop)
-							{
-								OppNextLeafValue += 3;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Rook)
-							{
-								OppNextLeafValue += 5;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Queen)
-							{
-								OppNextLeafValue += 9;
-							}
-							else 
-							{
-								OppNextLeafValue += 0;
-							}
-						}
-					}
-			}
-			if (player->PlayerColor == Black)
-			{
-					/*for ( i = 0; i < 16; i++ ) 
-					{
-						if (tempBoard->Blackplayer->Pieces[i]->AliveFlag)
-						{
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Pawn)
-							{
-								NextLeafValue += 1;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Knight)
-							{
-								NextLeafValue += 3;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Bishop)
-							{
-								NextLeafValue += 3;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Rook)
-							{
-								NextLeafValue += 5;
-							}
-							if (tempBoard->BlackPlayer->Pieces[i]->Type == Queen)
-							{
-								NextLeafValue += 9;
-							}
-							else 
-							{
-								NextLeafValue += 0;
-							}
-						}
-					}*/
-					for ( i = 0; i < 16; i++ ) 
-					{
-						if (tempBoard->WhitePlayer->Pieces[i]->AliveFlag)
-						{
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Pawn)
-							{
-								OppNextLeafValue += 1;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Knight)
-							{
-								OppNextLeafValue += 3;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Bishop)
-							{
-								OppNextLeafValue += 3;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Rook)
-							{
-								OppNextLeafValue += 5;
-							}
-							if (tempBoard->WhitePlayer->Pieces[i]->Type == Queen)
-							{
-								OppNextLeafValue += 9;
-							}
-							else 
-							{
-								OppNextLeafValue += 0;
-							}
-						}
-					}			
-			}
-			
-			LeafTotal = OppCurrLeafValue - OppNextLeafValue;
-
-			/* free everything */
-			ChessMoveList_Free(moveList);
-			ChessBoard_Free(tempBoard);
-			
-		LeafNode = LeafNode->NextNode;
+			CurrNode = CurrNode->NextNode;
 		}
+		return CurrNode->Move;
 	}
 	return NULL;
 }

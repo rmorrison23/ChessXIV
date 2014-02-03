@@ -16,7 +16,7 @@
 
 ChessBoard * Model_Initialize(void);
 
-Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *);
+Boolean Model_CheckLegalMove(ChessBoard *, ChessMove *, ChessMoveList*);
 
 ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *, ChessPiece *, ChessPlayer *, ChessMoveList *);
 
