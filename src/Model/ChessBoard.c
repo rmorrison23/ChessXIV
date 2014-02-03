@@ -232,3 +232,23 @@ void ChessBoard_Free(ChessBoard * CurrBoard){
 	/*free the board*/
 	free(CurrBoard);
 }
+
+int ChessBoard_CountCapturePiece(ChessBoard * CurrBoard, PlayerColorEnum Color, ChessPieceTypeEnum Type){
+	ChessPlayer * CurrentPlayer;
+	switch (Color){
+		case White:
+			CurrentPlayer = CurrBoard->WhitePlayer;
+			break;
+		case Black:
+			CurrentPlayer = CurrBoard->BlackPlayer;
+			break;
+	}
+	
+	int i, count = 0;
+	for (i = 0; i < 16; i++){
+		if (!(CurrentPlayer->Pieces[i]->AliveFlag) && CurrentPlayer->Pieces[i]->Type == Type)
+			count++;
+		
+	}
+	return count;
+}

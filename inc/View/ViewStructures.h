@@ -44,7 +44,7 @@ typedef enum {
 	Label_Color, Label_Difficulty,	   \
 	Option_Undo, Option_Quit,
 
-	Square
+	Square, CaptureCount
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {

@@ -12,5 +12,5 @@
 ChessBoard * ChessBoard_InitializeEmpty(void);
 ChessBoard * ChessBoard_Initialize(void);
 void ChessBoard_Free(ChessBoard *);
-
+int ChessBoard_CountCapturePiece(ChessBoard * CurrBoard, PlayerColorEnum Color, ChessPieceTypeEnum Type);
 #endif

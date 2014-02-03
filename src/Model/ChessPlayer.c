@@ -8,4 +8,4 @@ ChessPiece * ChessPlayer_GetChessPiece(ChessPlayer * Player, ChessPieceTypeEnum 
 		}
 	}
 	return 0;
-} 
+}

@@ -10,7 +10,7 @@ int main(void){
 	getchar();*/
 
 	DisplayChessBoard(MainViewHandle, MainChessBoard);
-		Event * LocalEvent = View_GetEvent(MainViewHandle, MainChessBoard, LocalEvent);
+	Event * LocalEvent = View_GetEvent(MainViewHandle, MainChessBoard, LocalEvent);
 #if 1
 	/*print rank and file of the selected coordinate*/
 	if (LocalEvent->Type == SelectCoordinate){
@@ -24,8 +24,16 @@ int main(void){
 	ChessCoordinateList_AppendCoord(TempList, MainChessBoard->Board[2][0]);
 	
 	HighlightCoordinates(MainViewHandle, MainChessBoard, TempList);
-	getchar();
+	LocalEvent = View_GetEvent(MainViewHandle, MainChessBoard, LocalEvent);
 #endif	
+	
+	
+	ChessCoordinateList_AppendCoord(TempList, MainChessBoard->Board[0][7]);
+	ChessCoordinateList_AppendCoord(TempList, MainChessBoard->Board[1][7]);
+	ChessCoordinateList_AppendCoord(TempList, MainChessBoard->Board[2][7]);
+	HighlightCoordinates(MainViewHandle, MainChessBoard, TempList);
+	LocalEvent = View_GetEvent(MainViewHandle, MainChessBoard, LocalEvent);
+	
 	MainViewHandle = View_CleanUp(MainViewHandle);
 
 	  

@@ -462,9 +462,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	return ReturnEvent;
 }
 
-/*for displaying*/
-void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
-{	
+void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	int XMargin = 4, YMargin = 5;
 	
 	drawChessBoard(MainViewHandle);
@@ -485,6 +483,23 @@ void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
 		}		
 	}
 	
+	/*capture count*/
+	ObjectHandleList * AllCaptureCount = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, CaptureCount);
+	
+	ObjectHandleNode * Node = AllCaptureCount->FirstNode;
+	while (Node){
+		sprintf(Node->Object->String, "%d", ChessBoard_CountCapturePiece(MainBoard, Node->Object->PlayerColor, Node->Object->PieceType)); 
+		Node = Node->NextNode;
+	}
+	
+	ObjectHandleList_ShallowFree(AllCaptureCount);
+	
+}
+/*for displaying*/
+void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
+{	
+	
+	PopulateGUIChessBoard(MainViewHandle, MainBoard);
 	windowRender(MainViewHandle);
 	
 }
@@ -492,19 +507,14 @@ void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
 void HighlightCoordinates(ViewHandle * MainViewHandle, 
 ChessBoard * MainBoard, ChessCoordinateList * CoordList){
 	
-	int XMargin = 4, YMargin = 5;
-	
-	drawChessBoard(MainViewHandle);
-	ObjectHandleList_KillAllPieces(MainViewHandle);
+	PopulateGUIChessBoard(MainViewHandle, MainBoard);
 	int rank, file;
-	ObjectHandle * NewObject, *CoordObject;
-	/*update pieces*/
+	ObjectHandle * CoordObject;
 	for (rank = 0; rank < 8; rank ++){
 		for (file = 0; file < 8; file++){
 			CoordObject = GetGUICoordinate(MainViewHandle, rank, file);
 			/*highlight the board if necessary*/
 			if (ChessCoordinateList_CheckRedundancy(CoordList, MainBoard->Board[rank][file])){
-				printf("highlight this: %d %d\n", rank,file);
 				if ((rank + file) % 2){
 					CoordObject->hexR = 0x30;
 					CoordObject->hexG = 0xFF;
@@ -517,15 +527,6 @@ ChessBoard * MainBoard, ChessCoordinateList * CoordList){
 					CoordObject->hexA = 0x03;
 				}
 			}
-			
-			if (MainBoard->Board[rank][file]->Piece){
-				CoordObject = GetGUICoordinate(MainViewHandle, rank, file);
-				NewObject = ObjectHandle_Initialize(Piece, PieceObject, CoordObject->X + XMargin,CoordObject->Y + YMargin, CoordObject->Width - 2 * XMargin, CoordObject->Height - 2 * YMargin);
-				NewObject->PieceType = MainBoard->Board[rank][file]->Piece->Type;
-				NewObject->PlayerColor = MainBoard->Board[rank][file]->Piece->Player->PlayerColor;
-				ObjectHandleList_AppendObject(MainViewHandle->CurrentWindow->ObjectList, NewObject);
-			}
-			
 		}		
 	}
 	
@@ -546,7 +547,7 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 					LocalEvent->Type = Exit;
 					break;
 			}
-		case Coordinate:
+		case SelectCoordinate:
 			LocalEvent->Type = SelectCoordinate;
 			ObjectHandle * CoordObject = LocalEvent->Object;
 			LocalEvent->Coordinate = CurrBoard->Board[CoordObject->Rank][CoordObject->File];

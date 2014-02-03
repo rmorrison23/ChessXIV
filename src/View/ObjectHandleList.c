@@ -107,3 +107,14 @@ void ObjectHandleList_KillAllPieces(ViewHandle * MainViewHandle){
 		Node1 = Node2;
 	}
 }
+
+ObjectHandleList * GetObjectListByTag(ObjectHandleList * List, ObjectTagEnum Tag){
+	ObjectHandleNode * CurrNode = List->FirstNode;
+	ObjectHandleList * ReturnList = ObjectHandleList_Initialize();
+	while (CurrNode){
+		if (CurrNode->Object->Tag ==Tag){
+			ObjectHandleList_AppendObject(ReturnList, CurrNode->Object);
+		}
+	}
+	return ReturnList;
+}
