@@ -471,7 +471,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	ObjectHandleList * PlayerLabelObjects = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, Player_Label);
 	ObjectHandleNode * node = PlayerLabelObjects->FirstNode;
 	while (node){
-		if (node->PlayerColor == White){
+		if (node->Object->PlayerColor == White){
 			switch (MainBoard->WhitePlayer->PlayerControl){
 				case Human:
 					strcpy(node->Object->String, "Player 1");
@@ -490,6 +490,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 					break;
 			}
 		}
+		node = node->NextNode;
 	}
 	
 	int rank, file;
@@ -509,7 +510,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	}
 	
 	/*capture count*/
-	/*ObjectHandleList * AllCaptureCount = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, CaptureCount);
+	ObjectHandleList * AllCaptureCount = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, CaptureCount);
 	
 	ObjectHandleNode * Node = AllCaptureCount->FirstNode;
 	while (Node){
@@ -517,7 +518,7 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		Node = Node->NextNode;
 	}
 	
-	ObjectHandleList_ShallowFree(AllCaptureCount);*/
+	ObjectHandleList_ShallowFree(AllCaptureCount);
 	
 }
 /*for displaying*/
@@ -563,15 +564,16 @@ ChessBoard * MainBoard, ChessCoordinateList * CoordList){
 Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * LocalEvent){	
 	*LocalEvent = GetSDLEvent(MainViewHandle);	
 	switch (LocalEvent->Type){
-		case Button:
+		case ButtonClicked:
 			switch (LocalEvent->Object->Tag){
 				case Option_Undo:
-						LocalEvent->Type = UndoMove;
+					LocalEvent->Type = UndoMove;
 					break;
 				case Option_Quit:
 					LocalEvent->Type = Exit;
 					break;
 			}
+			break;
 		case SelectCoordinate:
 			LocalEvent->Type = SelectCoordinate;
 			ObjectHandle * CoordObject = LocalEvent->Object;
@@ -617,12 +619,12 @@ void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Even
 }
 
 void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * PlayerCheckmated){	
-	drawConclusionWindow(MainViewHandle, PlayerCheckmated->PlayerColor);
+	/*drawConclusionWindow(MainViewHandle, PlayerCheckmated->PlayerColor);*/
 }
 
 /*for transformation: ask user which type to transform to*/
 Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * PlayerAsking){
-	drawAskMoveTransform(MainViewHandle, PlayerAsking->PlayerColor);
+	drawTransformWindow(MainViewHandle, PlayerAsking->PlayerColor);
 	
 	Event * LocalEvent = malloc(sizeof(Event));
 	* LocalEvent = GetSDLEvent(MainViewHandle);	

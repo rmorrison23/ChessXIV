@@ -156,6 +156,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 	ObjectHandle * ObjectSelected;
 	ObjectHandleList * TimerDisplayList;
 	Boolean DoneFlag = False;
+	
 	while (!DoneFlag){
 	while(SDL_PollEvent(&event)){
 
@@ -208,6 +209,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 
 			default:
 				/*update the timer*/
+				/*printf("updating timer\n");
 				TimerDisplayList = GetObjectListByTag(MainHandle->CurrentWindow->ObjectList, Timer);
 				ObjectHandleNode * Node = TimerDisplayList->FirstNode;
 				while (Node){
@@ -216,7 +218,12 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 					} else {
 						strcpy(Node->Object->String, GetTimeString(MainHandle->CurrentPlayer->OtherPlayer , False));
 					}
+					Node = Node->NextNode;
 				}
+				ObjectHandleList_ShallowFree(TimerDisplayList);
+				windowRender(MainHandle);			
+				printf("finish rendering timer\n");*/
+				
 				break;
 		}      
 	} 
