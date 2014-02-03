@@ -124,11 +124,6 @@ void windowRender(ViewHandle * MainHandle){
 
   	ObjectHandleNode * CurrNode = MainHandle->CurrentWindow->ObjectList->FirstNode;
 	while(CurrNode){		
-		
-		if (CurrNode->Object->Type == Coordinate) printf("render coord\n");
-		else if (CurrNode->Object->Type == Piece){
-			printf("render piece\n");
-		}
 		ObjectHandle_Render(MainHandle, CurrNode->Object);
 		CurrNode = CurrNode->NextNode;
 	}
@@ -166,7 +161,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 							DoneFlag = True;
 							break;
 						case Coordinate:
-							ReturnEvent.Type = CoordinateClicked;
+							ReturnEvent.Type = SelectCoordinate;
 							ReturnEvent.Object = ObjectSelected;
 							DoneFlag = True;
 							break;
