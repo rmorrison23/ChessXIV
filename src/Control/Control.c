@@ -35,6 +35,7 @@ ControlHandle * Control_Initialize(void){
 ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	ChessBoard * MainChessBoard = Handle->MainChessBoard;
 	ChessMoveList * MainMoveList = Handle->MainMoveList;
+	ViewHandle * MainViewHandle = Handle->MainViewHandle;
 	
 	/*local variables*/
 	Boolean GameOnFlag = True;
@@ -131,7 +132,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalChessMove->StartPosition = Coordinate1;
 			LocalChessMove->NextPosition = Coordinate2;
 			if (ChessMove_IsTransformation(LocalChessMove)){
-				Event * AskTransformEvent = View_AskMoveTransform(Handle->MainViewHandle);
+				Event * AskTransformEvent = View_AskMoveTransform(Handle->MainViewHandle, CurrentPlayer);
 				switch (AskTransformEvent->Type){
 					case Exit:
 						exit(0);

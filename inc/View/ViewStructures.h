@@ -4,7 +4,7 @@
 
 /*may add more type of event here*/
 typedef enum {NoEvent, SelectCoordinate, UndoMove, Exit, AskTransform, Checkmate, Stalemate,	\
-	ButtonClicked, CoordinateClicked, InCheck
+	ButtonClicked, CoordinateClicked, PieceClicked, InCheck
 } EventTypeEnum;
 
 #ifdef GUI_ENABLE
@@ -44,7 +44,7 @@ typedef enum {
 	Label_Color, Label_Difficulty,	   \
 	Option_Undo, Option_Quit,\
 	Box,\
-	Square, CaptureCount
+	Square, CaptureCount, StatusText, TransformPiece, Timer
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {

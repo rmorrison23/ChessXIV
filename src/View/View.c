@@ -3,8 +3,7 @@
 #ifndef GUI_ENABLE
 
 /*define basic colors*/
-#define KNRM  "\x1B[0m"
-#define KRED  "\x1B[31m"
+#define KNRM  "\x1B[31m"
 #define KGRN  "\x1B[32m"
 #define KYEL  "\x1B[33m"
 #define KBLU  "\x1B[34m"
@@ -19,7 +18,7 @@
 #define BLACK_PLAYER_COLOR 	KCYN
 #define HIGHLIGHT_COLOR 	KGRN_BKG
 
-Event * View_AskMoveTransform(ViewHandle * MainViewHandle){
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * PlayerAsking){
 	Boolean ValidFlag = False;
 	int UserChoice;
 	Event * ReturnEvent = malloc(sizeof(Event));
@@ -279,7 +278,7 @@ void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoa
 /*initialize*/
 ViewHandle * View_Initialize(void){
 	ViewHandle * ReturnHandle = malloc(sizeof(ViewHandle));
-	ReturnHandle->a = 10;
+	ReturnHandle->CurrentPlayer = NULL;
 	return ReturnHandle;
 }
 
@@ -289,7 +288,7 @@ ViewHandle * View_CleanUp(ViewHandle * handle){
 	return NULL;
 }
 
-void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * player){
 	printf("Game concluded\n");
 	printf("Goodbye. See you next time\n");
 }
@@ -467,6 +466,32 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	
 	drawChessBoard(MainViewHandle);
 	ObjectHandleList_KillAllPieces(MainViewHandle);
+	
+	/*set player label*/
+	ObjectHandleList * PlayerLabelObjects = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, Player_Label);
+	ObjectHandleNode * node = PlayerLabelObjects->FirstNode;
+	while (node){
+		if (node->PlayerColor == White){
+			switch (MainBoard->WhitePlayer->PlayerControl){
+				case Human:
+					strcpy(node->Object->String, "Player 1");
+					break;
+				case AI:
+					strcpy(node->Object->String, "Computer");
+					break;
+			}			
+		} else {
+			switch (MainBoard->BlackPlayer->PlayerControl){
+				case Human:
+					strcpy(node->Object->String, "Player 2");
+					break;
+				case AI:
+					strcpy(node->Object->String, "Computer");
+					break;
+			}
+		}
+	}
+	
 	int rank, file;
 	ObjectHandle * NewObject, * CoordObject;
 	/*update pieces*/
@@ -559,8 +584,8 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * Event_in){
 	
-	PopulateGUIChessBoard(MainViewHandle, MainBoard);
-	ObjectHandle * StatusTextObj = GetObjectByTag(ViewHandle, StatusText);
+	PopulateGUIChessBoard(MainViewHandle, CurrBoard);
+	ObjectHandle * StatusTextObj = GetObjectByTag(MainViewHandle, StatusText);
 	assert(StatusTextObj);
 	switch (Event_in->Type){
 		case Checkmate:
@@ -604,12 +629,7 @@ Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * PlayerA
 	switch (LocalEvent->Type){
 		case Piece:
 			LocalEvent->PieceType = LocalEvent->Object->PieceType;			
-			break;
-		case SelectCoordinate:
-			LocalEvent->Type = SelectCoordinate;
-			ObjectHandle * CoordObject = LocalEvent->Object;
-			LocalEvent->Coordinate = CurrBoard->Board[CoordObject->Rank][CoordObject->File];
-			break;
+			break;		
 	}
 	return LocalEvent;
 }

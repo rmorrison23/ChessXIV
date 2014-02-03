@@ -2,6 +2,8 @@
 #define MODEL_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
 /*include headers inside Model directory*/
 #include "ChessStructures.h"

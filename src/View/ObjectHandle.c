@@ -131,12 +131,30 @@ void windowRender(ViewHandle * MainHandle){
 
 }
 #endif
+char * GetTimeString(ChessPlayer * Player, Boolean InTurnFlag) {
+	char * ReturnString = malloc(sizeof(char) * 10);
+	int minute, second;
+	second = floor(78.0/*Player->ElapsedTime*/);
+		
+	if (InTurnFlag){		
+		time_t now;
+		time(&now);
+		/*second += floor(difftime(now, Player->StartTime));*/
+		
+	} 
+	minute = second / 60;
+	second = second % 60;
+	sprintf(ReturnString, "%d:%d", minute, second);
+	return ReturnString;
+}
+
 Event GetSDLEvent(ViewHandle * MainHandle){
 	SDL_Event event;
 	Event ReturnEvent; ReturnEvent.Type = NoEvent;
 	ObjectHandleList * ObjectSelectedList;
 	ObjectHandleNode * Node;
 	ObjectHandle * ObjectSelected;
+	ObjectHandleList * TimerDisplayList;
 	Boolean DoneFlag = False;
 	while (!DoneFlag){
 	while(SDL_PollEvent(&event)){
@@ -168,6 +186,14 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 							ReturnEvent.Object = ObjectSelected;
 							DoneFlag = True;
 							break;
+						case Piece:
+							if (ObjectSelected->Tag == TransformPiece){
+								ReturnEvent.Type = PieceClicked;
+								ReturnEvent.PieceType = ObjectSelected->PieceType;
+								DoneFlag = True;
+								break;
+							}
+							break;
 					}
 										
 					Node = Node->NextNode;
@@ -182,11 +208,13 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 
 			default:
 				/*update the timer*/
-				ObjectHandleList * TimerDisplayList = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, Timer);
+				TimerDisplayList = GetObjectListByTag(MainHandle->CurrentWindow->ObjectList, Timer);
 				ObjectHandleNode * Node = TimerDisplayList->FirstNode;
 				while (Node){
-					if (Node->Object->PlayerColor == MainViewHandle->CurrentPlayer->PlayerColor){
-						strcpy(Node->Object->
+					if (Node->Object->PlayerColor == MainHandle->CurrentPlayer->PlayerColor){
+						strcpy(Node->Object->String, GetTimeString(MainHandle->CurrentPlayer, True));
+					} else {
+						strcpy(Node->Object->String, GetTimeString(MainHandle->CurrentPlayer->OtherPlayer , False));
 					}
 				}
 				break;

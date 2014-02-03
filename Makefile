@@ -1,6 +1,6 @@
 CC	:= gcc
 CFLAGS	:= -g
-LDFLAGS :=
+LDFLAGS := -lm
 
 MODULES   := Model Control View
 SRC_DIR   := $(addprefix src/,$(MODULES))

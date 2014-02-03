@@ -67,10 +67,10 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event *);
 
-void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard *);
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer *);
 
 
 
 /*for transformation: ask user which type to transform to*/
-Event * View_AskMoveTransform(ViewHandle * MainViewHandle);
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * ChessPlayerAsking);
 #endif 
