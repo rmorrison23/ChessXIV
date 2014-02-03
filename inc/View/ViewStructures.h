@@ -99,6 +99,7 @@ typedef struct {
 typedef struct {
 	ChessPlayer	* CurrentPlayer;
 	WindowHandle * CurrentWindow;	
+	Event * ViewHandleEvent;
 } ViewHandle;
 #endif
 

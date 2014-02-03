@@ -286,6 +286,9 @@ void HighlightCoordinates(ViewHandle * MainViewHandle, ChessBoard * CurrChessBoa
 ViewHandle * View_Initialize(void){
 	ViewHandle * ReturnHandle = malloc(sizeof(ViewHandle));
 	ReturnHandle->CurrentPlayer = NULL;
+	ReturnHandle->ViewHandleEvent = malloc(sizeof(Event));
+	assert(ReturnHandle->ViewHandleEvent);
+	ReturnHandle->ViewHandleEvent->Type = NoEvent;
 	return ReturnHandle;
 }
 
@@ -359,9 +362,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 	assert(LocalEvent.Type == ButtonClicked || LocalEvent.Type == Exit);
 	if (LocalEvent.Type == ButtonClicked){
 		switch(LocalEvent.Object->Tag){
-			case Option_OnePlayer:
-				printf("One player clicked\n");
-				ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+			case Option_OnePlayer:				ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 				drawOnePlayerMenu(MainHandle);
 				Boolean AISelectedFlag = False, PlayerSelectedFlag = False, OptionsDoneFlag = False;
 				while (!AISelectedFlag || !PlayerSelectedFlag || !OptionsDoneFlag){			
@@ -370,7 +371,6 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 					assert(LocalEvent.Type == ButtonClicked);
 					switch(LocalEvent.Object->Tag){
 						case Option_Black:
-							printf("Black selected\n");
 							Object = GetObjectByTag(MainHandle, Option_Black);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;
 							Object = GetObjectByTag(MainHandle, Option_White);
@@ -379,7 +379,6 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							PlayerColorSelected = Black;
 							break;
 						case Option_White:
-							printf("W selected\n");
 							Object = GetObjectByTag(MainHandle, Option_White);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_Black);
@@ -388,7 +387,6 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							PlayerColorSelected = White;
 							break;
 						case Option_EasyAI:
-							printf("ES selected\n");
 							Object = GetObjectByTag(MainHandle, Option_EasyAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_MediumAI);
@@ -398,8 +396,7 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							AISelectedFlag = True;
 							AISelected = Easy;
 							break;
-						case Option_MediumAI:
-							printf("Me selected\n");
+						case Option_MediumAI:	
 							Object = GetObjectByTag(MainHandle, Option_MediumAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle, Option_EasyAI);
@@ -410,7 +407,6 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 							AISelected = Medium;
 							break;
 						case Option_DifficultAI:
-							printf("Dif selected\n");
 							Object = GetObjectByTag(MainHandle, Option_DifficultAI);
 							Object->Color = SDL_COLOR_SELETED_BUTTON;		/*selected color*/
 							Object = GetObjectByTag(MainHandle,Option_MediumAI);
@@ -448,13 +444,11 @@ Event * SetOptions(ViewHandle *MainHandle, ChessBoard * MainBoard){
 				
 				break;
 				
-			case Option_TwoPlayer:
-				printf("Two player clicked\n");
+			case Option_TwoPlayer:				
 				MainBoard->WhitePlayer->PlayerControl = Human;
 				MainBoard->BlackPlayer->PlayerControl = Human;
 				break;
-			case Option_AIvsAI:
-				printf("No player clicked\n");
+			case Option_AIvsAI:				
 				MainBoard->WhitePlayer->PlayerControl = AI;
 				MainBoard->WhitePlayer->AIDifficulty = Difficult;			
 				MainBoard->BlackPlayer->PlayerControl = AI;
@@ -527,6 +521,36 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 	
 	ObjectHandleList_ShallowFree(AllCaptureCount);
 	
+	/*event such as in check and stalemate*/
+	ObjectHandle * StatusTextObj = GetObjectByTag(MainViewHandle, StatusText);
+	assert(StatusTextObj);
+	switch (MainViewHandle->ViewHandleEvent->Type){
+		case Checkmate:
+			switch (MainViewHandle->ViewHandleEvent->Player->PlayerColor){
+				case White:
+					strcpy(StatusTextObj->String, "White player is checked mated");
+					break;
+				case Black:
+					strcpy(StatusTextObj->String, "Black player is checked mated");
+					break;
+			}
+			break;
+		case Stalemate:			
+			strcpy(StatusTextObj->String, "Two player are in stalemate. Tie game.");			
+			break;
+		case InCheck:
+			switch (MainViewHandle->ViewHandleEvent->Player->PlayerColor){
+				case White:
+					strcpy(StatusTextObj->String, "White player is in check");
+					break;
+				case Black:
+					strcpy(StatusTextObj->String, "Black player is in check");
+					break;
+			}
+			break;
+			
+	}
+	
 }
 /*for displaying*/
 void DisplayChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard)
@@ -592,41 +616,11 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * Event_in){
-	
-	PopulateGUIChessBoard(MainViewHandle, CurrBoard);
-	ObjectHandle * StatusTextObj = GetObjectByTag(MainViewHandle, StatusText);
-	assert(StatusTextObj);
-	switch (Event_in->Type){
-		case Checkmate:
-			switch (Event_in->Player->PlayerColor){
-				case White:
-					strcpy(StatusTextObj->String, "White player is checked mated");
-					break;
-				case Black:
-					strcpy(StatusTextObj->String, "Black player is checked mated");
-					break;
-			}
-			break;
-		case Stalemate:			
-			strcpy(StatusTextObj->String, "Two player are in stalemate. Tie game.");			
-			break;
-		case InCheck:
-			switch (Event_in->Player->PlayerColor){
-				case White:
-					strcpy(StatusTextObj->String, "White player is in check");
-					break;
-				case Black:
-					strcpy(StatusTextObj->String, "Black player is in check");
-					break;
-			}
-			break;
-			
-	}
-	windowRender(MainViewHandle);
+		
 }
 
 void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * PlayerCheckmated){	
-	/*drawConclusionWindow(MainViewHandle, PlayerCheckmated->PlayerColor);*/
+	sleep(5);
 }
 
 /*for transformation: ask user which type to transform to*/

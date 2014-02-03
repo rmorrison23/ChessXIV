@@ -117,7 +117,7 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
 {
 
 	/*COUNT NUMBER OF MOVE DONE B4 doing this: IN CASE GAME JUST  STARTED*/
-	 return board;
+	if (ChessMoveList_Count(moveList) < 3) return board;
       int i = 0;
       /* move to delete */
       ChessMoveNode * tempNode;
@@ -203,7 +203,7 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
       return board;
 }
 void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList)
-{
+{	
 	 ChessMoveNode * tempNode;
 	 tempNode = moveList->LastNode;
 
@@ -278,7 +278,7 @@ void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList)
 	
 	  moveList = ChessMoveList_PopLastMove(moveList);
 	}
-	return 0;
+	/*return 0;*/
 }
 ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
   
@@ -876,8 +876,7 @@ Boolean Model_CheckLegalMove(ChessBoard * board, ChessMove * moveTo, ChessMoveLi
 		file2 = history->LastNode->Move->NextPosition->File;
 		tempMove->NextPosition = tempBoard->Board[rank2][file2];
 		
-		moveList->FirstNode = tempMove;
-		moveList->LastNode = tempMove;
+		ChessMoveList_AppendMove(moveList, tempMove);		
 	}
 	tempMove = ChessMove_Initialize();
 	
@@ -1034,8 +1033,7 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		{
 
 			if (player->PlayerColor == White)
-			{
-				printf("%d\n", ChessMoveList_Count(history));
+			{				
 				if (ChessMoveList_Count(history) == 0)
 				{
 					ChessMove * newMove = ChessMove_Initialize();
@@ -1083,8 +1081,7 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 				
 			}
 			if (player->PlayerColor == Black)
-			{
-				printf("%d\n", ChessMoveList_Count(history));
+			{				
 				if (ChessMoveList_Count(history) == 1)
 				{
 					ChessMove * newMove = ChessMove_Initialize();

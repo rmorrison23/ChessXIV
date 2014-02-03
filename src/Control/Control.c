@@ -168,8 +168,13 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		/*change player*/
 		CurrentPlayer = CurrentPlayer->OtherPlayer;
 		
+		/*set default event for Viewhandle*/
+		MainViewHandle->ViewHandleEvent->Type = NoEvent;
+		
 		/*check for checkmate first*/
 		if (Model_CheckCheckmate(MainChessBoard, CurrentPlayer, MainMoveList)){
+			MainViewHandle->ViewHandleEvent->Type = Checkmate;
+			MainViewHandle->ViewHandleEvent->Player = CurrentPlayer;
 			LocalEvent->Type = Checkmate;
 			LocalEvent->Player = CurrentPlayer;
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
@@ -179,12 +184,15 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 /*==================================================CHECKING LOG FILE==========================*/
 		/*then check for stalemate*/
 		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer, MainMoveList)){
+			MainViewHandle->ViewHandleEvent->Type = Stalemate;			
 			LocalEvent->Type = Stalemate;			
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);
 			GameOnFlag = False;		
 		/*check for checked position */
 
 		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer, MainMoveList)){
+			MainViewHandle->ViewHandleEvent->Type = InCheck;
+			MainViewHandle->ViewHandleEvent->Player = CurrentPlayer;
 			LocalEvent->Type = InCheck;
 			LocalEvent->Player = CurrentPlayer;		
 			View_DisplayEvent(Handle->MainViewHandle, MainChessBoard, LocalEvent);

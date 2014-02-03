@@ -47,11 +47,7 @@ int main(void){
 	}
 	
 	ChessMoveNode * MoveNode = MoveList->FirstNode;
-	while(MoveNode){
-		printf("%d  %d%d  %d%d\n", MoveNode->Move->MovePiece->Type, MoveNode->Move->StartPosition->Rank,
-			MoveNode->Move->StartPosition->File, MoveNode->Move->NextPosition->Rank, MoveNode->Move->NextPosition->File);
-		MoveNode = MoveNode->NextNode;
-	}
+	
 	
 	ChessMoveList_Free(MoveList);
 #endif

@@ -303,7 +303,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   strcpy(blackPlayer->String, "");
   strcpy(blackPlayer->FontName, "Assets/fonts/Calibri.ttf");
   blackPlayer->Color = SDL_COLOR_BLACK;
-  blackPlayer->TextSize = 30;  
+  blackPlayer->TextSize = 30; 
+  blackPlayer->PlayerColor=Black;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, blackPlayer);
 
   ObjectHandle *blackTimer = ObjectHandle_Initialize(Text, Timer, 115, 75, 0, 0);
@@ -418,7 +419,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   strcpy(whitePlayer->String, "");
   strcpy(whitePlayer->FontName, "Assets/fonts/Calibri.ttf");
   whitePlayer->Color = SDL_COLOR_BLACK;
-  whitePlayer->TextSize = 30;  
+  whitePlayer->TextSize = 30; 
+  whitePlayer->PlayerColor = White;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, whitePlayer);
 
   ObjectHandle *whiteTimer = ObjectHandle_Initialize(Text, Timer, 1030, 451, 0, 0);
