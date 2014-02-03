@@ -28,6 +28,9 @@ ChessBoard * Model_PerformMove(ChessBoard *, ChessMoveList *, ChessMove *);
 /*done,  undo a move */
 ChessBoard * Model_UndoLastMove(ChessBoard *, ChessMoveList *);
 
+/* undo exactly 1 move for ai purposes */
+void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList);
+
 /* check type of move */
 ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move);
 

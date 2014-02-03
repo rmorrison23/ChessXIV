@@ -201,7 +201,84 @@ ChessBoard * Model_UndoLastMove(ChessBoard * board, ChessMoveList * moveList)
       
       return board;
 }
+void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList)
+{
+	 ChessMoveNode * tempNode;
+	 tempNode = moveList->LastNode;
 
+	if(tempNode->Move->MoveType == Transformation) {
+	  
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->Type = Pawn;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
+
+	else if(tempNode->Move->MoveType == EnPassant) {
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  /* bring back the dead */
+	  tempNode->Move->NextPosition->Piece = NULL;
+	  board->Board[tempNode->Move->StartPosition->Rank][tempNode->Move->NextPosition->File]->Piece = tempNode->Move->CapturePiece;
+	  tempNode->Move->CapturePiece->Coordinate = board->Board[tempNode->Move->StartPosition->Rank][tempNode->Move->NextPosition->File];
+	  tempNode->Move->CapturePiece->AliveFlag = True;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}	  
+
+	else if(tempNode->Move->MoveType == Castling) {
+	  /* moving back rook position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+
+	  tempNode = moveList->LastNode;
+	  /* moving back king position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+
+	  tempNode->Move->NextPosition->Piece = NULL;
+
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
+	
+	else {
+	  /* moving back a position (1 undo) */
+	  tempNode->Move->MovePiece->Coordinate = tempNode->Move->StartPosition;
+	  tempNode->Move->StartPosition->Piece = tempNode->Move->MovePiece;
+	  tempNode->Move->StartPosition->Piece->MoveFirstFlag--;
+		
+	  /* need to restore a piece from the graveyard */
+	  if (tempNode->Move->CaptureFlag)
+	    {
+	      /* bring back the dead */
+	      tempNode->Move->NextPosition->Piece = tempNode->Move->CapturePiece;
+	      tempNode->Move->CapturePiece->Coordinate = tempNode->Move->NextPosition;
+	      tempNode->Move->CapturePiece->AliveFlag = True;
+	    }
+	  /*nothing to restore from graveyard */
+	  else
+	    {
+	      tempNode->Move->NextPosition->Piece = NULL;
+	    }
+	
+	  moveList = ChessMoveList_PopLastMove(moveList);
+	}
+	return 0;
+}
 ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
   
   if(move->MovePiece->Type == Pawn) {
@@ -1129,7 +1206,18 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 	}
 	if (player->AIDifficulty == Difficult)
 	{
-	
+		ChessMoveList * LegalMoveList = ChessPlayer_GetAllLegalMoves(board, player, history);
+		ChessMoveNode * CurrNode = LegalMoveList->FirstNode;
+		int LegalMoveCount = ChessMoveList_Count(LegalMoveList);
+		srand(time(NULL));
+		int TieBreakMove = (rand()%LegalMoveCount);
+		int i;
+		for (i = 0; i < LegalMoveCount; i++)
+		{
+		
+			Model_Undo1Move(board, history);
+			CurrNode = CurrNode->NextNode;
+		}
 	}
 	return NULL;
 }
