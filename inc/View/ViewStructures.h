@@ -29,7 +29,6 @@ typedef struct {
 #define SDL_COLOR_SELETED_BUTTON 	(SDL_Color) {0x29, 0xEF, 0x48}
 #define SDL_COLOR_NORMAL_BUTTON 	(SDL_Color) {255, 255, 255}
 
-
 #define SDL_INT_TEXT_SIZE               50
 
 typedef enum {Color, Image, Text, Button, Piece, Coordinate, Outline} ObjectType;
@@ -41,7 +40,8 @@ typedef enum {
 	Title, Background, \
 	BPawnPiece, BRookPiece, BKnightPiece, BBishopPiece, BQueenPiece, BKingPiece,	\
 	WPawnPiece, WRookPiece, WKnightPiece, WBishopPiece, WQueenPiece, WKingPiece,	\
-	Label_Color, Label_Difficulty	   \
+	Label_Color, Label_Difficulty,					\
+	Square
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {

@@ -20,6 +20,8 @@
 
 /* QUAN_VERSION: function to display the main menu to the screen */
 void drawMainMenu(ViewHandle * MainHandle){
+
+  void ObjectHandleList_DeepFree(ObjectHandleList * List);
 	
 	SDL_Window * window = MainHandle->CurrentWindow->Window;
 	SDL_Renderer * renderer = MainHandle->CurrentWindow->WindowRenderer;
@@ -115,6 +117,8 @@ void drawMainMenu(ViewHandle * MainHandle){
 }
 
 void drawOnePlayerMenu(ViewHandle * MainHandle){
+
+  void ObjectHandleList_DeepFree(ObjectHandleList * List);
 
   SDL_Window * window = MainHandle->CurrentWindow->Window;
 
@@ -217,6 +221,34 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   playButton->TextSize = playButtonSize;  
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playButton);
   
+  windowRender(MainHandle);
+}
+
+void drawChessBoard(ViewHandle * MainHandle){
+
+  ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+
+  SDL_Window * window = MainHandle->CurrentWindow->Window;
+  SDL_Color Gray = {0x6D, 0x6D, 0x6D, 0x6D};
+  SDL_Color White = {0xB3, 0xB3, 0xB3, 0xB3};
+
+  int rank, file;
+  int leftOffset = 225;
+  int topOffset = (SCREEN_HEIGHT - BOARD_HEIGHT)/2;
+
+  for(rank=7; rank>=0; rank--){
+    for(file=0; file<8; file++){
+
+      Objecthandle *Box = ObjectHandle_Initialize(Coordinate, Square, leftOffset + file*75, topOffset + (rank-7)*75, 75, 75);
+      if((rank+file)%2 == 0)
+	Box->Color = Gray;
+      else
+	Box->Color = White;
+
+      Box->Rank = rank;
+      Box->File = file;
+    }
+  }
   windowRender(MainHandle);
 }
 
