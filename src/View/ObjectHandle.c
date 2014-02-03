@@ -142,7 +142,7 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 	while(SDL_PollEvent(&event)){
 
 		switch(event.type){
-
+			
 			case SDL_QUIT:
 				TTF_Quit();
 				SDL_Quit();
@@ -180,6 +180,16 @@ Event GetSDLEvent(ViewHandle * MainHandle){
 				
 				break;
 
+			default:
+				/*update the timer*/
+				ObjectHandleList * TimerDisplayList = GetObjectListByTag(MainViewHandle->CurrentWindow->ObjectList, Timer);
+				ObjectHandleNode * Node = TimerDisplayList->FirstNode;
+				while (Node){
+					if (Node->Object->PlayerColor == MainViewHandle->CurrentPlayer->PlayerColor){
+						strcpy(Node->Object->
+					}
+				}
+				break;
 		}      
 	} 
 	}

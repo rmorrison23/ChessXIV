@@ -50,7 +50,7 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	CurrentPlayer = MainChessBoard->WhitePlayer;
 	while (GameOnFlag){
 	 	 UndoMoveFlag = False;
-	 
+		MainViewHandle->CurrentPlayer = CurrentPlayer;
 		if (CurrentPlayer->PlayerControl == Human){
 			Coordinate1 = NULL;
 			Coordinate2 = NULL;
@@ -172,10 +172,10 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 	}
 	
 	/*display chessboard for last time*/
-	DisplayChessBoard(Handle->MainViewHandle, MainChessBoard);
+	/*DisplayChessBoard(Handle->MainViewHandle, MainChessBoard);*/
 	
 	/*conclude the game*/
-	View_ConcludeGame(Handle->MainViewHandle, MainChessBoard);
+	View_ConcludeGame(Handle->MainViewHandle, CurrentPlayer);
 	free(LocalEvent);
 	
 	return Handle;

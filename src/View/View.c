@@ -541,7 +541,7 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 		case Button:
 			switch (LocalEvent->Object->Tag){
 				case Option_Undo:
-					LocalEvent->Type = UndoMove;
+						LocalEvent->Type = UndoMove;
 					break;
 				case Option_Quit:
 					LocalEvent->Type = Exit;
@@ -558,13 +558,60 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * Event_in){
+	
+	PopulateGUIChessBoard(MainViewHandle, MainBoard);
+	ObjectHandle * StatusTextObj = GetObjectByTag(ViewHandle, StatusText);
+	assert(StatusTextObj);
+	switch (Event_in->Type){
+		case Checkmate:
+			switch (Event_in->Player->PlayerColor){
+				case White:
+					strcpy(StatusTextObj->String, "White player is checked mated");
+					break;
+				case Black:
+					strcpy(StatusTextObj->String, "Black player is checked mated");
+					break;
+			}
+			break;
+		case Stalemate:			
+			strcpy(StatusTextObj->String, "Two player are in stalemate. Tie game.");			
+			break;
+		case InCheck:
+			switch (Event_in->Player->PlayerColor){
+				case White:
+					strcpy(StatusTextObj->String, "White player is in check");
+					break;
+				case Black:
+					strcpy(StatusTextObj->String, "Black player is in check");
+					break;
+			}
+			break;
+			
+	}
+	windowRender(MainViewHandle);
 }
 
-void View_ConcludeGame(ViewHandle * MainViewHandle, ChessBoard * CurrBoard){
+void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * PlayerCheckmated){	
+	drawConclusionWindow(MainViewHandle, PlayerCheckmated->PlayerColor);
 }
 
 /*for transformation: ask user which type to transform to*/
-Event * View_AskMoveTransform(ViewHandle * MainViewHandle){
+Event * View_AskMoveTransform(ViewHandle * MainViewHandle, ChessPlayer * PlayerAsking){
+	drawAskMoveTransform(MainViewHandle, PlayerAsking->PlayerColor);
+	
+	Event * LocalEvent = malloc(sizeof(Event));
+	* LocalEvent = GetSDLEvent(MainViewHandle);	
+	switch (LocalEvent->Type){
+		case Piece:
+			LocalEvent->PieceType = LocalEvent->Object->PieceType;			
+			break;
+		case SelectCoordinate:
+			LocalEvent->Type = SelectCoordinate;
+			ObjectHandle * CoordObject = LocalEvent->Object;
+			LocalEvent->Coordinate = CurrBoard->Board[CoordObject->Rank][CoordObject->File];
+			break;
+	}
+	return LocalEvent;
 }
 
 #endif

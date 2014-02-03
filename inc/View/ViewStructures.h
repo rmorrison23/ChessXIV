@@ -95,6 +95,7 @@ typedef struct {
 } WindowHandle;
 
 typedef struct {
+	ChessPlayer	* CurrentPlayer;
 	WindowHandle * CurrentWindow;	
 } ViewHandle;
 #endif

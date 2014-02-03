@@ -39,7 +39,7 @@
 
 #else
 typedef struct {
-	int a;		/*just dummy variable for ViewHandle of commandline display*/
+	ChessPlayer * CurrentPlayer;		/*just dummy variable for ViewHandle of commandline display*/
 } ViewHandle;
 #endif
 
