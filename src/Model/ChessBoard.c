@@ -41,6 +41,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Pawn;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 1; /*for ai*/
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[1][i];
 		CurrPiece->AliveFlag = True;
@@ -55,6 +56,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Rook;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 5; /* for ai */
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][7*i];
 		CurrPiece->AliveFlag = True;
@@ -69,6 +71,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Knight;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 3; /* for ai */
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][1+5*i];
 		CurrPiece->AliveFlag = True;
@@ -83,6 +86,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Bishop;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 3; /* for ai */
 		CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[0][2+3*i];
 		CurrPiece->AliveFlag = True;
@@ -96,6 +100,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	assert(CurrPiece);
 	CurrPiece->Type = Queen;
 	CurrPiece->Index = 0;
+	CurrPiece->PieceValue = 9;
 	CurrPiece->Player = ChessBoardToReturn->WhitePlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[0][3];
 	CurrPiece->AliveFlag = True;
@@ -124,6 +129,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Pawn;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 1;
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[6][i];
 		CurrPiece->AliveFlag = True;
@@ -138,6 +144,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Rook;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 5; /* for ai */
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][7*i];
 		CurrPiece->AliveFlag = True;
@@ -152,6 +159,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Knight;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 3; /* for ai*/
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][1+5*i];
 		CurrPiece->AliveFlag = True;
@@ -165,6 +173,7 @@ ChessBoard * ChessBoard_Initialize(void){
 		assert(CurrPiece);
 		CurrPiece->Type = Bishop;
 		CurrPiece->Index = i;
+		CurrPiece->PieceValue = 3; /* for ai */
 		CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 		CurrPiece->Coordinate = ChessBoardToReturn->Board[7][2+3*i];
 		CurrPiece->AliveFlag = True;
@@ -178,6 +187,7 @@ ChessBoard * ChessBoard_Initialize(void){
 	assert(CurrPiece);
 	CurrPiece->Type = Queen;
 	CurrPiece->Index = 0;
+	CurrPiece->PieceValue = 9; /* for ai */
 	CurrPiece->Player = ChessBoardToReturn->BlackPlayer;
 	CurrPiece->Coordinate = ChessBoardToReturn->Board[7][3];
 	CurrPiece->AliveFlag = True;

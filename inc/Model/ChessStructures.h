@@ -73,6 +73,8 @@ struct ChessPieceStruct{
 	ChessCoordinate *	Coordinate;
 	Boolean			AliveFlag;
 	int			MoveFirstFlag;
+	/* for ai */
+	int			PieceValue;
 };
 
 struct ChessMoveStruct{
@@ -86,7 +88,7 @@ struct ChessMoveStruct{
 	/*for transformation*/
 	ChessPieceTypeEnum Transform_IntoType;
 	/* for ai */
-	int Value;
+	int Rating;
 };
 
 struct ChessMoveNodeStruct{

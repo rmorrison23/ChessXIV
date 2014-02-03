@@ -1118,5 +1118,9 @@ ChessMove * Model_GetBestMove(ChessBoard * board, ChessPlayer * player, ChessMov
 		}
 		return CurrNode->Move;
 	}
+	if (player->AIDifficulty == Difficult)
+	{
+	
+	}
 	return NULL;
 }
