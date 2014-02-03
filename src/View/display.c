@@ -262,6 +262,27 @@ void drawChessBoard(ViewHandle * MainHandle){
     }
   }
 
+  ObjectHandle *coordinateLabel;
+  for(rank=0; rank<8; rank++){
+    
+    coordinateLabel = ObjectHandle_Initialize(Text, CoordLabel, 300 + (rank + 0.4)*75, 640, 0, 0);
+    sprintf(coordinateLabel->String, "%c", 'A'+ rank);
+    strcpy(coordinateLabel->FontName, "Assets/fonts/Calibri.ttf");
+    coordinateLabel->Color = SDL_COLOR_NORMAL_BUTTON;
+    coordinateLabel->TextSize = 22;
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, coordinateLabel);
+  }
+
+  for(file=1; file<=8; file++){
+    
+    coordinateLabel = ObjectHandle_Initialize(Text, CoordLabel, 280, 675-(file*75)-20, 0, 0);
+    sprintf(coordinateLabel->String, "%d", 1 + file);
+    strcpy(coordinateLabel->FontName, "Assets/fonts/Calibri.ttf");
+    coordinateLabel->Color = SDL_COLOR_NORMAL_BUTTON;
+    coordinateLabel->TextSize = 22;
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, coordinateLabel);
+  }
+
   ObjectHandle *playerBoxLeft = ObjectHandle_Initialize(Color, Box, 30, SCREEN_HEIGHT/2 - 300, 225, 75);
   playerBoxLeft->hexR = 0xA8;
   playerBoxLeft->hexG = 0xC6;

@@ -45,7 +45,7 @@ typedef enum {
 	Label_Color, Label_Difficulty,	   \
 	Option_Undo, Option_Quit,\
 	Box,\
-	Square, CaptureCount, Player_Label, Timer, StatusText
+	Square, CaptureCount, Player_Label, Timer, StatusText, TransformPiece, CoordLabel
 } ObjectTagEnum;
 
 struct ObjectHandleStruct {
