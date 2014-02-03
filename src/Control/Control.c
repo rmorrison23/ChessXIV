@@ -151,6 +151,9 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 			LocalEvent->Player = CurrentPlayer;
 			View_DisplayEvent(MainChessBoard, LocalEvent);
 			GameOnFlag = False;
+/*==================================================CHECKING LOG FILE==========================*/
+			writeToLogFile("log", MainMoveList);
+/*==================================================CHECKING LOG FILE==========================*/
 		/*then check for stalemate*/
 		} else if (Model_CheckStalemate(MainChessBoard, CurrentPlayer, MainMoveList)){
 			LocalEvent->Type = Stalemate;			
@@ -159,6 +162,8 @@ ControlHandle * Control_MainLoop(ControlHandle * Handle){
 		/*check for checked position */
 		} else if (Model_CheckCheckedPosition(MainChessBoard, CurrentPlayer, MainMoveList)){
 			printf("Player %d is in check\n", CurrentPlayer->PlayerColor);
+			LocalChessMove->check = True;
+			
 		}
 	}
 	
