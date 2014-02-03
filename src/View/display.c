@@ -277,10 +277,12 @@ void drawChessBoard(ViewHandle * MainHandle){
   capturedPawnLeft->PlayerColor = White;
   strcpy(capturedPawnLeft->ImageFileName, "Assets/pieces/W_Pawn.png");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnLeft);
+
   ObjectHandle *capturedPawnCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedPawnCountWhite->TextSize = 30;
   capturedPawnCountWhite->Color = SDL_COLOR_BLACK;
-  strcpy(capturedPawnCountWhite->ImageFileName, "0");
+  strcpy(capturedPawnCountWhite->String, "0");
+  strcpy(capturedPawnCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountWhite);
 
   ObjectHandle *capturedRookLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
@@ -291,7 +293,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedRookCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedRookCountWhite->TextSize = 30;
   capturedRookCountWhite->Color = SDL_COLOR_BLACK;
-  strcpy(capturedRookCountWhite->ImageFileName, "0");
+  strcpy(capturedRookCountWhite->String, "0");
+  strcpy(capturedRookCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountWhite);
 
   ObjectHandle *capturedKnightLeft = ObjectHandle_Initialize(Image, Box, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
@@ -302,7 +305,8 @@ void drawChessBoard(ViewHandle * MainHandle){
  ObjectHandle *capturedKnightCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 180, SCREEN_HEIGHT/2 - 225, 75, 75);
   capturedKnightCountWhite->TextSize = 30;
   capturedKnightCountWhite->Color = SDL_COLOR_BLACK;
-  strcpy(capturedKnightCountWhite->ImageFileName, "0");
+  strcpy(capturedKnightCountWhite->String, "0");
+  strcpy(capturedKnightCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountWhite);
 
   ObjectHandle *capturedBishopLeft = ObjectHandle_Initialize(Image, Box, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
@@ -313,7 +317,8 @@ void drawChessBoard(ViewHandle * MainHandle){
  ObjectHandle *capturedBishopCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 30, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedBishopCountWhite->TextSize = 30;
   capturedBishopCountWhite->Color = SDL_COLOR_BLACK;
-  strcpy(capturedBishopCountWhite->ImageFileName, "0");
+  strcpy(capturedBishopCountWhite->String, "0");
+  strcpy(capturedBishopCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountWhite);
 
   ObjectHandle *capturedQueenLeft = ObjectHandle_Initialize(Image, Box, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
@@ -324,7 +329,8 @@ void drawChessBoard(ViewHandle * MainHandle){
  ObjectHandle *capturedQueenCountWhite = ObjectHandle_Initialize(Text, CaptureCount, 105, SCREEN_HEIGHT/2 - 150, 75, 75);
   capturedQueenCountWhite->TextSize = 30;
   capturedQueenCountWhite->Color = SDL_COLOR_BLACK;
-  strcpy(capturedQueenCountWhite->ImageFileName, "0");
+  strcpy(capturedQueenCountWhite->String, "0");
+  strcpy(capturedQueenCountWhite->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountWhite);
 
   ObjectHandle *playerBoxRight = ObjectHandle_Initialize(Color, Box, 945, 413, 225, 75);
@@ -348,7 +354,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedPawnCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488, 75, 75);
   capturedPawnCountBlack->TextSize = 30;
   capturedPawnCountBlack->Color = SDL_COLOR_BLACK;
-  strcpy(capturedPawnCountBlack->ImageFileName, "0");
+  strcpy(capturedPawnCountBlack->String, "0");
+  strcpy(capturedPawnCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedPawnCountBlack);
 
   ObjectHandle *capturedRookRight = ObjectHandle_Initialize(Image, Box, 945+75, 488, 75, 75);
@@ -359,7 +366,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedRookCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488, 75, 75);
   capturedRookCountBlack->TextSize = 30;
   capturedRookCountBlack->Color = SDL_COLOR_BLACK;
-  strcpy(capturedRookCountBlack->ImageFileName, "0");
+  strcpy(capturedRookCountBlack->String, "0");
+  strcpy(capturedRookCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedRookCountBlack);
 
   ObjectHandle *capturedKnightRight = ObjectHandle_Initialize(Image, Box, 945+150, 488, 75, 75);
@@ -370,7 +378,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedKnightCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+150, 488, 75, 75);
   capturedKnightCountBlack->TextSize = 30;
   capturedKnightCountBlack->Color = SDL_COLOR_BLACK;
-  strcpy(capturedKnightCountBlack->ImageFileName, "0");
+  strcpy(capturedKnightCountBlack->String, "0");
+  strcpy(capturedKnightCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedKnightCountBlack);
 
   ObjectHandle *capturedBishopRight = ObjectHandle_Initialize(Image, Box, 945, 488+75, 75, 75);
@@ -381,7 +390,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedBishopCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945, 488+75, 75, 75);
   capturedBishopCountBlack->TextSize = 30;
   capturedBishopCountBlack->Color = SDL_COLOR_BLACK;
-  strcpy(capturedBishopCountBlack->ImageFileName, "0");
+  strcpy(capturedBishopCountBlack->String, "0");
+  strcpy(capturedBishopCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedBishopCountBlack);
 
   ObjectHandle *capturedQueenRight = ObjectHandle_Initialize(Image, Box, 945+75, 488+75, 75, 75);
@@ -392,7 +402,8 @@ void drawChessBoard(ViewHandle * MainHandle){
   ObjectHandle *capturedQueenCountBlack = ObjectHandle_Initialize(Text, CaptureCount, 945+75, 488+75, 75, 75);
   capturedQueenCountBlack->TextSize = 30;
   capturedQueenCountBlack->Color = SDL_COLOR_BLACK;
-  strcpy(capturedQueenCountBlack->ImageFileName, "0");
+  strcpy(capturedQueenCountBlack->String, "0");
+  strcpy(capturedQueenCountBlack->FontName, "Assets/fonts/Calibri.ttf");
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, capturedQueenCountBlack);
 
   windowRender(MainHandle);
