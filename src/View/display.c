@@ -20,6 +20,8 @@
 
 /* QUAN_VERSION: function to display the main menu to the screen */
 void drawMainMenu(ViewHandle * MainHandle){
+
+  void ObjectHandleList_DeepFree(ObjectHandleList * List);
 	
 	SDL_Window * window = MainHandle->CurrentWindow->Window;
 	SDL_Renderer * renderer = MainHandle->CurrentWindow->WindowRenderer;
@@ -116,7 +118,10 @@ void drawMainMenu(ViewHandle * MainHandle){
 
 void drawOnePlayerMenu(ViewHandle * MainHandle){
 
-	SDL_Window * window = MainHandle->CurrentWindow->Window;
+  void ObjectHandleList_DeepFree(ObjectHandleList * List);
+
+  SDL_Window * window = MainHandle->CurrentWindow->Window;
+
   /* rename window title */
   SDL_SetWindowTitle(window, "One Player Options");
 
@@ -149,7 +154,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* black button */
   int blackButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color blackButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *blackButton = ObjectHandle_Initialize(Button, Option_Black, 100, SCREEN_HEIGHT/5, 0, 0);
+  ObjectHandle *blackButton = ObjectHandle_Initialize(Button, Option_Black, 200, SCREEN_HEIGHT/5, 0, 0);
   strcpy(blackButton->String, "Black");
   strcpy(blackButton->FontName, "Assets/fonts/Calibri.ttf");
   blackButton->Color = blackButtonColor;
@@ -159,7 +164,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* white button */
   int whiteButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color whiteButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *whiteButton = ObjectHandle_Initialize(Button, Option_White, 100, SCREEN_HEIGHT/5 + 30, 0, 0);
+  ObjectHandle *whiteButton = ObjectHandle_Initialize(Button, Option_White, 200, SCREEN_HEIGHT/5 + 75, 0, 0);
   strcpy(whiteButton->String, "White");
   strcpy(whiteButton->FontName, "Assets/fonts/Calibri.ttf");
   whiteButton->Color = whiteButtonColor;
@@ -179,7 +184,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Easy */
   int easyButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color easyButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *easyButton = ObjectHandle_Initialize(Button, Option_EasyAI, 725, SCREEN_HEIGHT/5, 0, 0);
+  ObjectHandle *easyButton = ObjectHandle_Initialize(Button, Option_EasyAI, 900, SCREEN_HEIGHT/5, 0, 0);
   strcpy(easyButton->String, "Easy");
   strcpy(easyButton->FontName, "Assets/fonts/Calibri.ttf");
   easyButton->Color = easyButtonColor;
@@ -189,7 +194,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Medium */
   int mediumButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color mediumButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *mediumButton = ObjectHandle_Initialize(Button, Option_MediumAI, 725, SCREEN_HEIGHT/5 + 30, 0, 0);
+  ObjectHandle *mediumButton = ObjectHandle_Initialize(Button, Option_MediumAI, 900, SCREEN_HEIGHT/5 + 75, 0, 0);
   strcpy(mediumButton->String, "Medium");
   strcpy(mediumButton->FontName, "Assets/fonts/Calibri.ttf");
   mediumButton->Color = mediumButtonColor;
@@ -199,7 +204,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Difficult  */
   int difficultButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color difficultButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *difficultButton = ObjectHandle_Initialize(Button, Option_DifficultAI, 725, SCREEN_HEIGHT/5 + 60, 0, 0);
+  ObjectHandle *difficultButton = ObjectHandle_Initialize(Button, Option_DifficultAI, 900, SCREEN_HEIGHT/5 + 150, 0, 0);
   strcpy(difficultButton->String, "Difficult");
   strcpy(difficultButton->FontName, "Assets/fonts/Calibri.ttf");
   difficultButton->Color = difficultButtonColor;
@@ -209,14 +214,41 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* Play  */
   int playButtonSize = SDL_INT_TEXT_SIZE;
   SDL_Color playButtonColor = SDL_COLOR_NORMAL_BUTTON;
-  ObjectHandle *playButton = ObjectHandle_Initialize(Button, Option_PlayButton, 900, 600, 0, 0);
+  ObjectHandle *playButton = ObjectHandle_Initialize(Button, Option_PlayButton, 900, 550, 0, 0);
   strcpy(playButton->String, "Play");
   strcpy(playButton->FontName, "Assets/fonts/Calibri.ttf");
   playButton->Color = playButtonColor;
   playButton->TextSize = playButtonSize;  
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playButton);
-
   
+  windowRender(MainHandle);
+}
+
+void drawChessBoard(ViewHandle * MainHandle){
+
+  ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+
+  SDL_Window * window = MainHandle->CurrentWindow->Window;
+  SDL_Color Gray = {0x6D, 0x6D, 0x6D, 0x6D};
+  SDL_Color White = {0xB3, 0xB3, 0xB3, 0xB3};
+
+  int rank, file;
+  int leftOffset = 225;
+  int topOffset = (SCREEN_HEIGHT - BOARD_HEIGHT)/2;
+
+  for(rank=7; rank>=0; rank--){
+    for(file=0; file<8; file++){
+
+      Objecthandle *Box = ObjectHandle_Initialize(Coordinate, Square, leftOffset + file*75, topOffset + (rank-7)*75, 75, 75);
+      if((rank+file)%2 == 0)
+	Box->Color = Gray;
+      else
+	Box->Color = White;
+
+      Box->Rank = rank;
+      Box->File = file;
+    }
+  }
   windowRender(MainHandle);
 }
 
