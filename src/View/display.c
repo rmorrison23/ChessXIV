@@ -19,8 +19,7 @@
 /* QUAN_VERSION: function to display the main menu to the screen */
 void drawMainMenu(ViewHandle * MainHandle){
 
-  void ObjectHandleList_DeepFree(ObjectHandleList * List);
-	
+
 	SDL_Window * window = MainHandle->CurrentWindow->Window;
 	SDL_Renderer * renderer = MainHandle->CurrentWindow->WindowRenderer;
 	
@@ -98,7 +97,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 
 void drawOnePlayerMenu(ViewHandle * MainHandle){
 
-  void ObjectHandleList_DeepFree(ObjectHandleList * List);
+  ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 
   SDL_Window * window = MainHandle->CurrentWindow->Window;
 
@@ -108,7 +107,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* create one player background image */
   ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, Background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
   printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
-  strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");  
+  strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_800_450.png");  
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, backSplashObject);
 
   /* screen title */
