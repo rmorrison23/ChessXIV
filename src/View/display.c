@@ -113,7 +113,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* screen title */
   int onePlayOptionsSize = SDL_INT_TEXT_SIZE*2;
   SDL_Color onePlayOptionsColor = SDL_COLOR_SCREEN_TITLE;
-  ObjectHandle *onePlayOptions = ObjectHandle_Initialize(Text, Title, 75, SCREEN_HEIGHT*0, 0, 0);
+  ObjectHandle *onePlayOptions = ObjectHandle_Initialize(Text, Title, 150, SCREEN_HEIGHT*0, 0, 0);
   strcpy(onePlayOptions->String, "ONE PLAYER OPTIONS");
   strcpy(onePlayOptions->FontName, "Assets/fonts/Calibri.ttf");
   onePlayOptions->Color = onePlayOptionsColor;

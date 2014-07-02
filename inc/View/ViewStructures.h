@@ -31,6 +31,8 @@ typedef struct {
 #define SDL_COLOR_HIGHLIGHT_COORDINATE	(SDL_Color) {100, 100, 100}
 #define SDL_COLOR_BLACK                 (SDL_Color) {0, 0, 0}
 #define SDL_COLOR_RED                   (SDL_Color) {0xFB, 0x00, 0x06}
+#define SDL_COLOR_GREY					(SDL_Color) {0xDD, 0xDD, 0xDD}
+
 
 #define SDL_INT_TEXT_SIZE               50
 

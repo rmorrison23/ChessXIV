@@ -306,6 +306,9 @@ void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * player){
  * Start defining GUI releated functions
  * ********************************************************/
 
+#define SDL_COLOR_SELETED_BUTTON 		(SDL_Color) {0x11, 0xAA, 0xFF}
+ 
+
 /*initialize*/
 ViewHandle * View_Initialize(void){
 	SDL_Window *window = NULL;
