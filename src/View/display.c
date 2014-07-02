@@ -499,7 +499,7 @@ void drawEndGameMessage(ViewHandle * MainHandle, char *message){
 
 void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
 
-  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
+/*  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
   SDL_RenderClear(MainHandle->CurrentWindow->WindowRenderer);
   ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
 
@@ -508,29 +508,40 @@ void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
   transformBox->hexG = 0x00;
   transformBox->hexB = 0xE8;
   transformBox->hexA = 0xE8;
-  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, transformBox);
-
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, transformBox);*/
+    
+  ObjectHandle *promoteBanner = ObjectHandle_Initialize(Image, Background, 350, 205, 508, 220);
+  strcpy(promoteBanner->ImageFileName, "Assets/Menu_Backgrounds/promoteBanner.png");
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, promoteBanner);
+    
+  ObjectHandle *promotePrompt = ObjectHandle_Initialize(Text, Background, 430, 225, 0, 0);
+  strcpy(promotePrompt->String, "Pawn Promotion");
+  strcpy(promotePrompt->FontName, "Assets/fonts/Calibri.ttf");
+  promotePrompt->Color = SDL_COLOR_GREY;
+  promotePrompt->TextSize = 50;
+  ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, promotePrompt);
+    
   ObjectHandle *NewObject;
-  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 405, 285, 75, 75);
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 405, 295, 75, 75);
   NewObject->PieceType = Knight;
   NewObject->PlayerColor = color;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
-
-  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 510, 285, 75, 75);
+    
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 510, 295, 75, 75);
   NewObject->PieceType = Bishop;
   NewObject->PlayerColor = color;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
-
-  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 615, 285, 75, 75);
+    
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 615, 295, 75, 75);
   NewObject->PieceType = Rook;
   NewObject->PlayerColor = color;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
-
-  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 720, 285, 75, 75);
+    
+  NewObject = ObjectHandle_Initialize(Piece, TransformPiece, 720, 295, 75, 75);
   NewObject->PieceType = Queen;
   NewObject->PlayerColor = color;
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, NewObject);
-
+    
   windowRender(MainHandle);
 }
 
