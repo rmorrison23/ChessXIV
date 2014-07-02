@@ -283,12 +283,21 @@ void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList)
 ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
   
   if(move->MovePiece->Type == Pawn) {
+
+  	move->MovePiece->Pawn2MoveOpen = False;
+
+  	if(((move->MovePiece->Player->PlayerColor == White) && (move->StartPosition->Rank == 1) && (move->NextPosition->Rank == 3)) ||
+  		((move->MovePiece->Player->PlayerColor == Black) && (move->StartPosition->Rank == 6) && (move->NextPosition->Rank == 4))){ 
+  		move->MovePiece->Pawn2MoveOpen = True;
+  	}
+  	
     /* for transformation, we want to check if pawn is at rank 0 or 7 */
     if(move->NextPosition->Rank == 0 || move->NextPosition->Rank == 7) {
       return Transformation;
     }
     /* for en passant, check if pawn is moving diagonally for capture */
-    if(move->NextPosition->File != move->StartPosition->File) {
+    if((move->NextPosition->File != move->StartPosition->File) && (board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece != NULL) &&
+    	(board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece->Pawn2MoveOpen == True)) {
       /* check if there is a pawn diagonally for it to capture */
       /* if not, then it is a special move */
       if(move->NextPosition->Piece == NULL) {
