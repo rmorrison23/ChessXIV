@@ -30,7 +30,7 @@ void drawMainMenu(ViewHandle * MainHandle){
 	/* create main menu background image */
 	ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, Background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
-	strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_800_450.png");
+	strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");
 
 	ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, backSplashObject);
 
@@ -107,7 +107,7 @@ void drawOnePlayerMenu(ViewHandle * MainHandle){
   /* create one player background image */
   ObjectHandle * backSplashObject = ObjectHandle_Initialize(Image, Background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
   printf("%d  %d\n", backSplashObject->Width, backSplashObject->Height);
-  strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_800_450.png");  
+  strcpy(backSplashObject->ImageFileName, "Assets/Menu_Backgrounds/Background_1600_900.jpg");  
   ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, backSplashObject);
 
   /* screen title */
