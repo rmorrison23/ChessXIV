@@ -481,6 +481,22 @@ void drawCheckBanner(ViewHandle * MainHandle, char *message){
     ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerInCheck);
 }
 
+void drawEndGameMessage(ViewHandle * MainHandle, char *message){
+    
+    ObjectHandle *promoteBanner = ObjectHandle_Initialize(Image, Background, 290, 285, 628, 100);
+    strcpy(promoteBanner->ImageFileName, "Assets/Menu_Backgrounds/promoteBanner.png");
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, promoteBanner);
+    
+    ObjectHandle *playerCheckmated = ObjectHandle_Initialize(Text, Background, 340, 300, 75, 75);
+    playerCheckmated->TextSize = 50;
+    playerCheckmated->Color = SDL_COLOR_GREY;
+    strcpy(playerCheckmated->String, message);
+    strcpy(playerCheckmated->FontName, "Assets/fonts/Calibri.ttf");
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerCheckmated);
+    
+    windowRender(MainHandle);
+}
+
 void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
 
   SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
