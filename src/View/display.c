@@ -466,6 +466,21 @@ void drawChessBoard(ViewHandle * MainHandle){
     windowRender(MainHandle);
 }
 
+void drawCheckBanner(ViewHandle * MainHandle, char *message){
+    
+    ObjectHandle *checkHeader = ObjectHandle_Initialize(Image, Background, 435, -108, 330, 280);
+    strcpy(checkHeader->ImageFileName, "Assets/Menu_Backgrounds/checkBar.png");
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, checkHeader);
+    
+    ObjectHandle *playerInCheck = ObjectHandle_Initialize(Text, Background, 492, 0, 75, 75);
+    playerInCheck->TextSize = 30;
+    playerInCheck->Color = SDL_COLOR_BLACK;
+    
+    strcpy(playerInCheck->String, message);
+    strcpy(playerInCheck->FontName, "Assets/fonts/Calibri.ttf");
+    ObjectHandleList_AppendObject(MainHandle->CurrentWindow->ObjectList, playerInCheck);
+}
+
 void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color){
 
   SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);

@@ -548,10 +548,12 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		case InCheck:
 			switch (MainViewHandle->ViewHandleEvent->Player->PlayerColor){
 				case White:
-					strcpy(StatusTextObj->String, "White player is in check");
+					//strcpy(StatusTextObj->String, "White player is in check");
+                    drawCheckBanner(MainViewHandle, "White is in Check!");
 					break;
 				case Black:
-					strcpy(StatusTextObj->String, "Black player is in check");
+					//strcpy(StatusTextObj->String, "Black player is in check");
+                    drawCheckBanner(MainViewHandle, "Black is in check!");
 					break;
 			}
 			break;
