@@ -207,10 +207,12 @@ void drawChessBoard(ViewHandle * MainHandle){
 
   SDL_SetWindowTitle(MainHandle->CurrentWindow->Window, "C h e s s  X I V");
 	
-  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0, 0, 0, 0);
+  SDL_SetRenderDrawColor(MainHandle->CurrentWindow->WindowRenderer, 0x1D, 0x1E, 0x19, 0x19);
   SDL_RenderClear(MainHandle->CurrentWindow->WindowRenderer);
 
   ObjectHandleList_DeepFree(MainHandle->CurrentWindow->ObjectList);
+
+  windowRender(MainHandle);
 
   SDL_Window * window = MainHandle->CurrentWindow->Window;
  /* SDL_Color Gray = {0x6D, 0x6D, 0x6D};
