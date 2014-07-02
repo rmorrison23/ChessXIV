@@ -307,7 +307,7 @@ void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * player){
  * ********************************************************/
 
 #define SDL_COLOR_SELETED_BUTTON 		(SDL_Color) {0x11, 0xAA, 0xFF}
- 
+
 
 /*initialize*/
 ViewHandle * View_Initialize(void){
@@ -482,19 +482,19 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		if (node->Object->PlayerColor == White){
 			switch (MainBoard->WhitePlayer->PlayerControl){
 				case Human:
-					strcpy(node->Object->String, "Player 1");
+					strcpy(node->Object->String, " Player  1");
 					break;
 				case AI:
-					strcpy(node->Object->String, "Computer");
+					strcpy(node->Object->String, " Computer");
 					break;
 			}			
 		} else {
 			switch (MainBoard->BlackPlayer->PlayerControl){
 				case Human:
-					strcpy(node->Object->String, "Player 2");
+					strcpy(node->Object->String, " Player  2");
 					break;
 				case AI:
-					strcpy(node->Object->String, "Computer");
+					strcpy(node->Object->String, " Computer");
 					break;
 			}
 		}
