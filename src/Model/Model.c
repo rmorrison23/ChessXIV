@@ -457,13 +457,21 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			
 			
 			/* if hasn't moved yet, check rank+2 if empty */
-			if(!(piece->MoveFirstFlag)) {
-				targetRank = piece->Coordinate->Rank + 2;
-				targetFile = piece->Coordinate->File;
-				if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
-					if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
-					}
+			// if(!(piece->MoveFirstFlag)) {
+			// 	targetRank = piece->Coordinate->Rank + 2;
+			// 	targetFile = piece->Coordinate->File;
+			// 	if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+			// 		if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+			// 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			// 		}
+			// 	}
+			// }
+
+			if(!(piece->MoveFirstFlag)){
+				if(chessboard->Board[piece->Coordinate->Rank + 2][piece->Coordinate->File]->Piece == NULL && 
+					chessboard->Board[piece->Coordinate->Rank + 1][piece->Coordinate->File]->Piece == NULL){
+					targetRank = piece->Coordinate->Rank +2;
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][piece->Coordinate->File]);
 				}
 			}
 
@@ -539,13 +547,21 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 			
 			/* if hasn't moved yet, check rank-2 if empty */
-			if(!(piece->MoveFirstFlag)) {
-				targetRank = piece->Coordinate->Rank - 2;
-				targetFile = piece->Coordinate->File;
-				if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
-					if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
-					}
+			// if(!(piece->MoveFirstFlag)) {
+			// 	targetRank = piece->Coordinate->Rank - 2;
+			// 	targetFile = piece->Coordinate->File;
+			// 	if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+			// 		if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+			// 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			// 		}
+			// 	}
+			// }
+
+			if(!(piece->MoveFirstFlag)){
+				if(chessboard->Board[piece->Coordinate->Rank - 2][piece->Coordinate->File]->Piece == NULL && 
+					chessboard->Board[piece->Coordinate->Rank - 1][piece->Coordinate->File]->Piece == NULL){
+					targetRank = piece->Coordinate->Rank - 2;
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][piece->Coordinate->File]);
 				}
 			}
 
