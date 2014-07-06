@@ -35,5 +35,7 @@ void drawMainMenu(ViewHandle * MainHandle);
 void drawOnePlayerMenu(ViewHandle * MainHandle);
 void drawChessBoard(ViewHandle * MainHandle);
 void drawTransformWindow(ViewHandle * MainHandle, PlayerColorEnum color);
+void drawCheckBanner(ViewHandle *MainHandle, char *message);
+void drawEndGameMessage(ViewHandle *MainHandle, char *message);
 
 #endif

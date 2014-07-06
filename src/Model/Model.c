@@ -283,17 +283,26 @@ void Model_Undo1Move(ChessBoard * board, ChessMoveList * moveList)
 ChessMoveTypeEnum Model_GetMoveType(ChessBoard * board, ChessMove *move) {
   
   if(move->MovePiece->Type == Pawn) {
+
+  	move->MovePiece->Pawn2MoveOpen = False;
+
+  	if(((move->MovePiece->Player->PlayerColor == White) && (move->StartPosition->Rank == 1) && (move->NextPosition->Rank == 3)) ||
+  		((move->MovePiece->Player->PlayerColor == Black) && (move->StartPosition->Rank == 6) && (move->NextPosition->Rank == 4))){ 
+  		move->MovePiece->Pawn2MoveOpen = True;
+  	}
+
     /* for transformation, we want to check if pawn is at rank 0 or 7 */
     if(move->NextPosition->Rank == 0 || move->NextPosition->Rank == 7) {
       return Transformation;
     }
     /* for en passant, check if pawn is moving diagonally for capture */
-    if(move->NextPosition->File != move->StartPosition->File) {
+    if((move->NextPosition->File != move->StartPosition->File) && (board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece != NULL) &&
+    	(board->Board[move->StartPosition->Rank][move->NextPosition->File]->Piece->Pawn2MoveOpen == True)) {
       /* check if there is a pawn diagonally for it to capture */
       /* if not, then it is a special move */
-      if(move->NextPosition->Piece == NULL) {
+      //if(move->NextPosition->Piece == NULL) {
 	return EnPassant;
-      }
+      //}
     }
   }
 
@@ -448,47 +457,63 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			
 			
 			/* if hasn't moved yet, check rank+2 if empty */
-			if(!(piece->MoveFirstFlag)) {
-				targetRank = piece->Coordinate->Rank + 2;
-				targetFile = piece->Coordinate->File;
-				if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
-					if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
-					}
+			// if(!(piece->MoveFirstFlag)) {
+			// 	targetRank = piece->Coordinate->Rank + 2;
+			// 	targetFile = piece->Coordinate->File;
+			// 	if(targetRank <= 7 && targetFile >= 0 && targetFile <= 7) {
+			// 		if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+			// 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			// 		}
+			// 	}
+			// }
+
+			if(!(piece->MoveFirstFlag)){
+				if(chessboard->Board[piece->Coordinate->Rank + 2][piece->Coordinate->File]->Piece == NULL && 
+					chessboard->Board[piece->Coordinate->Rank + 1][piece->Coordinate->File]->Piece == NULL){
+					targetRank = piece->Coordinate->Rank +2;
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][piece->Coordinate->File]);
 				}
 			}
 
 			/* check for 'en passant' special move */
-			/* this move only applies for pawn at a particular position (in rank 4) */
 			if(piece->Coordinate->Rank == 4) {
-			  /* check to make sure there's a pawn directly next to it */
-			  if(piece->Coordinate->File < 7) {
-			    if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece != NULL) {
-			      if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece->Type == Pawn) {
-				/* check to see if last move was pawn skipping spaces */
-				if(moveList->LastNode->Move->StartPosition->Rank == 6) {
-				  /* if so, add to list of moves */
-				  targetRank = 5;
-				  targetFile = piece->Coordinate->File + 1;
-				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+
+				if(piece->Coordinate->File == 7) {
+					if((chessboard->Board[4][6]->Piece != NULL) && (chessboard->Board[4][6]->Piece->Type == Pawn)){
+						if(moveList->LastNode->Move->StartPosition->Rank == 6 && moveList->LastNode->Move->StartPosition->File == 6){
+							targetRank = 5;
+							targetFile = piece->Coordinate->File -1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
 				}
-			      }
-			    }
-			  }
-			  /* check the other side */
-			  if(piece->Coordinate->File > 0) {
-			    if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece != NULL) {
-			      if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece->Type == Pawn) {
-				/* check if last move was pawn skipping spaces */
-				if(moveList->LastNode->Move->StartPosition->Rank == 6) {
-				  /* if so, add to list of moves */
-				  targetRank = 5;
-				  targetFile = piece->Coordinate->File - 1;
-				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+
+				else if(piece->Coordinate->File < 7 && piece->Coordinate->File > 0) {
+					if(chessboard->Board[4][piece->Coordinate->File - 1]->Piece != NULL && chessboard->Board[4][piece->Coordinate->File - 1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 6 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File -1){
+							targetRank = 5;
+							targetFile = piece->Coordinate->File -1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
+					if(chessboard->Board[4][piece->Coordinate->File + 1]->Piece != NULL && chessboard->Board[4][piece->Coordinate->File + 1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 6 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File +1){
+							targetRank = 5;
+							targetFile = piece->Coordinate->File +1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
 				}
-			      }
-			    }
-			  }
+
+				else{
+					if(chessboard->Board[4][1]->Piece != NULL && chessboard->Board[4][1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 6 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File +1){
+							targetRank = 5;
+							targetFile = piece->Coordinate->File +1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
+				}
 			}
 
 		}
@@ -522,47 +547,63 @@ ChessCoordinateList * Model_GetLegalCoordinates(ChessBoard *chessboard, ChessPie
 			}
 			
 			/* if hasn't moved yet, check rank-2 if empty */
-			if(!(piece->MoveFirstFlag)) {
-				targetRank = piece->Coordinate->Rank - 2;
-				targetFile = piece->Coordinate->File;
-				if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
-					if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
-						output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
-					}
+			// if(!(piece->MoveFirstFlag)) {
+			// 	targetRank = piece->Coordinate->Rank - 2;
+			// 	targetFile = piece->Coordinate->File;
+			// 	if(targetRank >= 0 && targetFile >= 0 && targetFile <= 7) {
+			// 		if(chessboard->Board[targetRank][targetFile]->Piece == NULL) {
+			// 			output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+			// 		}
+			// 	}
+			// }
+
+			if(!(piece->MoveFirstFlag)){
+				if(chessboard->Board[piece->Coordinate->Rank - 2][piece->Coordinate->File]->Piece == NULL && 
+					chessboard->Board[piece->Coordinate->Rank - 1][piece->Coordinate->File]->Piece == NULL){
+					targetRank = piece->Coordinate->Rank - 2;
+					output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][piece->Coordinate->File]);
 				}
 			}
 
 			/* check for 'en passant' special move */
-			/* this move only applies for pawn at a particular position (in rank 4) */
 			if(piece->Coordinate->Rank == 3) {
-			  /* check to make sure there's a pawn directly next to it */
-			  if(piece->Coordinate->File < 7) {
-			    if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece != NULL) {
-			      if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece->Type == Pawn) {
-				/* check to see if last move was pawn skipping spaces */
-				if(moveList->LastNode->Move->StartPosition->Rank == 1) {
-				  /* if so, add to list of moves */
-				  targetRank = 2;
-				  targetFile = piece->Coordinate->File + 1;
-				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+
+				if(piece->Coordinate->File == 7) {
+					if((chessboard->Board[3][6]->Piece != NULL) && (chessboard->Board[3][6]->Piece->Type == Pawn)){
+						if(moveList->LastNode->Move->StartPosition->Rank == 1 && moveList->LastNode->Move->StartPosition->File == 6){
+							targetRank = 2;
+							targetFile = piece->Coordinate->File - 1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
 				}
-			      }
-			    }
-			  }
-			  /* check the other side */
-			  if(piece->Coordinate->File > 0) {
-			    if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece != NULL) {
-			      if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece->Type == Pawn) {
-				/* check if last move was pawn skipping spaces */
-				if(moveList->LastNode->Move->StartPosition->Rank == 1) {
-				  /* if so, add to list of moves */
-				  targetRank = 2;
-				  targetFile = piece->Coordinate->File - 1;
-				  output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+
+				else if(piece->Coordinate->File < 7 && piece->Coordinate->File > 0) {
+					if(chessboard->Board[3][piece->Coordinate->File - 1]->Piece != NULL && chessboard->Board[3][piece->Coordinate->File - 1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 1 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File -1){
+							targetRank = 2;
+							targetFile = piece->Coordinate->File -1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
+					if(chessboard->Board[3][piece->Coordinate->File + 1]->Piece != NULL && chessboard->Board[3][piece->Coordinate->File + 1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 1 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File +1){
+							targetRank = 2;
+							targetFile = piece->Coordinate->File +1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
 				}
-			      }
-			    }
-			  }
+
+				else{
+					if(chessboard->Board[3][1]->Piece != NULL && chessboard->Board[3][1]->Piece->Type == Pawn){
+						if(moveList->LastNode->Move->StartPosition->Rank == 1 && moveList->LastNode->Move->StartPosition->File == piece->Coordinate->File + 1){
+							targetRank = 2;
+							targetFile = piece->Coordinate->File + 1;
+							output = ChessCoordinateList_AppendCoord(output,chessboard->Board[targetRank][targetFile]);
+						}
+					}
+				}
 			}
 		
 		}

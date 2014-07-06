@@ -75,6 +75,7 @@ struct ChessPieceStruct{
 	int			MoveFirstFlag;
 	/* for ai */
 	int			PieceValue;
+	Boolean Pawn2MoveOpen;
 };
 
 struct ChessMoveStruct{

@@ -306,6 +306,9 @@ void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * player){
  * Start defining GUI releated functions
  * ********************************************************/
 
+#define SDL_COLOR_SELETED_BUTTON 		(SDL_Color) {0x11, 0xAA, 0xFF}
+
+
 /*initialize*/
 ViewHandle * View_Initialize(void){
 	SDL_Window *window = NULL;
@@ -479,19 +482,19 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		if (node->Object->PlayerColor == White){
 			switch (MainBoard->WhitePlayer->PlayerControl){
 				case Human:
-					strcpy(node->Object->String, "Player 1");
+					strcpy(node->Object->String, " Player  1");
 					break;
 				case AI:
-					strcpy(node->Object->String, "Computer");
+					strcpy(node->Object->String, " Computer");
 					break;
 			}			
 		} else {
 			switch (MainBoard->BlackPlayer->PlayerControl){
 				case Human:
-					strcpy(node->Object->String, "Player 2");
+					strcpy(node->Object->String, " Player  2");
 					break;
 				case AI:
-					strcpy(node->Object->String, "Computer");
+					strcpy(node->Object->String, " Computer");
 					break;
 			}
 		}
@@ -532,23 +535,28 @@ void PopulateGUIChessBoard(ViewHandle * MainViewHandle, ChessBoard * MainBoard){
 		case Checkmate:
 			switch (MainViewHandle->ViewHandleEvent->Player->PlayerColor){
 				case White:
-					strcpy(StatusTextObj->String, "White player is checked mated");
+					//strcpy(StatusTextObj->String, "White player is checked mated");
+                    drawEndGameMessage(MainViewHandle, "Checkmate - Black Wins!");
 					break;
 				case Black:
-					strcpy(StatusTextObj->String, "Black player is checked mated");
+					//strcpy(StatusTextObj->String, "Black player is checked mated");
+                    drawEndGameMessage(MainViewHandle, "Checkmate - White Wins!");
 					break;
 			}
 			break;
 		case Stalemate:			
-			strcpy(StatusTextObj->String, "Two player are in stalemate. Tie game.");			
+			//strcpy(StatusTextObj->String, "       Stalemate");
+            drawEndGameMessage(MainViewHandle, "       Stalemate!");
 			break;
 		case InCheck:
 			switch (MainViewHandle->ViewHandleEvent->Player->PlayerColor){
 				case White:
-					strcpy(StatusTextObj->String, "White player is in check");
+					//strcpy(StatusTextObj->String, "White player is in check");
+                    drawCheckBanner(MainViewHandle, "White is in Check!");
 					break;
 				case Black:
-					strcpy(StatusTextObj->String, "Black player is in check");
+					//strcpy(StatusTextObj->String, "Black player is in check");
+                    drawCheckBanner(MainViewHandle, "Black is in check!");
 					break;
 			}
 			break;
@@ -620,11 +628,21 @@ Event * View_GetEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event
 
 /*DisplayEvent*/
 void View_DisplayEvent(ViewHandle * MainViewHandle, ChessBoard * CurrBoard, Event * Event_in){
-		
-}
+	if (Event_in->Type == Checkmate){
+		switch (Event_in->Player->PlayerColor){
+			case White:
+				drawEndGameMessage(MainViewHandle, "Checkmate - Black Wins!");
+				break;
+			case Black:
+				drawEndGameMessage(MainViewHandle, "Checkmate - White Wins!");
+				break;
+		}
+	}
+}	
+
 
 void View_ConcludeGame(ViewHandle * MainViewHandle, ChessPlayer * PlayerCheckmated){	
-	sleep(3);
+	sleep(5);
 }
 
 /*for transformation: ask user which type to transform to*/
