@@ -1,5 +1,21 @@
-1. Pe4 Na6
-2. Bc4 Pa5
-3. Qf3 Nb8
-4. Qxf7# 
+1. Ph4 Pd6
+2. Qg4 Qd7
+3. Qg5 Ph6
+4. Qxh6 Pb5
+5. Qxg7 Pc5
+6. gxh8Q Pa6
+7. Nf4 Ra7
+8. Nf5 Pe5
+9. Nxe6 Rc7
+10. Nxd7+ Ke7
+11. dxc8N+ Kf6
+12. Qxg8 Rxc8
+13. Pe4 Kg6
+14. Qg4+ Kf6
+15. Qxc8 Kg7
+16. Qxb8+ Kg6
+17. Qxf8+ Kh7
+18. Qxf7+ Kh6
+19. Nf3 Pb4
+20. Pd3# 
 1-0
