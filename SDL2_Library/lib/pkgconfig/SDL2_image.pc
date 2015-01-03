@@ -1,4 +1,4 @@
-prefix=/Users/Ryan/Dev/SDL_Projects/EECS22L_Group1_ChessProgram/EECS22L_Group1_ChessProgram/SDL2_Library
+prefix=/Users/Ryan/Dev/SDL_Projects/ChessXIV/SDL2_Library
 #prefix=~/SDL_lib_at_school/SDL2
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib

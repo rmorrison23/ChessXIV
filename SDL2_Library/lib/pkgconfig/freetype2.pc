@@ -1,5 +1,5 @@
 #prefix=/users/ugrad2/2013/spring/mqchau/SDL_lib_at_school/SDL2
-prefix=/Users/Ryan/Dev/SDL_Projects/EECS22L_Group1_ChessProgram/EECS22L_Group1_ChessProgram/SDL2_Library
+prefix=/Users/Ryan/Dev/SDL_Projects/ChessXIV/SDL2_Library
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
